@@ -10,7 +10,7 @@ public class AddinAuthor extends EditorObject {
     public AddinAuthor(EditorObject _parent, GameVersion version) {
         super(_parent, "author", version);
 
-        addAttribute("value", InputField.ANY).assertRequired();
+        addAttribute("value", InputField._1_STRING).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("value,"));
     }

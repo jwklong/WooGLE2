@@ -1,8 +1,8 @@
 package com.worldOfGoo.scene;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.AnchorComponent;
 import com.woogleFX.editorObjects.objectComponents.LineComponent;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.ObjectUtil;
 import com.woogleFX.engine.renderer.Depth;
@@ -17,13 +17,13 @@ public class Line extends EditorObject {
     public Line(EditorObject _parent, GameVersion version) {
         super(_parent, "line", version);
 
-        addAttribute("id",       InputField.ANY)     .assertRequired();
-        addAttribute("static",   InputField.FLAG)    .setDefaultValue("true").assertRequired();
-        addAttribute("tag",      InputField.TAG);
-        addAttribute("material", InputField.MATERIAL).setDefaultValue("rock").assertRequired();
-        addAttribute("anchor",   InputField.POSITION).setDefaultValue("0,0") .assertRequired();
-        addAttribute("normal",   InputField.POSITION).setDefaultValue("1,0") .assertRequired();
-        addAttribute("break",    InputField.NUMBER);
+        addAttribute("id",       InputField._1_STRING)     .assertRequired();
+        addAttribute("static",   InputField._1_FLAG)    .setDefaultValue("true").assertRequired();
+        addAttribute("tag",      InputField._1_TAG);
+        addAttribute("material", InputField._1_MATERIAL).setDefaultValue("rock").assertRequired();
+        addAttribute("anchor",   InputField._1_POSITION).setDefaultValue("0,0") .assertRequired();
+        addAttribute("normal",   InputField._1_POSITION).setDefaultValue("1,0") .assertRequired();
+        addAttribute("break",    InputField._1_NUMBER);
 
         addObjectComponent(new LineComponent() {
             public double getX() {

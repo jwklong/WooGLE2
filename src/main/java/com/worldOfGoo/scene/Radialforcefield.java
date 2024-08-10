@@ -1,10 +1,10 @@
 package com.worldOfGoo.scene;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.AnchorComponent;
 import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -15,18 +15,18 @@ public class Radialforcefield extends EditorObject {
     public Radialforcefield(EditorObject _parent, GameVersion version) {
         super(_parent, "radialforcefield", version);
 
-        addAttribute("id",               InputField.ANY)                                    .assertRequired();
-        addAttribute("type",             InputField.ANY)       .setDefaultValue("gravity")  .assertRequired();
-        addAttribute("center",           InputField.POSITION)  .setDefaultValue("0,0")      .assertRequired();
-        addAttribute("radius",           InputField.NUMBER)    .setDefaultValue("100")      .assertRequired();
-        addAttribute("forceatcenter",    InputField.NUMBER)    .setDefaultValue("0")        .assertRequired();
-        addAttribute("forceatedge",      InputField.NUMBER)    .setDefaultValue("0")        .assertRequired();
-        addAttribute("dampeningfactor",  InputField.NUMBER)    .setDefaultValue("0")        .assertRequired();
+        addAttribute("id",               InputField._1_STRING)                                    .assertRequired();
+        addAttribute("type",             InputField._1_STRING)       .setDefaultValue("gravity")  .assertRequired();
+        addAttribute("center",           InputField._1_POSITION)  .setDefaultValue("0,0")      .assertRequired();
+        addAttribute("radius",           InputField._1_NUMBER)    .setDefaultValue("100")      .assertRequired();
+        addAttribute("forceatcenter",    InputField._1_NUMBER)    .setDefaultValue("0")        .assertRequired();
+        addAttribute("forceatedge",      InputField._1_NUMBER)    .setDefaultValue("0")        .assertRequired();
+        addAttribute("dampeningfactor",  InputField._1_NUMBER)    .setDefaultValue("0")        .assertRequired();
         addAttribute(
-            "rotationaldampeningfactor", InputField.NUMBER);
-        addAttribute("antigrav",         InputField.FLAG)      .setDefaultValue("false")    .assertRequired();
-        addAttribute("geomonly",         InputField.FLAG)                                   .assertRequired();
-        addAttribute("enabled",          InputField.FLAG)      .setDefaultValue("true")     .assertRequired();
+            "rotationaldampeningfactor", InputField._1_NUMBER);
+        addAttribute("antigrav",         InputField._1_FLAG)      .setDefaultValue("false")    .assertRequired();
+        addAttribute("geomonly",         InputField._1_FLAG)                                   .assertRequired();
+        addAttribute("enabled",          InputField._1_FLAG)      .setDefaultValue("true")     .assertRequired();
 
         addObjectComponent(new CircleComponent() {
             public double getX() {

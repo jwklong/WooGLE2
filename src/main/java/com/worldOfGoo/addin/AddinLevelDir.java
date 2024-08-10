@@ -10,7 +10,7 @@ public class AddinLevelDir extends EditorObject {
     public AddinLevelDir(EditorObject _parent, GameVersion version) {
         super(_parent, "dir", version);
 
-        addAttribute("value", InputField.ANY).assertRequired();
+        addAttribute("value", InputField._1_STRING).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("value,"));
 

@@ -10,8 +10,8 @@ public class AddinLevelOCD extends EditorObject {
     public AddinLevelOCD(EditorObject _parent, GameVersion version) {
         super(_parent, "ocd", version);
 
-        addAttribute("type", InputField.OCD_TYPE)            .assertRequired();
-        addAttribute("value", InputField.NUMBER_NON_NEGATIVE).assertRequired();
+        addAttribute("type", InputField._1_OCD_TYPE)            .assertRequired();
+        addAttribute("value", InputField._1_NUMBER_NON_NEGATIVE).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("type,value,"));
 

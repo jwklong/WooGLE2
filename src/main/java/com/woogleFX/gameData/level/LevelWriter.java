@@ -1,8 +1,8 @@
 package com.woogleFX.gameData.level;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.file.aesEncryption.AESBinFormat;
 import com.woogleFX.file.FileManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.file.fileExport.XMLUtility;
 
 import java.io.File;
@@ -42,7 +42,7 @@ public class LevelWriter {
         ArrayList<EditorObject> dynamicGeometry = new ArrayList<>();
         ArrayList<EditorObject> geometryConstraints = new ArrayList<>();
 
-        for (EditorObject object : level.getSceneObject().getChildren()) switch (object.getType()) {
+        for (EditorObject object : ((WOG1Level)level).getSceneObject().getChildren()) switch (object.getType()) {
 
             case "linearforcefield", "radialforcefield" -> forceFields.add(object);
             case "particles" -> particles.add(object);
@@ -59,7 +59,7 @@ public class LevelWriter {
         }
 
         StringBuilder scene = new StringBuilder();
-        scene.append(XMLUtility.XMLExport(level.getSceneObject()));
+        scene.append(XMLUtility.XMLExport(((WOG1Level)level).getSceneObject()));
 
         scene.append("\n\t<!-- ForceFields -->\n");
         for (EditorObject object : forceFields) scene.append(XMLUtility.XMLExport(object)).append("\n");
@@ -115,7 +115,7 @@ public class LevelWriter {
         ArrayList<EditorObject> arms = new ArrayList<>();
         ArrayList<EditorObject> levelExit = new ArrayList<>();
 
-        for (EditorObject object : _level.getLevelObject().getChildren()) switch (object.getType()) {
+        for (EditorObject object : ((WOG1Level)_level).getLevelObject().getChildren()) switch (object.getType()) {
 
             case "camera" -> camera.add(object);
             case "music" -> music.add(object);
@@ -131,7 +131,7 @@ public class LevelWriter {
         }
 
         StringBuilder level = new StringBuilder();
-        level.append(XMLUtility.XMLExport(_level.getLevelObject()));
+        level.append(XMLUtility.XMLExport(((WOG1Level)_level).getLevelObject()));
 
         level.append("\n\t<!-- Camera -->\n");
         for (EditorObject object : camera) level.append(XMLUtility.XMLExport(object)).append("\n");
@@ -173,13 +173,13 @@ public class LevelWriter {
 
         String level = getLevel(_level);
 
-        EditorObject addinObject = _level.getAddinObject();
+        EditorObject addinObject = ((WOG1Level)_level).getAddinObject();
         String addin = XMLUtility.fullAddinXMLExport("", addinObject, 0);
 
-        EditorObject textObject = _level.getTextObject();
+        EditorObject textObject = ((WOG1Level)_level).getTextObject();
         String text = XMLUtility.XMLExport(textObject);
 
-        EditorObject resourcesObject = _level.getResrcObject();
+        EditorObject resourcesObject = ((WOG1Level)_level).getResrcObject();
         String resrc = XMLUtility.XMLExport(resourcesObject);
 
         return new LevelInformation(scene, level, resrc, addin, text);
@@ -204,7 +204,7 @@ public class LevelWriter {
             scenePathText += ".xml";
             levelPathText += ".xml";
             resrcPathText += ".xml";
-        } else if (version == GameVersion.OLD) {
+        } else if (version == GameVersion.VERSION_WOG1_OLD) {
             //If not exporting and on the older version, add .bin to the end of each path.
             scenePathText += ".bin";
             levelPathText += ".bin";
@@ -240,7 +240,7 @@ public class LevelWriter {
         if (!Files.exists(addinPath)) Files.createFile(addinPath);
         if (!Files.exists(textPath)) Files.createFile(textPath);
 
-        if (version == GameVersion.OLD && !exportingGoomod) {
+        if (version == GameVersion.VERSION_WOG1_OLD && !exportingGoomod) {
             AESBinFormat.encodeFile(new File(scenePathText), levelInformation.scene.getBytes());
             AESBinFormat.encodeFile(new File(levelPathText), levelInformation.level.getBytes());
             AESBinFormat.encodeFile(new File(resrcPathText), levelInformation.resrc.getBytes());
@@ -250,7 +250,7 @@ public class LevelWriter {
             Files.write(resrcPath, Collections.singleton(levelInformation.resrc), StandardCharsets.UTF_8);
         }
 
-        String otherDir = FileManager.getGameDir(version == GameVersion.NEW ? GameVersion.OLD : GameVersion.NEW);
+        String otherDir = FileManager.getGameDir(version == GameVersion.VERSION_WOG1_NEW ? GameVersion.VERSION_WOG1_OLD : GameVersion.VERSION_WOG1_NEW);
         if (!exportingGoomod && Files.exists(Path.of(otherDir + "\\res\\levels\\" + levelName))) {
             File[] images = new File(otherDir + "\\res\\levels\\" + levelName).listFiles();
             if (images != null) for (File imageFile : images) {

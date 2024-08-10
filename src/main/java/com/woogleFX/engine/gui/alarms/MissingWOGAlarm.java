@@ -25,23 +25,31 @@ public class MissingWOGAlarm {
         info2.setWrapText(true);
         Button selectOldButton = new Button("Select 1.3 version...");
         Button selectNewButton = new Button("Select 1.5 version...");
+        Button select2Button = new Button("Select 2 version...");
         Stage stage = new Stage();
 
         selectOldButton.setOnAction(actionEvent -> {
-            if (GameResourceManager.changeWorldOfGooDirectory(GameVersion.OLD, true)) {
+            if (GameResourceManager.changeWorldOfGooDirectory(GameVersion.VERSION_WOG1_OLD, true)) {
                 Initializer.startWithWorldOfGooVersion();
                 stage.close();
             }
         });
 
         selectNewButton.setOnAction(actionEvent -> {
-            if (GameResourceManager.changeWorldOfGooDirectory(GameVersion.OLD, true)) {
+            if (GameResourceManager.changeWorldOfGooDirectory(GameVersion.VERSION_WOG1_NEW, true)) {
                 Initializer.startWithWorldOfGooVersion();
                 stage.close();
             }
         });
 
-        HBox idk = new HBox(selectOldButton, selectNewButton);
+        select2Button.setOnAction(actionEvent -> {
+            if (GameResourceManager.changeWorldOfGooDirectory(GameVersion.VERSION_WOG2, true)) {
+                Initializer.startWithWorldOfGooVersion();
+                stage.close();
+            }
+        });
+
+        HBox idk = new HBox(selectOldButton, selectNewButton, select2Button);
         idk.setSpacing(20);
         everythingBox.getChildren().addAll(info, idk, info2);
         Scene scene = new Scene(everythingBox, 280, 170);

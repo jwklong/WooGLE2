@@ -1,12 +1,13 @@
 package com.worldOfGoo.level;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 
+import com.woogleFX.gameData.level.WOG1Level;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -15,8 +16,8 @@ public class Vertex extends EditorObject {
     public Vertex(EditorObject _parent, GameVersion version) {
         super(_parent, "Vertex", version);
 
-        addAttribute("x", InputField.NUMBER).setDefaultValue("0").assertRequired();
-        addAttribute("y", InputField.NUMBER).setDefaultValue("0").assertRequired();
+        addAttribute("x", InputField._1_NUMBER).setDefaultValue("0").assertRequired();
+        addAttribute("y", InputField._1_NUMBER).setDefaultValue("0").assertRequired();
 
         Vertex thisVertex = this;
 
@@ -27,9 +28,9 @@ public class Vertex extends EditorObject {
             public void setX(double x) {
 
                 EditorObject pipe = null;
-                for (EditorObject editorObject : LevelManager.getLevel().getLevelObject().getChildren())
-                    if (editorObject instanceof Pipe) {
-                        pipe = editorObject;
+                for (EditorObject EditorObject : ((WOG1Level)LevelManager.getLevel()).getLevelObject().getChildren())
+                    if (EditorObject instanceof Pipe) {
+                        pipe = EditorObject;
                         break;
                     }
 
@@ -58,9 +59,9 @@ public class Vertex extends EditorObject {
             public void setY(double y) {
 
                 EditorObject pipe = null;
-                for (EditorObject editorObject : LevelManager.getLevel().getLevelObject().getChildren())
-                    if (editorObject instanceof Pipe) {
-                        pipe = editorObject;
+                for (EditorObject EditorObject : ((WOG1Level)LevelManager.getLevel()).getLevelObject().getChildren())
+                    if (EditorObject instanceof Pipe) {
+                        pipe = EditorObject;
                         break;
                     }
 

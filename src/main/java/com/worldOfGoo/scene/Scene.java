@@ -15,11 +15,11 @@ public class Scene extends EditorObject {
     public Scene(EditorObject _parent, GameVersion version) {
         super(_parent, "scene", version);
 
-        addAttribute("minx", InputField.NUMBER)          .setDefaultValue("-500");
-        addAttribute("miny", InputField.NUMBER)          .setDefaultValue("0");
-        addAttribute("maxx", InputField.NUMBER)          .setDefaultValue("500");
-        addAttribute("maxy", InputField.NUMBER)          .setDefaultValue("1000");
-        addAttribute("backgroundcolor", InputField.COLOR).setDefaultValue("0,0,0").assertRequired();
+        addAttribute("minx", InputField._1_NUMBER)          .setDefaultValue("-500");
+        addAttribute("miny", InputField._1_NUMBER)          .setDefaultValue("0");
+        addAttribute("maxx", InputField._1_NUMBER)          .setDefaultValue("500");
+        addAttribute("maxy", InputField._1_NUMBER)          .setDefaultValue("1000");
+        addAttribute("backgroundcolor", InputField._1_COLOR).setDefaultValue("0,0,0").assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("backgroundcolor,minx,miny,maxx,maxy,"));
 

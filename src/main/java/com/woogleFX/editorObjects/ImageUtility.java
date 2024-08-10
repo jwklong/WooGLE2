@@ -10,11 +10,12 @@ public class ImageUtility {
 
     public static Image colorize(Image image, Color colorize) {
 
+        double aScale = colorize.getA() / 255.0;
         double rScale = colorize.getR() / 255.0;
         double gScale = colorize.getG() / 255.0;
         double bScale = colorize.getB() / 255.0;
 
-        if (rScale == 1 && gScale == 1 && bScale == 1) return image;
+        if (aScale == 1 && rScale == 1 && gScale == 1 && bScale == 1) return image;
 
         WritableImage writableImage = new WritableImage((int)image.getWidth(), (int)image.getHeight());
         PixelWriter pixelWriter = writableImage.getPixelWriter();
@@ -35,11 +36,12 @@ public class ImageUtility {
                 int pixelG = (int)((pixel % (2 << 15)) / (2 << 7));
                 int pixelB = (int)(pixel % (2 << 7));
 
+                int scaledA = (int)(pixelA * (0.5 + 0.5 * aScale));
                 int scaledR = (int)(pixelR * rScale);
                 int scaledG = (int)(pixelG * gScale);
                 int scaledB = (int)(pixelB * bScale);
 
-                pixelBuffer[y * (int)image.getWidth() + x] = (pixelA * (2 << 23)) + (scaledR * (2 << 15)) + (scaledG * (2 << 7)) + scaledB;
+                pixelBuffer[y * (int)image.getWidth() + x] = (scaledA * (2 << 23)) + (scaledR * (2 << 15)) + (scaledG * (2 << 7)) + scaledB;
 
             }
         }

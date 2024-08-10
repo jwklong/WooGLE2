@@ -58,7 +58,7 @@
     <!-- SLF4J API -->
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
+      <artifactId>slf4j-simple</artifactId>
       <version>2.0.9</version>
     </dependency>
     <!-- Logback Core and Classic (implements SLF4J API) -->
@@ -68,9 +68,9 @@
       <version>1.4.14</version>
     </dependency>
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.4.14</version>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.26.2</version>
     </dependency>
   </dependencies>
 

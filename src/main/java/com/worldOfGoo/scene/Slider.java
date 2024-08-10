@@ -10,14 +10,14 @@ public class Slider extends EditorObject {
     public Slider(EditorObject _parent, GameVersion version) {
         super(_parent, "slider", version);
 
-        addAttribute("body1", InputField.ANY).assertRequired();
-        addAttribute("body2", InputField.ANY).assertRequired();
-        addAttribute("axis", InputField.POSITION).setDefaultValue("1,0").assertRequired();
-        addAttribute("bounce", InputField.NUMBER);
-        addAttribute("histop", InputField.NUMBER);
-        addAttribute("lostop", InputField.NUMBER);
-        addAttribute("stopcfm", InputField.NUMBER);
-        addAttribute("stoperp", InputField.NUMBER);
+        addAttribute("body1", InputField._1_STRING).assertRequired();
+        addAttribute("body2", InputField._1_STRING).assertRequired();
+        addAttribute("axis", InputField._1_POSITION).setDefaultValue("1,0").assertRequired();
+        addAttribute("bounce", InputField._1_NUMBER);
+        addAttribute("histop", InputField._1_NUMBER);
+        addAttribute("lostop", InputField._1_NUMBER);
+        addAttribute("stopcfm", InputField._1_NUMBER);
+        addAttribute("stoperp", InputField._1_NUMBER);
 
 
 

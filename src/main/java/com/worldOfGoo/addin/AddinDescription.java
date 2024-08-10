@@ -10,7 +10,7 @@ public class AddinDescription extends EditorObject {
     public AddinDescription(EditorObject _parent, GameVersion version) {
         super(_parent, "description", version);
 
-        addAttribute("value", InputField.ANY).assertRequired();
+        addAttribute("value", InputField._1_STRING).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("value,"));
 

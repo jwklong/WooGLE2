@@ -10,6 +10,7 @@ public class Depth {
     public static final double FORCEFIELDS = 10002;
     public static final double MECHANICS = 10003;
     public static final double SCENE = 10005;
+    public static final double ITEMS = 10006;
 
 
 }

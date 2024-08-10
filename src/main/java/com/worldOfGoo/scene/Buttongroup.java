@@ -10,8 +10,8 @@ public class Buttongroup extends EditorObject {
     public Buttongroup(EditorObject _parent, GameVersion version) {
         super(_parent, "buttongroup", version);
 
-        addAttribute("id", InputField.ANY)      .setDefaultValue("levelMarkerGroup").assertRequired();
-        addAttribute("osx", InputField.POSITION).setDefaultValue("150,1.08")        .assertRequired();
+        addAttribute("id", InputField._1_STRING)      .setDefaultValue("levelMarkerGroup").assertRequired();
+        addAttribute("osx", InputField._1_POSITION).setDefaultValue("150,1.08")        .assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("id,osx"));
 

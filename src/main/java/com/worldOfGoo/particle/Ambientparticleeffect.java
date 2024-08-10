@@ -1,7 +1,7 @@
 package com.worldOfGoo.particle;
 
-import com.woogleFX.gameData.particle.ParticleManager;
 import com.woogleFX.editorObjects.EditorObject;
+import com.woogleFX.gameData.particle.ParticleManager;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 
@@ -21,10 +21,10 @@ public class Ambientparticleeffect extends EditorObject {
     public Ambientparticleeffect(EditorObject _parent, GameVersion version) {
         super(_parent, "ambientparticleeffect", version);
 
-        addAttribute("name", InputField.NUMBER).setDefaultValue("0").assertRequired();
-        addAttribute("maxparticles", InputField.NUMBER).setDefaultValue("0").assertRequired();
-        addAttribute("rate", InputField.NUMBER).setDefaultValue("0").assertRequired();
-        addAttribute("margin", InputField.NUMBER).setDefaultValue("0").assertRequired();
+        addAttribute("name", InputField._1_NUMBER).setDefaultValue("0").assertRequired();
+        addAttribute("maxparticles", InputField._1_NUMBER).setDefaultValue("0").assertRequired();
+        addAttribute("rate", InputField._1_NUMBER).setDefaultValue("0").assertRequired();
+        addAttribute("margin", InputField._1_NUMBER).setDefaultValue("0").assertRequired();
 
     }
 

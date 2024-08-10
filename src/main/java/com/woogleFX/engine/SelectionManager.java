@@ -1,11 +1,12 @@
 package com.woogleFX.engine;
 
+import com.woogleFX.editorObjects.EditorObject;
+import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.engine.fx.FXContainers;
 import com.woogleFX.engine.fx.FXEditorButtons;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
-import com.woogleFX.editorObjects.attributes.EditorAttribute;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.DragSettings;
+import com.woogleFX.gameData.level.GameVersion;
 import javafx.scene.control.SplitPane;
 
 public class SelectionManager {
@@ -138,12 +139,15 @@ public class SelectionManager {
         EditorObject selected = selectedArray[0];
 
         EditorObject absoluteParent = selected;
-        while (absoluteParent.getParent() != null) absoluteParent = absoluteParent.getParent();
+        if (selected.getVersion() != GameVersion.VERSION_WOG2)
+            while (absoluteParent.getParent() != null) absoluteParent = absoluteParent.getParent();
 
         if (selected.getParent() != null) {
 
-            FXHierarchy.getHierarchy().setRoot(absoluteParent.getTreeItem());
+            if (selected.getVersion() != GameVersion.VERSION_WOG2)
+                FXHierarchy.getHierarchy().setRoot(absoluteParent.getTreeItem());
             FXHierarchy.getHierarchy().setShowRoot(true);
+
 
             switch (absoluteParent.getType()) {
                 case "scene" -> FXHierarchy.getHierarchySwitcherButtons().getSelectionModel().select(0);
@@ -151,6 +155,16 @@ public class SelectionManager {
                 case "resourcemanifest" -> FXHierarchy.getHierarchySwitcherButtons().getSelectionModel().select(2);
                 case "strings" -> FXHierarchy.getHierarchySwitcherButtons().getSelectionModel().select(3);
                 case "addin" -> FXHierarchy.getHierarchySwitcherButtons().getSelectionModel().select(4);
+
+                case "BallInstance" -> {
+                    if (absoluteParent.getAttribute("type").stringValue().equals("Terrain"))
+                        FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select(0);
+                    else FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select(1);
+                }
+                case "Item" -> FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select(2);
+                case "Pin" -> FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select(3);
+                case "CameraKeyFrame" -> FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select(4);
+
             }
         }
     }

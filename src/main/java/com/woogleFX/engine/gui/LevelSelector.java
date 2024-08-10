@@ -1,6 +1,11 @@
 package com.woogleFX.engine.gui;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import com.woogleFX.file.resourceManagers.BaseGameResources;
 import com.woogleFX.file.FileManager;
@@ -36,7 +41,14 @@ public class LevelSelector extends Application {
 
         VBox allLevelsBox = new VBox();
 
-        File levelDir = new File(FileManager.getGameDir(version) + "\\res\\levels");
+        ArrayList<String> levels = new ArrayList<>();
+        for (File child : new File(FileManager.getGameDir(version) + "\\res\\levels").listFiles()) {
+            if (version == GameVersion.VERSION_WOG1_OLD || version == GameVersion.VERSION_WOG1_NEW) {
+                levels.add(child.getName());
+            } else {
+                levels.add(child.getName().substring(0, child.getName().length() - 5));
+            }
+        }
 
         ScrollPane realPane = new ScrollPane(allLevelsBox);
 
@@ -57,22 +69,19 @@ public class LevelSelector extends Application {
 
             allLevelsBox.getChildren().clear();
 
-            File[] levels = levelDir.listFiles();
-            if (levels == null) return;
-
-            for (File levelFile : levels) {
+            for (String level : levels) {
 
                 boolean ok = false;
                 switch (t1) {
                     case "Original Levels Only" -> ok = BaseGameResources.LEVELS.stream().anyMatch(
-                            e -> e.equals(levelFile.getName()));
+                            e -> e.equals(level));
                     case "Customizable Levels Only" -> ok = BaseGameResources.LEVELS.stream().noneMatch(
-                            e -> e.equals(levelFile.getName()));
+                            e -> e.equals(level));
                     case "All Levels" -> ok = true;
                 }
                 if (!ok) return;
 
-                Label label = new Label(levelFile.getName());
+                Label label = new Label(level);
                 label.setPrefWidth(376);
                 label.setOnMouseClicked(mouseEvent -> {
 

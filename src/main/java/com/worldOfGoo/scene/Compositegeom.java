@@ -1,15 +1,16 @@
 package com.worldOfGoo.scene;
 
+import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.editorObjects.attributes.dataTypes.Position;
+import com.woogleFX.gameData.level.WOG1Level;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -24,22 +25,22 @@ public class Compositegeom extends EditorObject {
     public Compositegeom(EditorObject _parent, GameVersion version) {
         super(_parent, "compositegeom", version);
 
-        addAttribute("id",               InputField.ANY)                             .assertRequired();
-        addAttribute("x",                InputField.NUMBER)  .setDefaultValue("0")   .assertRequired();
-        addAttribute("y",                InputField.NUMBER)  .setDefaultValue("0")   .assertRequired();
-        addAttribute("rotation",         InputField.NUMBER)  .setDefaultValue("0")   .assertRequired();
-        addAttribute("static",           InputField.FLAG)    .setDefaultValue("true").assertRequired();
-        addAttribute("mass",             InputField.NUMBER);
-        addAttribute("tag",              InputField.TAG);
-        addAttribute("material",         InputField.MATERIAL).setDefaultValue("rock").assertRequired();
-        addAttribute("break",            InputField.NUMBER);
-        addAttribute("image",            InputField.IMAGE);
-        addAttribute("imagepos",         InputField.POSITION);
-        addAttribute("imagerot",         InputField.NUMBER)  .setDefaultValue("0");
-        addAttribute("imagescale",       InputField.POSITION).setDefaultValue("1,1");
-        addAttribute("rotspeed",         InputField.NUMBER)  .setDefaultValue("0");
-        addAttribute("contacts",         InputField.FLAG);
-        addAttribute("nogeomcollisions", InputField.FLAG);
+        addAttribute("id",               InputField._1_STRING)                             .assertRequired();
+        addAttribute("x",                InputField._1_NUMBER)  .setDefaultValue("0")   .assertRequired();
+        addAttribute("y",                InputField._1_NUMBER)  .setDefaultValue("0")   .assertRequired();
+        addAttribute("rotation",         InputField._1_NUMBER)  .setDefaultValue("0")   .assertRequired();
+        addAttribute("static",           InputField._1_FLAG)    .setDefaultValue("true").assertRequired();
+        addAttribute("mass",             InputField._1_NUMBER);
+        addAttribute("tag",              InputField._1_TAG);
+        addAttribute("material",         InputField._1_MATERIAL).setDefaultValue("rock").assertRequired();
+        addAttribute("break",            InputField._1_NUMBER);
+        addAttribute("image",            InputField._1_IMAGE);
+        addAttribute("imagepos",         InputField._1_POSITION);
+        addAttribute("imagerot",         InputField._1_NUMBER)  .setDefaultValue("0");
+        addAttribute("imagescale",       InputField._1_POSITION).setDefaultValue("1,1");
+        addAttribute("rotspeed",         InputField._1_NUMBER)  .setDefaultValue("0");
+        addAttribute("contacts",         InputField._1_FLAG);
+        addAttribute("nogeomcollisions", InputField._1_FLAG);
 
         addObjectComponent(new CircleComponent() {
             public double getX() {
@@ -171,7 +172,7 @@ public class Compositegeom extends EditorObject {
         if (getAttribute("image").stringValue().isEmpty()) return;
 
         try {
-            image = getAttribute("image").imageValue(LevelManager.getLevel().getResrc(), getVersion());
+            image = getAttribute("image").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
         } catch (FileNotFoundException ignored) {
             image = null;
         }

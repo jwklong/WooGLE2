@@ -1,7 +1,7 @@
 package com.worldOfGoo.particle;
 
-import com.woogleFX.gameData.particle.ParticleManager;
 import com.woogleFX.editorObjects.EditorObject;
+import com.woogleFX.gameData.particle.ParticleManager;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -22,10 +22,10 @@ public class Particleeffect extends EditorObject {
     public Particleeffect(EditorObject _parent, GameVersion version) {
         super(_parent, "particleeffect", version);
 
-        addAttribute("name", InputField.ANY);
-        addAttribute("maxparticles", InputField.NUMBER).setDefaultValue("0");
-        addAttribute("rate", InputField.NUMBER).setDefaultValue("0.25");
-        addAttribute("margin", InputField.NUMBER).setDefaultValue("0");
+        addAttribute("name", InputField._1_STRING);
+        addAttribute("maxparticles", InputField._1_NUMBER).setDefaultValue("0");
+        addAttribute("rate", InputField._1_NUMBER).setDefaultValue("0.25");
+        addAttribute("margin", InputField._1_NUMBER).setDefaultValue("0");
 
         setMetaAttributes(MetaEditorAttribute.parse("name,maxparticles,rate"));
 

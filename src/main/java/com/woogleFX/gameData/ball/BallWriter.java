@@ -39,7 +39,7 @@ public class BallWriter {
         String ballsPathText = outputPathString + "\\balls.xml";
         String resourcesPathText = outputPathString + "\\resources.xml";
 
-        if (!goomod && version == GameVersion.OLD) {
+        if (!goomod && version == GameVersion.VERSION_WOG1_OLD) {
             ballsPathText += ".bin";
             resourcesPathText += ".bin";
         }
@@ -63,8 +63,8 @@ public class BallWriter {
             Files.createFile(resourcesPath);
         }
 
-        String otherDir = FileManager.getGameDir(version == GameVersion.OLD ? GameVersion.NEW : GameVersion.OLD);
-        if (!goomod && version == GameVersion.OLD) {
+        String otherDir = FileManager.getGameDir(version == GameVersion.VERSION_WOG1_OLD ? GameVersion.VERSION_WOG1_NEW : GameVersion.VERSION_WOG1_OLD);
+        if (!goomod && version == GameVersion.VERSION_WOG1_OLD) {
             AESBinFormat.encodeFile(new File(ballsPathText), ballXML.getBytes());
             AESBinFormat.encodeFile(new File(resourcesPathText), resrcXML.getBytes());
         } else {

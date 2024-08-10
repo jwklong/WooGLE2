@@ -9,9 +9,9 @@ public class Marker extends EditorObject {
     public Marker(EditorObject _parent, GameVersion version) {
         super(_parent, "marker", version);
 
-        addAttribute("drag",     InputField.ANY).assertRequired();
-        addAttribute("detach",   InputField.ANY).assertRequired();
-        addAttribute("rotspeed", InputField.ANY).assertRequired();
+        addAttribute("drag",     InputField._1_STRING).assertRequired();
+        addAttribute("detach",   InputField._1_STRING).assertRequired();
+        addAttribute("rotspeed", InputField._1_STRING).assertRequired();
 
     }
 

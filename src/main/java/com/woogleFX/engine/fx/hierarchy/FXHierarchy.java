@@ -1,10 +1,11 @@
 package com.woogleFX.engine.fx.hierarchy;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.engine.fx.FXPropertiesView;
 import com.woogleFX.engine.fx.FXStage;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
-import com.woogleFX.gameData.level._Level;
+import com.woogleFX.gameData.level.WOG1Level;
+import com.woogleFX.gameData.level.WOG2Level;
 import com.worldOfGoo.addin.Addin;
 import com.worldOfGoo.level.Level;
 import com.worldOfGoo.resrc.ResourceManifest;
@@ -61,18 +62,22 @@ public class FXHierarchy {
         // properties view.
         hierarchy.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
-            if (newValue == null || newValue.getValue() == null) return;
+            if (newValue == null || newValue.getValue() == null || hierarchy.getSelectionModel().getSelectedItems().isEmpty() ||
+                    hierarchy.getSelectionModel().getSelectedItems().get(0) == null) return;
 
             EditorObject absoluteParent = newValue.getValue();
+
             while (absoluteParent.getParent() != null) absoluteParent = absoluteParent.getParent();
             if (absoluteParent instanceof Scene) hierarchySwitcherButtons.getSelectionModel().select(0);
             else if (absoluteParent instanceof Level) hierarchySwitcherButtons.getSelectionModel().select(1);
-            else if (absoluteParent instanceof ResourceManifest) hierarchySwitcherButtons.getSelectionModel().select(2);
+            else if (absoluteParent instanceof ResourceManifest)
+                hierarchySwitcherButtons.getSelectionModel().select(2);
             else if (absoluteParent instanceof TextStrings) hierarchySwitcherButtons.getSelectionModel().select(3);
             else if (absoluteParent instanceof Addin) hierarchySwitcherButtons.getSelectionModel().select(4);
 
             EditorObject[] selectedNow = new EditorObject[hierarchy.getSelectionModel().getSelectedItems().size()];
-            for (int i = 0; i < selectedNow.length; i++) selectedNow[i] = hierarchy.getSelectionModel().getSelectedItems().get(i).getValue();
+            for (int i = 0; i < selectedNow.length; i++)
+                selectedNow[i] = hierarchy.getSelectionModel().getSelectedItems().get(i).getValue();
             LevelManager.getLevel().setSelected(selectedNow);
 
             FXPropertiesView.changeTableView(selectedNow);
@@ -93,6 +98,7 @@ public class FXHierarchy {
         hierarchy.setId("hierarchy");
 
         hierarchySwitcherButtons();
+        newHierarchySwitcherButtons();
 
     }
 
@@ -121,13 +127,14 @@ public class FXHierarchy {
 
         hierarchySwitcherButtons.getSelectionModel().selectedItemProperty().addListener((observableValue, tab, t1) -> {
 
-            _Level _level = LevelManager.getLevel();
-            if (_level == null) return;
+            if (LevelManager.getLevel() == null) return;
+
+            WOG1Level _level = (WOG1Level) LevelManager.getLevel();
 
             EditorObject rootObject;
             if (t1 == scene) rootObject = _level.getScene().get(0);
             else if (t1 == level) rootObject = _level.getLevel().get(0);
-            else if (t1 == resrc) rootObject =  _level.getResrc().get(0);
+            else if (t1 == resrc) rootObject = _level.getResrc().get(0);
             else if (t1 == text) rootObject = _level.getText().get(0);
             else if (t1 == addin) rootObject = _level.getAddin().get(0);
             else return;
@@ -136,6 +143,59 @@ public class FXHierarchy {
             hierarchy.refresh();
             hierarchy.getRoot().setExpanded(true);
             _level.setCurrentlySelectedSection(t1.getText());
+            hierarchy.setShowRoot(true);
+
+        });
+
+    }
+
+
+    private static final TabPane newHierarchySwitcherButtons = new TabPane();
+    public static TabPane getNewHierarchySwitcherButtons() {
+        return newHierarchySwitcherButtons;
+    }
+
+
+    public static void newHierarchySwitcherButtons() {
+
+        // Create the three buttons.
+        Tab terrain = new Tab("Terrain");
+        Tab balls = new Tab("Balls");
+        Tab items = new Tab("Items");
+        Tab pins = new Tab("Pins");
+        Tab camera = new Tab("Camera");
+
+        newHierarchySwitcherButtons.getTabs().addAll(terrain, balls, items, pins, camera);
+        newHierarchySwitcherButtons.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        newHierarchySwitcherButtons.setMinHeight(30);
+        newHierarchySwitcherButtons.setMaxHeight(30);
+        newHierarchySwitcherButtons.setPrefHeight(30);
+        newHierarchySwitcherButtons.setPadding(new Insets(-6, -6, -6, -6));
+
+        newHierarchySwitcherButtons.getSelectionModel().selectedItemProperty().addListener((observableValue, tab, t1) -> {
+
+            if (LevelManager.getLevel() == null) return;
+
+            WOG2Level level = (WOG2Level) LevelManager.getLevel();
+
+            TreeItem<EditorObject> root = level.getLevel().getTreeItem();
+            hierarchy.setRoot(root);
+
+            root.getChildren().clear();
+
+            for (EditorObject child : level.getLevel().getChildren()) {
+
+                if ((child.getType().equals("BallInstance") && child.getAttribute("type").stringValue().equals("Terrain") || child.getType().equals("TerrainGroup")) && t1 == terrain) root.getChildren().add(child.getTreeItem());
+                else if (((child.getType().equals("BallInstance") && !child.getAttribute("type").stringValue().equals("Terrain")) || child.getType().equals("Strand")) && t1 == balls) root.getChildren().add(child.getTreeItem());
+                else if (child.getType().equals("Item") && t1 == items) root.getChildren().add(child.getTreeItem());
+                else if (child.getType().equals("Pin") && t1 == pins) root.getChildren().add(child.getTreeItem());
+                else if (child.getType().equals("CameraKeyFrame") && t1 == camera) root.getChildren().add(child.getTreeItem());
+
+            }
+
+            hierarchy.refresh();
+            hierarchy.getRoot().setExpanded(true);
+            level.setCurrentlySelectedSection(t1.getText());
             hierarchy.setShowRoot(true);
 
         });

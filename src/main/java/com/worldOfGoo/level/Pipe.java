@@ -1,8 +1,8 @@
 package com.worldOfGoo.level;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -13,9 +13,9 @@ public class Pipe extends EditorObject {
     public Pipe(EditorObject _parent, GameVersion version) {
         super(_parent, "pipe", version);
 
-        addAttribute("type", InputField.ANY);
-        addAttribute("id", InputField.ANY)                        .assertRequired();
-        addAttribute("depth", InputField.ANY).setDefaultValue("0").assertRequired();
+        addAttribute("type", InputField._1_STRING);
+        addAttribute("id", InputField._1_STRING)                        .assertRequired();
+        addAttribute("depth", InputField._1_STRING).setDefaultValue("0").assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("type,id,depth,"));
 

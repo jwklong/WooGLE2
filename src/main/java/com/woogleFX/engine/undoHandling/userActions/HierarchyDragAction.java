@@ -19,6 +19,7 @@ public class HierarchyDragAction extends UserAction {
     public UserAction getInverse() {
 
         int extra;
+        // TODO
         if (toPosition > fromPosition) extra = getObject().getChildren().size();
         else extra = 0;
 

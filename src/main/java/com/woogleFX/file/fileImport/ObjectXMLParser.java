@@ -1,5 +1,6 @@
 package com.woogleFX.file.fileImport;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
 import com.woogleFX.gameData.level.GameVersion;
 import com.worldOfGoo.level.Level;
@@ -9,7 +10,6 @@ import com.worldOfGoo.text.TextStrings;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.woogleFX.editorObjects.EditorObject;
 import com.worldOfGoo.addin.Addin;
 import com.worldOfGoo.addin.AddinLevel;
 import com.worldOfGoo.addin.AddinLevelOCD;

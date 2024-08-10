@@ -76,6 +76,7 @@ public class EditorAttribute {
     }
 
     public String[] listValue() {
+        if (stringValue().isEmpty()) return new String[0];
         return stringValue().split(",");
     }
 

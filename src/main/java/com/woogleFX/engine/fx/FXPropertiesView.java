@@ -1,18 +1,20 @@
 package com.woogleFX.engine.fx;
 
+import com.woogleFX.editorObjects.EditorObject;
+import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.engine.LevelManager;
+import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.particle.ParticleManager;
 import com.woogleFX.engine.undoHandling.UndoManager;
-import com.woogleFX.editorObjects.attributes.EditorAttribute;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.engine.undoHandling.userActions.AttributeChangeAction;
 import com.worldOfGoo.resrc.ResrcImage;
+import com.worldOfGoo2.util.ItemHelper;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -20,8 +22,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -106,8 +106,8 @@ public class FXPropertiesView {
                 } else {
 
                     if (getTableRow().getTreeItem() != null) {
-                        EditorAttribute editorAttribute = getTableRow().getTreeItem().getValue();
-                        if (InputField.verify(editorAttribute.getObject(), editorAttribute.getType(), editorAttribute.stringValue())) {
+                        EditorAttribute EditorAttribute = getTableRow().getTreeItem().getValue();
+                        if (InputField.verify(EditorAttribute.getObject(), EditorAttribute.getType(), EditorAttribute.stringValue())) {
                             setStyle("-fx-text-fill: #000000ff");
                         } else {
                             setStyle("-fx-text-fill: #ff0000ff");
@@ -138,19 +138,21 @@ public class FXPropertiesView {
                     }
                 };
                 TextFieldTreeTableCell<EditorAttribute, String> cell = new TextFieldTreeTableCell<>(stringConverter) {
-                    @Override
-                    public void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
+                    private TextField textField;
 
-                        // Override the default padding that ruins the text.
-                        setPadding(new Insets(0, 0, 0, 2));
-                    }
-
-                    private String before;
+                    private ContextMenu contextMenu;
 
                     @Override
                     public void startEdit() {
                         super.startEdit();
+                        if (textField == null) {
+                            createTextField();
+                        }
+                        setText(null);
+                        setGraphic(textField);
+                        textField.setText(getItem());
+                        textField.selectAll();
+                        textField.requestFocus();
                         before = getItem();
 
                         Bounds bounds = localToScreen(getBoundsInLocal());
@@ -160,7 +162,8 @@ public class FXPropertiesView {
                         double x = bounds.getMinX();
                         double y = bounds.getMinY() + 18;
 
-                        ContextMenu contextMenu = possibleAttributeValues(this, LevelManager.getLevel().getVersion());
+                        if (contextMenu != null) contextMenu.hide();
+                        contextMenu = possibleAttributeValues(this, getItem(), LevelManager.getLevel().getVersion());
 
                         if (((VBox)((ScrollPane)contextMenu.getItems().get(0).getGraphic()).getContent()).getChildren().isEmpty()) return;
 
@@ -168,15 +171,68 @@ public class FXPropertiesView {
 
                         contextMenu.requestFocus();
 
+                        TextField textField = new TextField();
+                        textField.setText(getItem());
+                        textField.selectAll();
                     }
 
                     @Override
                     public void cancelEdit() {
                         super.cancelEdit();
+                        setText(getItem());
+                        setGraphic(null);
                         if (getContextMenu() != null) {
                             getContextMenu().hide();
                         }
                     }
+
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            if (isEditing()) {
+                                if (textField != null) {
+                                    textField.setText(getItem());
+                                }
+                                setText(null);
+                                setGraphic(textField);
+                            } else {
+                                setText(getItem());
+                                setGraphic(null);
+                            }
+                        }
+
+                        // Override the default padding that ruins the text.
+                        setPadding(new Insets(0, 0, 0, 2));
+                    }
+
+                    private void createTextField() {
+                        textField = new TextField(getItem());
+                        textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+                        TextFieldTreeTableCell<EditorAttribute, String> cell = this;
+                        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+                            if (contextMenu == null) return;
+                            contextMenu.hide();
+                            contextMenu = possibleAttributeValues(cell, newValue, LevelManager.getLevel().getVersion());
+
+                            Bounds bounds = localToScreen(getBoundsInLocal());
+
+                            if (bounds == null) return;
+
+                            double x = bounds.getMinX();
+                            double y = bounds.getMinY() + 18;
+
+                            contextMenu.show(FXStage.getStage(), x, y);
+
+                            contextMenu.requestFocus();
+                        });
+                        textField.setOnAction(event -> commitEdit(textField.getText()));
+                    }
+
+                    private String before;
 
                     @Override
                     public void commitEdit(String s) {
@@ -184,6 +240,8 @@ public class FXPropertiesView {
                         EditorObject object = getTableRow().getItem().getObject();
                         super.commitEdit(InputField.verify(object, type, s) ? s : before);
                     }
+
+
 
                 };
 
@@ -205,7 +263,7 @@ public class FXPropertiesView {
             EditorAttribute attribute = propertiesView.getTreeItem(e.getTreeTablePosition().getRow()).getValue();
             String oldValue = attribute.stringValue();
             if (InputField.verify(attribute.getObject(), attribute.getType(), e.getNewValue())) {
-                attribute.setValue(e.getNewValue());
+                attribute.getObject().setAttribute(attribute.getName(), e.getNewValue());
             }
 
             // If the edit was actually valid:
@@ -273,6 +331,7 @@ public class FXPropertiesView {
                 // In this case, create a dummy attribute with no value.
                 attribute = new EditorAttribute(metaEditorAttribute.getName(), null, object);
             }
+            if (attribute.getType() == InputField._2_LIST_CHILD || attribute.getType() == InputField._2_LIST_CHILD_HIDDEN) continue;
             TreeItem<EditorAttribute> thisAttribute = new TreeItem<>(attribute);
 
             // If this attribute is set to be open by default, set its tree item to open.
@@ -296,7 +355,7 @@ public class FXPropertiesView {
     }
 
 
-    private static ContextMenu possibleAttributeValues(TextFieldTreeTableCell<EditorAttribute, String> cell, GameVersion version) {
+    private static ContextMenu possibleAttributeValues(TextFieldTreeTableCell<EditorAttribute, String> cell, String currentText, GameVersion version) {
         ContextMenu contextMenu = new ContextMenu();
         EditorAttribute attribute = cell.getTableRow().getItem();
         if (attribute == null) {
@@ -306,8 +365,8 @@ public class FXPropertiesView {
         VBox vBox = new VBox();
 
         switch (attribute.getType()) {
-            case IMAGE, IMAGE_REQUIRED -> {
-                for (EditorObject resource : LevelManager.getLevel().getResrc()) {
+            case _1_IMAGE, _1_IMAGE_REQUIRED -> {
+                for (EditorObject resource : ((WOG1Level)LevelManager.getLevel()).getResrc()) {
                     if (resource instanceof ResrcImage) {
                         Button setImageItem = new Button(resource.getAttribute("id").stringValue());
 
@@ -315,7 +374,7 @@ public class FXPropertiesView {
 
                         // Add thumbnail of the image to the menu item
                         try {
-                            ImageView graphic = new ImageView(ResourceManager.getImage(LevelManager.getLevel().getResrc(), resource.getAttribute("id").stringValue(), version));
+                            ImageView graphic = new ImageView(ResourceManager.getImage(((WOG1Level)LevelManager.getLevel()).getResrc(), resource.getAttribute("id").stringValue(), version));
                             graphic.setFitHeight(30);
                             // Set width depending on height
                             graphic.setFitWidth(graphic.getImage().getWidth() * 30 / graphic.getImage().getHeight());
@@ -338,7 +397,7 @@ public class FXPropertiesView {
                     }
                 }
             }
-            case BALL -> {
+            case _1_BALL -> {
                 String path = FileManager.getGameDir(version);
                 File[] ballFiles = new File(path + "\\res\\balls").listFiles();
                 if (ballFiles != null) {
@@ -360,7 +419,31 @@ public class FXPropertiesView {
                     }
                 }
             }
-            case PARTICLES -> {
+            case _2_BALL_TYPE -> {
+                String path = FileManager.getGameDir(version);
+                File[] ballFiles = new File(path + "\\res\\balls").listFiles();
+                if (ballFiles != null) {
+                    for (File ballFile : ballFiles) {
+                        if (ballFile.getName().contains(".")) continue;
+                        if (!(ballFile.getName().toLowerCase().contains(currentText.toLowerCase()))) continue;
+                        Button setImageItem = new Button(ballFile.getName());
+
+                        configureButton(setImageItem);
+
+                        setImageItem.setOnAction(event -> {
+                            UndoManager.registerChange(new AttributeChangeAction(attribute,
+                                    attribute.stringValue(), ballFile.getName()));
+                            attribute.setValue(ballFile.getName());
+                            if (contextMenu.isFocused()) {
+                                cell.commitEdit(attribute.stringValue());
+                            }
+                        });
+
+                        vBox.getChildren().add(setImageItem);
+                    }
+                }
+            }
+            case _1_PARTICLES -> {
                 for (String particleType : ParticleManager.getSortedParticleNames()) {
                     Button setImageItem = new Button(particleType);
 
@@ -378,6 +461,29 @@ public class FXPropertiesView {
                     vBox.getChildren().add(setImageItem);
                 }
             }
+
+            case _2_ITEM_TYPE -> {
+
+                for (String itemType : ItemHelper.itemNameMap.values()) {
+                    if (!itemType.toLowerCase().contains(currentText.toLowerCase())) continue;
+                    Button setImageItem = new Button(itemType);
+
+                    configureButton(setImageItem);
+
+                    setImageItem.setOnAction(event -> {
+                        UndoManager.registerChange(new AttributeChangeAction(attribute,
+                                attribute.stringValue(), itemType));
+                        attribute.setValue(itemType);
+                        if (contextMenu.isFocused()) {
+                            cell.commitEdit(attribute.stringValue());
+                        }
+                    });
+
+                    vBox.getChildren().add(setImageItem);
+                }
+
+            }
+
         }
 
         vBox.setPrefWidth(300);

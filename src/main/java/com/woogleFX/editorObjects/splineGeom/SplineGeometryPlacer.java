@@ -7,6 +7,7 @@ import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.DeleteSplinePointAction;
 import com.woogleFX.engine.undoHandling.userActions.ObjectCreationAction;
 import com.woogleFX.engine.undoHandling.userActions.UserAction;
+import com.woogleFX.gameData.level.WOG1Level;
 import javafx.geometry.Point2D;
 
 import java.awt.geom.QuadCurve2D;
@@ -606,12 +607,14 @@ public class SplineGeometryPlacer {
             undoBuilder.add(new DeleteSplinePointAction(p0.getX(), p0.getY(), p1.getX(), p1.getY(), p2.getX(), p2.getY(), i));
         }
 
-        EditorObject compositegeom = ObjectCreator.create("compositegeom", LevelManager.getLevel().getSceneObject(), LevelManager.getLevel().getVersion());
+        WOG1Level level = (WOG1Level) LevelManager.getLevel();
+
+        EditorObject compositegeom = (EditorObject)ObjectCreator.create("compositegeom", level.getSceneObject(), LevelManager.getLevel().getVersion());
         compositegeom.setAttribute("x", splineBounds.minX + width / 2);
         compositegeom.setAttribute("y", -splineBounds.minY - height / 2);
-        LevelManager.getLevel().getScene().add(compositegeom);
+        level.getScene().add(compositegeom);
 
-        undoBuilder.add(new ObjectCreationAction(compositegeom, LevelManager.getLevel().getSceneObject().getChildren().indexOf(compositegeom)));
+        undoBuilder.add(new ObjectCreationAction(compositegeom, level.getSceneObject().getChildren().indexOf(compositegeom)));
 
         for (Geometry geometry : geometryList) {
 
@@ -619,14 +622,14 @@ public class SplineGeometryPlacer {
 
             if (geometry instanceof Circle circle) {
 
-                geometryObject = ObjectCreator.create("circle", compositegeom, LevelManager.getLevel().getVersion());
+                geometryObject = (EditorObject)ObjectCreator.create("circle", compositegeom, LevelManager.getLevel().getVersion());
                 geometryObject.setAttribute("x", circle.x * size + splineBounds.minX - compositegeom.getAttribute("x").doubleValue());
                 geometryObject.setAttribute("y", -circle.y * size - splineBounds.minY - compositegeom.getAttribute("y").doubleValue());
                 geometryObject.setAttribute("radius", circle.radius * size);
 
             } else if (geometry instanceof Rectangle rectangle) {
 
-                geometryObject = ObjectCreator.create("rectangle", compositegeom, LevelManager.getLevel().getVersion());
+                geometryObject = (EditorObject)ObjectCreator.create("rectangle", compositegeom, LevelManager.getLevel().getVersion());
                 geometryObject.setAttribute("x", rectangle.x * size + splineBounds.minX - compositegeom.getAttribute("x").doubleValue());
                 geometryObject.setAttribute("y", -rectangle.y * size - splineBounds.minY - compositegeom.getAttribute("y").doubleValue());
                 geometryObject.setAttribute("width", rectangle.width * size);
@@ -635,7 +638,7 @@ public class SplineGeometryPlacer {
 
             } else continue;
 
-            LevelManager.getLevel().getScene().add(geometryObject);
+            level.getScene().add(geometryObject);
 
             undoBuilder.add(new ObjectCreationAction(geometryObject, compositegeom.getChildren().indexOf(geometryObject)));
 

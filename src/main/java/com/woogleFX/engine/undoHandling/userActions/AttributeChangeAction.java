@@ -25,7 +25,7 @@ public class AttributeChangeAction extends UserAction {
 
     @Override
     public void execute() {
-        attribute.setValue(newValue);
+        attribute.getObject().setAttribute(attribute.getName(), newValue);
         FXHierarchy.getHierarchy().refresh();
         FXPropertiesView.getPropertiesView().refresh();
     }

@@ -4,8 +4,10 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.engine.gui.alarms.LoadingResourcesAlarm;
 import com.woogleFX.file.FileManager;
+import com.woogleFX.file.fileImport.ObjectGOOParser;
 import com.woogleFX.gameData.animation.AnimationManager;
 import com.woogleFX.gameData.animation.AnimationReader;
+import com.woogleFX.gameData.ball.AtlasManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.gameData.particle.ParticleManager;
 import com.worldOfGoo.resrc.Material;
@@ -15,12 +17,15 @@ import com.worldOfGoo.resrc.ResrcImage;
 import com.worldOfGoo.resrc.SetDefaults;
 import com.worldOfGoo.resrc.Sound;
 import com.worldOfGoo.text.TextString;
+import com.worldOfGoo2.items._2_Item;
+import com.worldOfGoo2.util.ItemHelper;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +45,12 @@ public class GlobalResourceManager {
     }
 
 
+    private static final ArrayList<EditorObject> sequelResources = new ArrayList<>();
+    public static ArrayList<EditorObject> getSequelResources() {
+        return sequelResources;
+    }
+
+
     private static final ArrayList<String> allFailedResources = new ArrayList<>();
 
 
@@ -48,22 +59,35 @@ public class GlobalResourceManager {
         allFailedResources.clear();
 
         oldResources.clear();
-        if (!FileManager.getGameDir(GameVersion.OLD).isEmpty()) {
-            openResources(GameVersion.OLD);
-            openParticles(GameVersion.OLD);
-            openAnimations(GameVersion.OLD);
-            openText(GameVersion.OLD);
-            openMaterials(GameVersion.OLD);
+        if (!FileManager.getGameDir(GameVersion.VERSION_WOG1_OLD).isEmpty()) {
+            openResources(GameVersion.VERSION_WOG1_OLD);
+            openParticles(GameVersion.VERSION_WOG1_OLD);
+            openAnimations(GameVersion.VERSION_WOG1_OLD);
+            openText(GameVersion.VERSION_WOG1_OLD);
+            openMaterials(GameVersion.VERSION_WOG1_OLD);
         }
 
         newResources.clear();
-        if (!FileManager.getGameDir(GameVersion.NEW).isEmpty()) {
-            openResources(GameVersion.NEW);
-            openParticles(GameVersion.NEW);
-            openAnimations(GameVersion.NEW);
-            openText(GameVersion.NEW);
-            openMaterials(GameVersion.NEW);
+        if (!FileManager.getGameDir(GameVersion.VERSION_WOG1_NEW).isEmpty()) {
+            openResources(GameVersion.VERSION_WOG1_NEW);
+            openParticles(GameVersion.VERSION_WOG1_NEW);
+            openAnimations(GameVersion.VERSION_WOG1_NEW);
+            openText(GameVersion.VERSION_WOG1_NEW);
+            openMaterials(GameVersion.VERSION_WOG1_NEW);
         }
+
+        sequelResources.clear();
+        if (!FileManager.getGameDir(GameVersion.VERSION_WOG2).isEmpty()) {
+            openResources(GameVersion.VERSION_WOG2);
+            openItems();
+            AtlasManager.reloadAtlas();
+            //openParticles(GameVersion.VERSION_WOG2);
+            //openAnimations(GameVersion.VERSION_WOG2);
+            //openText(GameVersion.VERSION_WOG2);
+            //openMaterials(GameVersion.VERSION_WOG2);
+        }
+
+        // TODO
 
         // Load particle names, remove duplicates, and sort them alphabetically
         Set<String> particleNames = new HashSet<>();
@@ -85,9 +109,26 @@ public class GlobalResourceManager {
     }
 
 
+    private static void openItems() {
+
+        new Thread(() -> {
+            for (File itemFile : new File(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\items").listFiles())
+                if (itemFile.getName().endsWith(".wog2"))
+                    ItemHelper.getItemActualName(itemFile.getName().substring(0, itemFile.getName().length() - 5));
+        }).start();
+
+
+
+    }
+
+
     private static void openResources(GameVersion version) {
 
-        ArrayList<EditorObject> toAddTo = version == GameVersion.OLD ? oldResources : newResources;
+        ArrayList<EditorObject> toAddTo = switch (version) {
+            case VERSION_WOG1_OLD -> oldResources;
+            case VERSION_WOG1_NEW -> newResources;
+            case VERSION_WOG2 -> sequelResources;
+        };
 
         ArrayList<EditorObject> resources;
         try {
@@ -99,19 +140,19 @@ public class GlobalResourceManager {
 
         SetDefaults currentSetDefaults = null;
 
-        for (EditorObject editorObject : resources) {
+        for (EditorObject EditorObject : resources) {
 
-            if (editorObject instanceof SetDefaults setDefaults) {
+            if (EditorObject instanceof SetDefaults setDefaults) {
                 currentSetDefaults = setDefaults;
             }
 
-            else if (editorObject instanceof ResrcImage resrcImage) {
+            else if (EditorObject instanceof ResrcImage resrcImage) {
                 resrcImage.setSetDefaults(currentSetDefaults);
                 toAddTo.add(resrcImage);
-            } else if (editorObject instanceof Sound sound) {
+            } else if (EditorObject instanceof Sound sound) {
                 sound.setSetDefaults(currentSetDefaults);
                 toAddTo.add(sound);
-            } else if (editorObject instanceof Font font) {
+            } else if (EditorObject instanceof Font font) {
                 font.setSetDefaults(currentSetDefaults);
                 toAddTo.add(font);
             }
@@ -153,12 +194,12 @@ public class GlobalResourceManager {
         if (animationsArray == null) return;
 
         for (File second : animationsArray) {
-            if (version == GameVersion.NEW || !second.getName().substring(second.getName().lastIndexOf(".")).equals(".binltl64")) {
+            if (version == GameVersion.VERSION_WOG1_NEW || !second.getName().substring(second.getName().lastIndexOf(".")).equals(".binltl64")) {
                 try (FileInputStream test2 = new FileInputStream(second)) {
                     byte[] allBytes = test2.readAllBytes();
-                    if (version == GameVersion.OLD) {
+                    if (version == GameVersion.VERSION_WOG1_OLD) {
                         AnimationManager.getAnimations().add(AnimationReader.readBinltl(allBytes, second.getName()));
-                    } else if (version == GameVersion.NEW) {
+                    } else if (version == GameVersion.VERSION_WOG1_NEW) {
                         AnimationManager.getAnimations().add(AnimationReader.readBinuni(allBytes, second.getName()));
                     }
                 } catch (Exception e) {
@@ -172,7 +213,7 @@ public class GlobalResourceManager {
 
     private static void openText(GameVersion version) {
 
-        ArrayList<EditorObject> toAddTo = version == GameVersion.OLD ? oldResources : newResources;
+        ArrayList<EditorObject> toAddTo = version == GameVersion.VERSION_WOG1_OLD ? oldResources : newResources;
 
         ArrayList<EditorObject> textList;
         try {
@@ -193,7 +234,7 @@ public class GlobalResourceManager {
 
     private static void openMaterials(GameVersion version) {
 
-        ArrayList<EditorObject> toAddTo = version == GameVersion.OLD ? oldResources : newResources;
+        ArrayList<EditorObject> toAddTo = version == GameVersion.VERSION_WOG1_OLD ? oldResources : newResources;
 
         ArrayList<EditorObject> materialList;
         try {

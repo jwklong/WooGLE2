@@ -102,17 +102,17 @@ public class _Ball {
 
         SetDefaults currentSetDefaults = null;
 
-        for (EditorObject editorObject : resources) {
+        for (EditorObject EditorObject : resources) {
 
-            if (editorObject instanceof SetDefaults setDefaults) {
+            if (EditorObject instanceof SetDefaults setDefaults) {
                 currentSetDefaults = setDefaults;
             }
 
-            else if (editorObject instanceof ResrcImage resrcImage) {
+            else if (EditorObject instanceof ResrcImage resrcImage) {
                 resrcImage.setSetDefaults(currentSetDefaults);
-            } else if (editorObject instanceof Sound sound) {
+            } else if (EditorObject instanceof Sound sound) {
                 sound.setSetDefaults(currentSetDefaults);
-            } else if (editorObject instanceof Font font) {
+            } else if (EditorObject instanceof Font font) {
                 font.setSetDefaults(currentSetDefaults);
             }
 

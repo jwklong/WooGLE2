@@ -9,9 +9,9 @@ public class Sinvariance extends EditorObject {
     public Sinvariance(EditorObject _parent, GameVersion version) {
         super(_parent, "sinvariance", version);
 
-        addAttribute("freq", InputField.ANY).assertRequired();
-        addAttribute("amp", InputField.ANY).assertRequired();
-        addAttribute("shift", InputField.ANY).assertRequired();
+        addAttribute("freq", InputField._1_STRING).assertRequired();
+        addAttribute("amp", InputField._1_STRING).assertRequired();
+        addAttribute("shift", InputField._1_STRING).assertRequired();
 
     }
 

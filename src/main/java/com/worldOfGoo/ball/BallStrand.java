@@ -9,26 +9,26 @@ public class BallStrand extends EditorObject {
     public BallStrand(EditorObject _parent, GameVersion version) {
         super(_parent, "strand", version);
 
-        addAttribute("type",           InputField.ANY)                     .assertRequired();
-        addAttribute("image",          InputField.IMAGE)                   .assertRequired();
-        addAttribute("inactiveimage",  InputField.ANY)                     .assertRequired();
-        addAttribute("mass",           InputField.NUMBER);
-        addAttribute("springconstmin", InputField.ANY)                     .assertRequired();
-        addAttribute("springconstmax", InputField.ANY)                     .assertRequired();
-        addAttribute("dampfac",        InputField.ANY)                     .assertRequired();
-        addAttribute("maxlen2",        InputField.ANY).setDefaultValue("0").assertRequired();
-        addAttribute("maxlen1",        InputField.ANY);
-        addAttribute("maxforce",       InputField.ANY)                     .assertRequired();
-        addAttribute("minlen",         InputField.ANY)                     .assertRequired();
-        addAttribute("walkable",       InputField.ANY);
-        addAttribute("thickness",      InputField.NUMBER)                  .setDefaultValue("24");
-        addAttribute("ignitedelay",    InputField.ANY);
-        addAttribute("burnspeed",      InputField.ANY);
-        addAttribute("fireparticles",  InputField.ANY);
-        addAttribute("burntimage",     InputField.ANY);
-        addAttribute("geom",           InputField.ANY);
-        addAttribute("shrinklen",      InputField.ANY);
-        addAttribute("rope",           InputField.ANY);
+        addAttribute("type",           InputField._1_STRING)                     .assertRequired();
+        addAttribute("image",          InputField._1_IMAGE)                   .assertRequired();
+        addAttribute("inactiveimage",  InputField._1_STRING)                     .assertRequired();
+        addAttribute("mass",           InputField._1_NUMBER);
+        addAttribute("springconstmin", InputField._1_STRING)                     .assertRequired();
+        addAttribute("springconstmax", InputField._1_STRING)                     .assertRequired();
+        addAttribute("dampfac",        InputField._1_STRING)                     .assertRequired();
+        addAttribute("maxlen2",        InputField._1_STRING).setDefaultValue("0").assertRequired();
+        addAttribute("maxlen1",        InputField._1_STRING);
+        addAttribute("maxforce",       InputField._1_STRING)                     .assertRequired();
+        addAttribute("minlen",         InputField._1_STRING)                     .assertRequired();
+        addAttribute("walkable",       InputField._1_STRING);
+        addAttribute("thickness",      InputField._1_NUMBER)                  .setDefaultValue("24");
+        addAttribute("ignitedelay",    InputField._1_STRING);
+        addAttribute("burnspeed",      InputField._1_STRING);
+        addAttribute("fireparticles",  InputField._1_STRING);
+        addAttribute("burntimage",     InputField._1_STRING);
+        addAttribute("geom",           InputField._1_STRING);
+        addAttribute("shrinklen",      InputField._1_STRING);
+        addAttribute("rope",           InputField._1_STRING);
 
     }
 

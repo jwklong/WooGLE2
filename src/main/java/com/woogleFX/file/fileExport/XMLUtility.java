@@ -1,7 +1,7 @@
 package com.woogleFX.file.fileExport;
 
-import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.EditorObject;
+import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.worldOfGoo.addin.AddinLevelOCD;
 import com.worldOfGoo.level.Level;
@@ -57,7 +57,7 @@ public class XMLUtility {
                 if (!breakValue.isEmpty()) {
                     breakValue = "break=" + breakValue;
                     if (!attribute.stringValue().isEmpty()) breakValue = "," + breakValue;
-                    EditorAttribute secretTagAttribute = new EditorAttribute("tag", InputField.TAG, object);
+                    EditorAttribute secretTagAttribute = new EditorAttribute("tag", InputField._1_TAG, object);
                     secretTagAttribute.setValue(attribute.stringValue() + breakValue);
                     addAttributeToExport(exportBuilder, secretTagAttribute);
                     continue;

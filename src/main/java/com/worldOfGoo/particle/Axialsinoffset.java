@@ -9,10 +9,10 @@ public class Axialsinoffset extends EditorObject {
     public Axialsinoffset(EditorObject _parent, GameVersion version) {
         super(_parent, "axialsinoffset", version);
 
-        addAttribute("amp",        InputField.RANGE).setDefaultValue("0").assertRequired();
-        addAttribute("freq",       InputField.RANGE).setDefaultValue("0").assertRequired();
-        addAttribute("phaseshift", InputField.RANGE).setDefaultValue("0").assertRequired();
-        addAttribute("axis",       InputField.ANY)  .setDefaultValue("x").assertRequired();
+        addAttribute("amp",        InputField._1_RANGE).setDefaultValue("0").assertRequired();
+        addAttribute("freq",       InputField._1_RANGE).setDefaultValue("0").assertRequired();
+        addAttribute("phaseshift", InputField._1_RANGE).setDefaultValue("0").assertRequired();
+        addAttribute("axis",       InputField._1_STRING)  .setDefaultValue("x").assertRequired();
 
     }
 

@@ -8,6 +8,7 @@ import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.engine.LevelManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
+import com.woogleFX.gameData.level.WOG1Level;
 import com.worldOfGoo.text.TextString;
 
 import java.io.FileNotFoundException;
@@ -17,25 +18,25 @@ public class Label extends EditorObject {
     public Label(EditorObject _parent, GameVersion version) {
         super(_parent, "label", version);
 
-        addAttribute("id",          InputField.ANY)                             .assertRequired();
-        addAttribute("depth",       InputField.NUMBER).setDefaultValue("10")    .assertRequired();
-        addAttribute("x",           InputField.NUMBER).setDefaultValue("0")     .assertRequired();
-        addAttribute("y",           InputField.NUMBER).setDefaultValue("0")     .assertRequired();
-        addAttribute("align",       InputField.ANY)   .setDefaultValue("center").assertRequired();
-        addAttribute("rotation",    InputField.NUMBER).setDefaultValue("0")     .assertRequired();
-        addAttribute("scale",       InputField.NUMBER).setDefaultValue("1")     .assertRequired();
-        addAttribute("overlay",     InputField.FLAG)  .setDefaultValue("true")  .assertRequired();
-        addAttribute("screenspace", InputField.FLAG)  .setDefaultValue("true")  .assertRequired();
-        addAttribute("font",        InputField.FONT)                            .assertRequired();
-        addAttribute("text",        InputField.TEXT)                            .assertRequired();
-        addAttribute("colorize", InputField.COLOR)    .setDefaultValue("255,255,255");
+        addAttribute("id",          InputField._1_STRING)                             .assertRequired();
+        addAttribute("depth",       InputField._1_NUMBER).setDefaultValue("10")    .assertRequired();
+        addAttribute("x",           InputField._1_NUMBER).setDefaultValue("0")     .assertRequired();
+        addAttribute("y",           InputField._1_NUMBER).setDefaultValue("0")     .assertRequired();
+        addAttribute("align",       InputField._1_STRING)   .setDefaultValue("center").assertRequired();
+        addAttribute("rotation",    InputField._1_NUMBER).setDefaultValue("0")     .assertRequired();
+        addAttribute("scale",       InputField._1_NUMBER).setDefaultValue("1")     .assertRequired();
+        addAttribute("overlay",     InputField._1_FLAG)  .setDefaultValue("true")  .assertRequired();
+        addAttribute("screenspace", InputField._1_FLAG)  .setDefaultValue("true")  .assertRequired();
+        addAttribute("font",        InputField._1_FONT)                            .assertRequired();
+        addAttribute("text",        InputField._1_TEXT)                            .assertRequired();
+        addAttribute("colorize", InputField._1_COLOR)    .setDefaultValue("255,255,255");
 
         addObjectComponent(new TextComponent() {
 
             @Override
             public _Font getFont() {
                 try {
-                    return ResourceManager.getFont(LevelManager.getLevel().getResrc(), getAttribute("font").stringValue(), LevelManager.getLevel().getVersion());
+                    return ResourceManager.getFont(((WOG1Level)LevelManager.getLevel()).getResrc(), getAttribute("font").stringValue(), LevelManager.getLevel().getVersion());
                 } catch (FileNotFoundException e) {
                     return null;
                 }
@@ -43,8 +44,8 @@ public class Label extends EditorObject {
 
             @Override
             public String getText() {
-                for (EditorObject editorObject : LevelManager.getLevel().getText()) {
-                    if (editorObject instanceof TextString textString) {
+                for (EditorObject EditorObject : ((WOG1Level)LevelManager.getLevel()).getText()) {
+                    if (EditorObject instanceof TextString textString) {
                         if (textString.getAttribute("id").stringValue().equals(getAttribute("text").stringValue())) {
                             return textString.getAttribute("text").stringValue();
                         }

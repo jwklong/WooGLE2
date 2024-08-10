@@ -10,7 +10,7 @@ public class Endonmessage extends EditorObject {
     public Endonmessage(EditorObject _parent, GameVersion version) {
         super(_parent, "endonmessage", version);
 
-        addAttribute("id", InputField.ANY).assertRequired();
+        addAttribute("id", InputField._1_STRING).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("id"));
 

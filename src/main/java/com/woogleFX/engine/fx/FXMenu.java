@@ -32,8 +32,10 @@ public class FXMenu {
 
     private static final MenuItem reloadWorldOfGooOldItem = new MenuItem();
     private static final MenuItem reloadWorldOfGooNewItem = new MenuItem();
+    private static final MenuItem reloadWorldOfGoo2Item = new MenuItem();
     private static final MenuItem changeGameDirectoryOldItem = new MenuItem();
     private static final MenuItem changeGameDirectoryNewItem = new MenuItem();
+    private static final MenuItem changeGameDirectory2Item = new MenuItem();
     private static final MenuItem saveOldBallToNewItem = new MenuItem();
     private static final MenuItem saveNewBallToOldItem = new MenuItem();
     private static final MenuItem configurePaletteItem = new MenuItem();
@@ -45,34 +47,44 @@ public class FXMenu {
 
         String prefix = "ButtonIcons\\File\\";
 
-        reloadWorldOfGooOldItem.setText("Reload World of Goo (1.3)");
+        reloadWorldOfGooOldItem.setText("Reload World of Goo 1.3");
         setIcon(reloadWorldOfGooOldItem, prefix + "reload_world_of_goo_old.png");
-        reloadWorldOfGooOldItem.setOnAction(e -> GameResourceManager.reloadWorldOfGoo(GameVersion.OLD));
+        reloadWorldOfGooOldItem.setOnAction(e -> GameResourceManager.reloadWorldOfGoo(GameVersion.VERSION_WOG1_OLD));
         fileMenu.getItems().add(reloadWorldOfGooOldItem);
 
-        reloadWorldOfGooNewItem.setText("Reload World of Goo (1.5)");
+        reloadWorldOfGooNewItem.setText("Reload World of Goo 1.5");
         setIcon(reloadWorldOfGooNewItem, prefix + "reload_world_of_goo_new.png");
-        reloadWorldOfGooNewItem.setOnAction(e -> GameResourceManager.reloadWorldOfGoo(GameVersion.NEW));
+        reloadWorldOfGooNewItem.setOnAction(e -> GameResourceManager.reloadWorldOfGoo(GameVersion.VERSION_WOG1_NEW));
         fileMenu.getItems().add(reloadWorldOfGooNewItem);
 
-        changeGameDirectoryOldItem.setText("Change World of Goo Directory (1.3)...");
+        reloadWorldOfGoo2Item.setText("Reload World of Goo 2");
+        setIcon(reloadWorldOfGoo2Item, prefix + "reload_world_of_goo_new.png");
+        reloadWorldOfGoo2Item.setOnAction(e -> GameResourceManager.reloadWorldOfGoo(GameVersion.VERSION_WOG2));
+        fileMenu.getItems().add(reloadWorldOfGoo2Item);
+
+        changeGameDirectoryOldItem.setText("Change World of Goo 1.3 Directory...");
         setIcon(changeGameDirectoryOldItem, prefix + "change_world_of_goo_directory_old.png");
-        changeGameDirectoryOldItem.setOnAction(e -> GameResourceManager.changeWorldOfGooDirectory(GameVersion.OLD, false));
+        changeGameDirectoryOldItem.setOnAction(e -> GameResourceManager.changeWorldOfGooDirectory(GameVersion.VERSION_WOG1_OLD, false));
         fileMenu.getItems().add(changeGameDirectoryOldItem);
 
-        changeGameDirectoryNewItem.setText("Change World of Goo Directory (1.5)...");
+        changeGameDirectoryNewItem.setText("Change World of Goo 1.5 Directory...");
         setIcon(changeGameDirectoryNewItem, prefix + "change_world_of_goo_directory_new.png");
-        changeGameDirectoryNewItem.setOnAction(e -> GameResourceManager.changeWorldOfGooDirectory(GameVersion.NEW, false));
+        changeGameDirectoryNewItem.setOnAction(e -> GameResourceManager.changeWorldOfGooDirectory(GameVersion.VERSION_WOG1_NEW, false));
         fileMenu.getItems().add(changeGameDirectoryNewItem);
+
+        changeGameDirectory2Item.setText("Change World of Goo 2 Directory...");
+        setIcon(changeGameDirectory2Item, prefix + "change_world_of_goo_directory_new.png");
+        changeGameDirectory2Item.setOnAction(e -> GameResourceManager.changeWorldOfGooDirectory(GameVersion.VERSION_WOG2, false));
+        fileMenu.getItems().add(changeGameDirectory2Item);
 
         saveOldBallToNewItem.setText("Copy Ball from 1.3 to 1.5");
         setIcon(saveOldBallToNewItem, prefix + "move_ball_to_new_version.png");
-        saveOldBallToNewItem.setOnAction(e -> BallManager.saveBallInVersion(GameVersion.OLD, GameVersion.NEW));
+        saveOldBallToNewItem.setOnAction(e -> BallManager.saveBallInVersion(GameVersion.VERSION_WOG1_OLD, GameVersion.VERSION_WOG1_NEW));
         fileMenu.getItems().add(saveOldBallToNewItem);
 
         saveNewBallToOldItem.setText("Copy Ball from 1.5 to 1.3");
         setIcon(saveNewBallToOldItem, prefix + "move_ball_to_old_version.png");
-        saveNewBallToOldItem.setOnAction(e -> BallManager.saveBallInVersion(GameVersion.NEW, GameVersion.OLD));
+        saveNewBallToOldItem.setOnAction(e -> BallManager.saveBallInVersion(GameVersion.VERSION_WOG1_NEW, GameVersion.VERSION_WOG1_OLD));
         fileMenu.getItems().add(saveNewBallToOldItem);
 
         configurePaletteItem.setText("Configure Goo Ball Palette...");
@@ -91,8 +103,10 @@ public class FXMenu {
 
     private static final MenuItem newLevelOldItem = new MenuItem();
     private static final MenuItem newLevelNewItem = new MenuItem();
+    private static final MenuItem newLevel2Item = new MenuItem();
     private static final MenuItem openLevelOldItem = new MenuItem();
     private static final MenuItem openLevelNewItem = new MenuItem();
+    private static final MenuItem openLevel2Item = new MenuItem();
     private static final MenuItem cloneLevelItem = new MenuItem();
     private static final MenuItem saveLevelItem = new MenuItem();
     private static final MenuItem saveAllLevelsItem = new MenuItem();
@@ -108,23 +122,33 @@ public class FXMenu {
 
         newLevelOldItem.setText("New Level (1.3)...");
         setIcon(newLevelOldItem, prefix + "new_lvl_old.png");
-        newLevelOldItem.setOnAction(e -> LevelLoader.newLevel(GameVersion.OLD));
+        newLevelOldItem.setOnAction(e -> LevelLoader.newLevel(GameVersion.VERSION_WOG1_OLD));
         levelMenu.getItems().add(newLevelOldItem);
 
         newLevelNewItem.setText("New Level (1.5)...");
         setIcon(newLevelNewItem, prefix + "new_lvl_new.png");
-        newLevelNewItem.setOnAction(e -> LevelLoader.newLevel(GameVersion.NEW));
+        newLevelNewItem.setOnAction(e -> LevelLoader.newLevel(GameVersion.VERSION_WOG1_NEW));
         levelMenu.getItems().add(newLevelNewItem);
+
+        newLevel2Item.setText("New Level (2)...");
+        setIcon(newLevel2Item, prefix + "new_level_2.png");
+        newLevel2Item.setOnAction(e -> LevelLoader.newLevel(GameVersion.VERSION_WOG2));
+        levelMenu.getItems().add(newLevel2Item);
 
         openLevelOldItem.setText("Open Level (1.3)...");
         setIcon(openLevelOldItem, prefix + "open_lvl_old.png");
-        openLevelOldItem.setOnAction(e -> LevelLoader.openLevel(GameVersion.OLD));
+        openLevelOldItem.setOnAction(e -> LevelLoader.openLevel(GameVersion.VERSION_WOG1_OLD));
         levelMenu.getItems().add(openLevelOldItem);
 
         openLevelNewItem.setText("Open Level (1.5)...");
         setIcon(openLevelNewItem, prefix + "open_lvl_new.png");
-        openLevelNewItem.setOnAction(e -> LevelLoader.openLevel(GameVersion.NEW));
+        openLevelNewItem.setOnAction(e -> LevelLoader.openLevel(GameVersion.VERSION_WOG1_NEW));
         levelMenu.getItems().add(openLevelNewItem);
+
+        openLevel2Item.setText("Open Level (2)...");
+        setIcon(openLevel2Item, prefix + "open_lvl_new.png");
+        openLevel2Item.setOnAction(e -> LevelLoader.openLevel(GameVersion.VERSION_WOG2));
+        levelMenu.getItems().add(openLevel2Item);
 
         cloneLevelItem.setText("Clone Level...");
         setIcon(cloneLevelItem, prefix + "clone_lvl.png");
@@ -273,14 +297,17 @@ public class FXMenu {
 
         boolean inLevel = LevelManager.getLevel() != null;
 
-        boolean missingOldDir = FileManager.getGameDir(GameVersion.OLD).isEmpty();
-        boolean missingNewDir = FileManager.getGameDir(GameVersion.NEW).isEmpty();
+        boolean missingOldDir = FileManager.getGameDir(GameVersion.VERSION_WOG1_OLD).isEmpty();
+        boolean missingNewDir = FileManager.getGameDir(GameVersion.VERSION_WOG1_NEW).isEmpty();
+        boolean missing2Dir = FileManager.getGameDir(GameVersion.VERSION_WOG2).isEmpty();
 
         reloadWorldOfGooOldItem.setDisable(missingOldDir);
         saveOldBallToNewItem.setDisable(missingOldDir);
 
         reloadWorldOfGooNewItem.setDisable(missingNewDir);
         saveNewBallToOldItem.setDisable(missingNewDir);
+
+        reloadWorldOfGoo2Item.setDisable(missing2Dir);
 
         for (MenuItem menuItem : levelMenu.getItems()) menuItem.setDisable(!inLevel);
 
@@ -298,6 +325,9 @@ public class FXMenu {
 
         newLevelNewItem.setDisable(missingNewDir);
         openLevelNewItem.setDisable(missingNewDir);
+
+        newLevel2Item.setDisable(missing2Dir);
+        openLevel2Item.setDisable(missing2Dir);
 
     }
 

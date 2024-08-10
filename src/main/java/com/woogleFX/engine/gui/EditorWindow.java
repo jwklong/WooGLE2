@@ -2,6 +2,7 @@ package com.woogleFX.engine.gui;
 
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.engine.renderer.Renderer;
+import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.particle.ParticleUtility;
 import com.woogleFX.gameData.animation.AnimationManager;
 import com.woogleFX.engine.LevelManager;
@@ -35,14 +36,16 @@ public class EditorWindow extends AnimationTimer {
         AnimationManager.updateAnimations(timeElapsed);
 
         if (LevelManager.getLevel() != null) {
-            for (EditorObject editorObject : LevelManager.getLevel().getScene()) {
-                if (editorObject instanceof Particles particles) {
-                    ParticleUtility.frameUpdate(particles, particles.getCounts(), particles.getDrawing(), timeStep);
+            if (LevelManager.getLevel() instanceof WOG1Level level) {
+                for (EditorObject EditorObject : level.getScene()) {
+                    if (EditorObject instanceof Particles particles) {
+                        ParticleUtility.frameUpdate(particles, particles.getCounts(), particles.getDrawing(), timeStep);
+                    }
                 }
-            }
-            for (EditorObject editorObject : LevelManager.getLevel().getLevel()) {
-                if (editorObject instanceof Fire fire) {
-                    ParticleUtility.frameUpdate(fire, fire.getCounts(), fire.getDrawing(), timeStep);
+                for (EditorObject EditorObject : level.getLevel()) {
+                    if (EditorObject instanceof Fire fire) {
+                        ParticleUtility.frameUpdate(fire, fire.getCounts(), fire.getDrawing(), timeStep);
+                    }
                 }
             }
         }

@@ -1,13 +1,14 @@
 package com.worldOfGoo.level;
 
 import com.woogleFX.editorObjects.ImageUtility;
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
+import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.levelOpening.LevelLoader;
 import com.woogleFX.engine.LevelManager;
 import com.woogleFX.gameData.level.GameVersion;
 import javafx.scene.image.Image;
 
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.attributes.dataTypes.Color;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -20,19 +21,19 @@ public class Signpost extends EditorObject {
     public Signpost(EditorObject _parent, GameVersion version) {
         super(_parent, "signpost", version);
 
-        addAttribute("name",      InputField.ANY)                                  .assertRequired();
-        addAttribute("depth",     InputField.NUMBER).setDefaultValue("0")          .assertRequired();
-        addAttribute("x",         InputField.NUMBER).setDefaultValue("0")          .assertRequired();
-        addAttribute("y",         InputField.NUMBER).setDefaultValue("0")          .assertRequired();
-        addAttribute("scalex",    InputField.NUMBER).setDefaultValue("1")          .assertRequired();
-        addAttribute("scaley",    InputField.NUMBER).setDefaultValue("1")          .assertRequired();
-        addAttribute("rotation",  InputField.NUMBER).setDefaultValue("0")          .assertRequired();
-        addAttribute("alpha",     InputField.NUMBER).setDefaultValue("1")          .assertRequired();
-        addAttribute("colorize",  InputField.COLOR) .setDefaultValue("255,255,255").assertRequired();
-        addAttribute("image",     InputField.IMAGE)                                .assertRequired();
-        addAttribute("text",      InputField.TEXT)                                 .assertRequired();
-        addAttribute("particles", InputField.PARTICLES);
-        addAttribute("pulse",     InputField.ANY);
+        addAttribute("name",      InputField._1_STRING)                                  .assertRequired();
+        addAttribute("depth",     InputField._1_NUMBER).setDefaultValue("0")          .assertRequired();
+        addAttribute("x",         InputField._1_NUMBER).setDefaultValue("0")          .assertRequired();
+        addAttribute("y",         InputField._1_NUMBER).setDefaultValue("0")          .assertRequired();
+        addAttribute("scalex",    InputField._1_NUMBER).setDefaultValue("1")          .assertRequired();
+        addAttribute("scaley",    InputField._1_NUMBER).setDefaultValue("1")          .assertRequired();
+        addAttribute("rotation",  InputField._1_NUMBER).setDefaultValue("0")          .assertRequired();
+        addAttribute("alpha",     InputField._1_NUMBER).setDefaultValue("1")          .assertRequired();
+        addAttribute("colorize",  InputField._1_COLOR) .setDefaultValue("255,255,255").assertRequired();
+        addAttribute("image",     InputField._1_IMAGE)                                .assertRequired();
+        addAttribute("text",      InputField._1_TEXT)                                 .assertRequired();
+        addAttribute("particles", InputField._1_PARTICLES);
+        addAttribute("pulse",     InputField._1_STRING);
 
         addObjectComponent(new ImageComponent() {
             public double getX() {
@@ -101,7 +102,7 @@ public class Signpost extends EditorObject {
         if (LevelManager.getLevel() == null) return;
 
         try {
-            image = getAttribute("image").imageValue(LevelManager.getLevel().getResrc(), getVersion());
+            image = getAttribute("image").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
             if (image == null) return;
             Color color = getAttribute("colorize").colorValue();
             image = ImageUtility.colorize(image, color);

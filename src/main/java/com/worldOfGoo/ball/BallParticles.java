@@ -9,9 +9,9 @@ public class BallParticles extends EditorObject {
     public BallParticles(EditorObject _parent, GameVersion version) {
         super(_parent, "particles", version);
 
-        addAttribute("id",       InputField.ANY).assertRequired();
-        addAttribute("states",   InputField.ANY).assertRequired();
-        addAttribute("overball", InputField.ANY).assertRequired();
+        addAttribute("id",       InputField._1_STRING).assertRequired();
+        addAttribute("states",   InputField._1_STRING).assertRequired();
+        addAttribute("overball", InputField._1_STRING).assertRequired();
 
     }
 

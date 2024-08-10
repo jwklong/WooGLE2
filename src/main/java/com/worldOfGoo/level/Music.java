@@ -10,7 +10,7 @@ public class Music extends EditorObject {
     public Music(EditorObject _parent, GameVersion version) {
         super(_parent, "music", version);
 
-        addAttribute("id", InputField.ANY).assertRequired();
+        addAttribute("id", InputField._1_STRING).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("id,"));
 

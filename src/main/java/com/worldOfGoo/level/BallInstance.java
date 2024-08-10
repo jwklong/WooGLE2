@@ -1,5 +1,6 @@
 package com.worldOfGoo.level;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.ObjectUtil;
@@ -7,9 +8,9 @@ import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.gameData.ball._Ball;
 import com.woogleFX.gameData.ball.BallManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
+import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.levelOpening.LevelLoader;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -37,12 +38,12 @@ public class BallInstance extends EditorObject {
     public BallInstance(EditorObject _parent, GameVersion version) {
         super(_parent, "BallInstance", version);
 
-        addAttribute("type",       InputField.BALL)                                         .assertRequired();
-        addAttribute("x",          InputField.NUMBER)                                       .assertRequired();
-        addAttribute("y",          InputField.NUMBER)                                       .assertRequired();
-        addAttribute("id",         InputField.UNIQUE_GOOBALL_ID)                            .assertRequired();
-        addAttribute("discovered", InputField.FLAG)               .setDefaultValue("true");
-        addAttribute("angle",      InputField.NUMBER)             .setDefaultValue("0")     .assertRequired();
+        addAttribute("type",       InputField._1_BALL)                                         .assertRequired();
+        addAttribute("x",          InputField._1_NUMBER)                                       .assertRequired();
+        addAttribute("y",          InputField._1_NUMBER)                                       .assertRequired();
+        addAttribute("id",         InputField._1_UNIQUE_GOOBALL_ID)                            .assertRequired();
+        addAttribute("discovered", InputField._1_FLAG)               .setDefaultValue("true");
+        addAttribute("angle",      InputField._1_NUMBER)             .setDefaultValue("0")     .assertRequired();
 
         randomSeed = (long)(Math.random() * 10000000);
 
@@ -67,7 +68,7 @@ public class BallInstance extends EditorObject {
 
         if (LevelManager.getLevel() == null) return;
 
-        for (EditorObject object : LevelManager.getLevel().getLevel()) if (object instanceof Strand strand) {
+        for (EditorObject object : ((WOG1Level)LevelManager.getLevel()).getLevel()) if (object instanceof Strand strand) {
 
             String id = getAttribute("id").stringValue();
             String gb1 = strand.getAttribute("gb1").stringValue();
@@ -96,7 +97,7 @@ public class BallInstance extends EditorObject {
         }
 
         String id = getAttribute("id").stringValue();
-        for (EditorObject object : LevelManager.getLevel().getLevel()) if (object instanceof Strand strand) {
+        for (EditorObject object : ((WOG1Level)LevelManager.getLevel()).getLevel()) if (object instanceof Strand strand) {
             String gb1 = strand.getAttribute("gb1").stringValue();
             String gb2 = strand.getAttribute("gb2").stringValue();
             if (gb1.equals(id) || gb2.equals(id)) {
@@ -124,9 +125,9 @@ public class BallInstance extends EditorObject {
 
         ArrayList<Part> orderedParts = new ArrayList<>();
 
-        for (EditorObject editorObject : objects) {
+        for (EditorObject EditorObject : objects) {
 
-            if (editorObject instanceof Part part) {
+            if (EditorObject instanceof Part part) {
 
                 double layer = part.getAttribute("layer").doubleValue();
                 int i = 0;
@@ -287,7 +288,7 @@ public class BallInstance extends EditorObject {
         if (!getAttribute("discovered").booleanValue()) {
             state = "sleeping";
         } else {
-            for (EditorObject obj : LevelManager.getLevel().getLevel()) {
+            for (EditorObject obj : ((WOG1Level)LevelManager.getLevel()).getLevel()) {
                 if (obj instanceof Strand strand) {
 
                     String id = getAttribute("id").stringValue();

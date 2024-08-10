@@ -1,17 +1,21 @@
 package com.woogleFX.editorObjects.clipboardHandling;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.engine.LevelManager;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.engine.fx.FXPropertiesView;
 import com.woogleFX.editorObjects.objectCreators.ObjectAdder;
 import com.woogleFX.editorObjects.ObjectManager;
 import com.woogleFX.engine.undoHandling.UndoManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.engine.undoHandling.userActions.ObjectCreationAction;
 import com.woogleFX.engine.undoHandling.userActions.UserAction;
+import com.woogleFX.gameData.level.WOG1Level;
+import com.woogleFX.gameData.level.WOG2Level;
 import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.level.BallInstance;
 import com.worldOfGoo.level.Strand;
+import com.worldOfGoo2.level._2_Level_BallInstance;
+import com.worldOfGoo2.level._2_Level_Strand;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 
@@ -58,13 +62,28 @@ public class ClipboardManager {
 
             if (object instanceof BallInstance) {
                 ObjectAdder.fixGooBall(object);
-                for (EditorObject editorObject : level.getLevel()) {
-                    if (editorObject instanceof Strand strand) {
+                for (EditorObject EditorObject : ((WOG1Level)level).getLevel()) {
+                    if (EditorObject instanceof Strand strand) {
                         strand.update();
                     }
                 }
             }
 
+            if (object instanceof _2_Level_BallInstance) {
+                ObjectAdder.fixGooBall(object);
+                for (EditorObject EditorObject : ((WOG2Level)level).getObjects()) {
+                    if (EditorObject instanceof _2_Level_Strand strand) {
+                        strand.update();
+                    }
+                }
+            }
+
+            if (level instanceof WOG2Level wog2Level) {
+                object.setParent(wog2Level.getLevel());
+                wog2Level.getObjects().add(object);
+                object.update();
+                object.onLoaded();
+            }
             ObjectManager.create(level, object, 0);
             objectCreationActions.add(new ObjectCreationAction(object, object.getParent().getChildren().indexOf(object)));
         }

@@ -5,6 +5,7 @@ import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.engine.gui.EditorWindow;
 import com.woogleFX.engine.LevelManager;
 import com.woogleFX.editorObjects.attributes.dataTypes.Position;
+import com.woogleFX.gameData.level.WOG1Level;
 import javafx.scene.image.Image;
 
 public class ParticleGraphicsInstance {
@@ -135,10 +136,10 @@ public class ParticleGraphicsInstance {
         double x = this.originalPos.getX() + (this.speed * Math.cos(angle) + 0.5 * this.acceleration.getX() * dt * 50) * dt * 50;
         double y = this.originalPos.getY() + (this.speed * Math.sin(angle) + 0.5 * this.acceleration.getY() * dt * 50) * dt * 50;
         if (lifespan == -1) {
-            return x < LevelManager.getLevel().getSceneObject().getAttribute("minx").doubleValue() ||
-                    y < LevelManager.getLevel().getSceneObject().getAttribute("miny").doubleValue() ||
-                    x > LevelManager.getLevel().getSceneObject().getAttribute("maxx").doubleValue() ||
-                    y > LevelManager.getLevel().getSceneObject().getAttribute("maxy").doubleValue();
+            return x < ((WOG1Level)LevelManager.getLevel()).getSceneObject().getAttribute("minx").doubleValue() ||
+                    y < ((WOG1Level)LevelManager.getLevel()).getSceneObject().getAttribute("miny").doubleValue() ||
+                    x > ((WOG1Level)LevelManager.getLevel()).getSceneObject().getAttribute("maxx").doubleValue() ||
+                    y > ((WOG1Level)LevelManager.getLevel()).getSceneObject().getAttribute("maxy").doubleValue();
         } else return dt > this.lifespan;
     }
 

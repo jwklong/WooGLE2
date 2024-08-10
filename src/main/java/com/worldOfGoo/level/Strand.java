@@ -1,14 +1,15 @@
 package com.worldOfGoo.level;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.ObjectUtil;
 import com.woogleFX.gameData.ball._Ball;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.renderer.Renderer;
 import com.woogleFX.gameData.ball.BallManager;
+import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.levelOpening.LevelLoader;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -49,8 +50,8 @@ public class Strand extends EditorObject {
     public Strand(EditorObject _parent, GameVersion version) {
         super(_parent, "Strand", version);
 
-        addAttribute("gb1", InputField.GOOBALL_ID).assertRequired();
-        addAttribute("gb2", InputField.GOOBALL_ID).assertRequired();
+        addAttribute("gb1", InputField._1_GOOBALL_ID).assertRequired();
+        addAttribute("gb2", InputField._1_GOOBALL_ID).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("gb1,gb2,"));
 
@@ -90,7 +91,7 @@ public class Strand extends EditorObject {
 
         if (LevelManager.getLevel() == null) return;
 
-        for (EditorObject obj : LevelManager.getLevel().getLevel()) if (obj instanceof BallInstance ballInstance) {
+        for (EditorObject obj : ((WOG1Level)LevelManager.getLevel()).getLevel()) if (obj instanceof BallInstance ballInstance) {
 
             String id = ballInstance.getAttribute("id").stringValue();
             String gb1 = getAttribute("gb1").stringValue();

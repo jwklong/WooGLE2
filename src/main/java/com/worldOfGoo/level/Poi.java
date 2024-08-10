@@ -1,9 +1,9 @@
 package com.worldOfGoo.level;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -15,10 +15,10 @@ public class Poi extends EditorObject {
     public Poi(EditorObject _parent, GameVersion version) {
         super(_parent, "poi", version);
 
-        addAttribute("pos",        InputField.POSITION).setDefaultValue("0,0").assertRequired();
-        addAttribute("traveltime", InputField.NUMBER)  .setDefaultValue("3")  .assertRequired();
-        addAttribute("pause",      InputField.NUMBER)  .setDefaultValue("0")  .assertRequired();
-        addAttribute("zoom",       InputField.NUMBER)  .setDefaultValue("1")  .assertRequired();
+        addAttribute("pos",        InputField._1_POSITION).setDefaultValue("0,0").assertRequired();
+        addAttribute("traveltime", InputField._1_NUMBER)  .setDefaultValue("3")  .assertRequired();
+        addAttribute("pause",      InputField._1_NUMBER)  .setDefaultValue("0")  .assertRequired();
+        addAttribute("zoom",       InputField._1_NUMBER)  .setDefaultValue("1")  .assertRequired();
 
         addObjectComponent(new RectangleComponent() {
             public double getX() {

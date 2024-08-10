@@ -12,17 +12,26 @@ public class PropertiesOpener extends DefaultHandler {
         switch (qName) {
             case "oldWOG" -> {
                 if (!attributes.getValue(attributes.getIndex("filepath")).isEmpty()) {
-                    FileManager.setOldWOGdir(attributes.getValue(attributes.getIndex("filepath")));
+                    FileManager.setOldWOG1dir(attributes.getValue(attributes.getIndex("filepath")));
                 }
             }
             case "newWOG" -> {
                 if (!attributes.getValue(attributes.getIndex("filepath")).isEmpty()) {
-                    FileManager.setNewWOGdir(attributes.getValue(attributes.getIndex("filepath")));
+                    FileManager.setNewWOG1dir(attributes.getValue(attributes.getIndex("filepath")));
+                }
+            }
+            case "WOG2" -> {
+                if (!attributes.getValue(attributes.getIndex("filepath")).isEmpty()) {
+                    FileManager.setWOG2dir(attributes.getValue(attributes.getIndex("filepath")));
                 }
             }
             case "Ball" -> {
                 PaletteManager.addPaletteBall(attributes.getValue(attributes.getIndex("ball")));
-                PaletteManager.addPaletteVersion(attributes.getValue(attributes.getIndex("version")).equals("1.3") ? GameVersion.OLD : GameVersion.NEW);
+                PaletteManager.addPaletteVersion(switch(attributes.getValue(attributes.getIndex("version"))) {
+                    case "1.3" -> GameVersion.VERSION_WOG1_OLD;
+                    case "1.5" -> GameVersion.VERSION_WOG1_NEW;
+                    default -> GameVersion.VERSION_WOG2;
+                });
             }
         }
     }

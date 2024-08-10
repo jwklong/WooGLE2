@@ -1,9 +1,11 @@
 package com.woogleFX.gameData.level.levelSaving;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.engine.gui.alarms.AskForLevelNameAlarm;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
+import com.woogleFX.file.fileExport.GOOWriter;
 import com.woogleFX.gameData.ball._Ball;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.engine.fx.FXLevelSelectPane;
@@ -11,12 +13,8 @@ import com.woogleFX.engine.fx.FXPropertiesView;
 import com.woogleFX.engine.fx.FXStage;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.fileExport.GoomodExporter;
-import com.woogleFX.gameData.level.LevelWriter;
-import com.woogleFX.editorObjects.EditorObject;
+import com.woogleFX.gameData.level.*;
 import com.woogleFX.gameData.level.levelOpening.LevelLoader;
-import com.woogleFX.gameData.level.GameVersion;
-import com.woogleFX.gameData.level.LevelTab;
-import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.level.BallInstance;
 import com.worldOfGoo.resrc.Resources;
 import com.worldOfGoo.resrc.ResrcImage;
@@ -28,8 +26,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -58,44 +55,67 @@ public class LevelUpdater {
     }
 
 
-    private static boolean verifyAllObjects(ArrayList<EditorObject> editorObjects) {
-        for (EditorObject object : editorObjects) if (!verifySingleObject(object)) return false;
+    private static boolean verifyAllObjects(ArrayList<EditorObject> EditorObjects) {
+        for (EditorObject object : EditorObjects) if (!verifySingleObject(object)) return false;
         return true;
     }
 
 
     private static boolean verifyEntireLevel(_Level level) {
-        return verifyAllObjects(level.getScene()) &&
-                verifyAllObjects(level.getLevel()) &&
-                verifyAllObjects(level.getResrc()) &&
-                verifyAllObjects(level.getText()) &&
-                verifyAllObjects(level.getAddin());
+        if (level instanceof WOG1Level wog1Level) {
+            return verifyAllObjects(wog1Level.getScene()) &&
+                    verifyAllObjects(wog1Level.getLevel()) &&
+                    verifyAllObjects(wog1Level.getResrc()) &&
+                    verifyAllObjects(wog1Level.getText()) &&
+                    verifyAllObjects(wog1Level.getAddin());
+        } else if (level instanceof WOG2Level wog2Level) {
+            return verifyAllObjects(wog2Level.getObjects());
+        } else return false;
     }
 
 
     public static boolean saveSpecificLevel(_Level level, GameVersion version) {
 
-        boolean okayToSave = true;
+        if (level instanceof WOG1Level) {
 
-        // Check for errors in level objects
-        if (!verifyEntireLevel(level)) {
-            // Fail to save
-            ErrorAlarm.show("Level could not be verified");
-            okayToSave = false;
+            boolean okayToSave = true;
+
+            // Check for errors in level objects
+            if (!verifyEntireLevel(level)) {
+                // Fail to save
+                ErrorAlarm.show("Level could not be verified");
+                okayToSave = false;
+            }
+
+            // TODO: check for game errors (stuff like there being a levelexit but no pipe)
+
+            if (!okayToSave) return false;
+
+            try {
+                LevelWriter.saveAsXML(level, FileManager.getGameDir(version) + "\\res\\levels\\" + level.getLevelName(),
+                        version, false, true);
+                return true;
+            } catch (IOException e) {
+                ErrorAlarm.show(e);
+                return false;
+            }
+
+        } else if (level instanceof WOG2Level) {
+
+            StringBuilder export = new StringBuilder();
+            GOOWriter.recursiveGOOExport(export, ((WOG2Level) level).getLevel(), 0);
+
+            try {
+                Files.writeString(Path.of(FileManager.getGameDir(version) + "\\res\\levels\\" + level.getLevelName() + ".wog2"), export.toString());
+                return true;
+            } catch (IOException e) {
+                ErrorAlarm.show(e);
+                return false;
+            }
+
         }
 
-        // TODO: check for game errors (stuff like there being a levelexit but no pipe)
-
-        if (!okayToSave) return false;
-
-        try {
-            LevelWriter.saveAsXML(level, FileManager.getGameDir(version) + "\\res\\levels\\" + level.getLevelName(),
-                    version, false, true);
-            return true;
-        } catch (IOException e) {
-            ErrorAlarm.show(e);
-            return false;
-        }
+        return false;
 
     }
 
@@ -114,15 +134,27 @@ public class LevelUpdater {
     }
 
     public static void playLevel(_Level level) {
-        if (level.getVersion() == GameVersion.OLD) {
+        if (level.getVersion() == GameVersion.VERSION_WOG1_OLD) {
             try {
                 ProcessBuilder processBuilder = new ProcessBuilder(
-                        FileManager.getGameDir(GameVersion.OLD) + "\\WorldOfGoo.exe", level.getLevelName());
-                processBuilder.directory(new File(FileManager.getGameDir(GameVersion.OLD)));
+                        FileManager.getGameDir(GameVersion.VERSION_WOG1_OLD) + "\\WorldOfGoo.exe", level.getLevelName());
+                processBuilder.directory(new File(FileManager.getGameDir(GameVersion.VERSION_WOG1_OLD)));
                 processBuilder.start();
             } catch (Exception e) {
                 ErrorAlarm.show(e);
             }
+        } else if (level.getVersion() == GameVersion.VERSION_WOG2) {
+
+            try {
+                System.out.println(level.getLevelName());
+                ProcessBuilder processBuilder = new ProcessBuilder(
+                        new File(FileManager.getGameDir(GameVersion.VERSION_WOG2)).getParent() + "\\World Of Goo 2.exe");
+                processBuilder.directory(new File(FileManager.getGameDir(GameVersion.VERSION_WOG2)));
+                processBuilder.start();
+            } catch (Exception e) {
+                ErrorAlarm.show(e);
+            }
+
         } else {
 
             // TODO figure something out to play in 1.5
@@ -168,7 +200,7 @@ public class LevelUpdater {
         }
 
         /* Edit every resource */
-        for (EditorObject resource : level.getResrc()) {
+        for (EditorObject resource : ((WOG1Level)level).getResrc()) {
 
             if (resource instanceof Resources) {
 
@@ -252,7 +284,7 @@ public class LevelUpdater {
         levels.add(level);
 
         ArrayList<_Ball> balls = new ArrayList<>();
-        for (EditorObject object : level.getLevel()) if (object instanceof BallInstance ballInstance)
+        for (EditorObject object : ((WOG1Level)level).getLevel()) if (object instanceof BallInstance ballInstance)
             if (!balls.contains(ballInstance.getBall())) balls.add(ballInstance.getBall());
 
         if (export != null) {

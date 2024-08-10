@@ -9,6 +9,7 @@ import com.woogleFX.engine.LevelManager;
 import com.woogleFX.editorObjects.DragSettings;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /** Represents a circle component in any object. */
 public abstract class CircleComponent extends ObjectComponent
@@ -41,7 +42,7 @@ public abstract class CircleComponent extends ObjectComponent
         double screenY = (y - radius) * zoom + offsetY;
 
         graphicsContext.setFill(getColor());
-
+        graphicsContext.setStroke(getColor());
         graphicsContext.fillOval(screenX + zoom / 2, screenY + zoom / 2,
                 (radius - 0.5) * 2 * zoom, (radius - 0.5) * 2 * zoom);
 

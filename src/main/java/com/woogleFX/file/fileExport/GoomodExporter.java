@@ -1,12 +1,13 @@
 package com.woogleFX.file.fileExport;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.gameData.ball.BallWriter;
 import com.woogleFX.gameData.ball._Ball;
 import com.woogleFX.file.resourceManagers.BaseGameResources;
 import com.woogleFX.file.FileManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.gameData.level.LevelWriter;
+import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.resrc.ResrcImage;
 import com.worldOfGoo.resrc.Sound;
@@ -123,7 +124,7 @@ public class GoomodExporter {
         LevelWriter.saveAsXML(level, levelDirectory, level.getVersion(), true, includeAddinInfo);
 
         // Copy resources to the goomod directory
-        for (EditorObject resource : level.getResrc()) addResourceToGoomod(resource, dir, levelDir);
+        for (EditorObject resource : ((WOG1Level)level).getResrc()) addResourceToGoomod(resource, dir, levelDir);
 
     }
 

@@ -38,11 +38,11 @@ public class ResrcImage extends EditorObject {
     public ResrcImage(EditorObject _parent, GameVersion version) {
         super(_parent, "Image", version);
 
-        addAttribute("id",   InputField.ANY).assertRequired();
-        addAttribute("path", InputField.IMAGE_PATH).assertRequired();
+        addAttribute("id",   InputField._1_STRING).assertRequired();
+        addAttribute("path", InputField._1_IMAGE_PATH).assertRequired();
 
         // extra attribute from 1.5
-        addAttribute("atlasid", InputField.ANY);
+        addAttribute("atlasid", InputField._1_STRING);
 
         setMetaAttributes(MetaEditorAttribute.parse("id,path,"));
 

@@ -9,8 +9,8 @@ public class BallSound extends EditorObject {
     public BallSound(EditorObject _parent, GameVersion version) {
         super(_parent, "sound", version);
 
-        addAttribute("event", InputField.ANY).assertRequired();
-        addAttribute("id",    InputField.ANY).assertRequired();
+        addAttribute("event", InputField._1_STRING).assertRequired();
+        addAttribute("id",    InputField._1_STRING).assertRequired();
 
     }
 

@@ -1,9 +1,14 @@
 package com.woogleFX.editorObjects.clipboardHandling;
 
-import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
-import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.EditorObject;
+import com.woogleFX.editorObjects.attributes.EditorAttribute;
+import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
 import com.woogleFX.engine.LevelManager;
+import com.woogleFX.file.fileExport.GOOWriter;
+import com.woogleFX.file.fileImport.ObjectGOOParser;
+import com.woogleFX.gameData.level.GameVersion;
+import com.woogleFX.gameData.level.WOG1Level;
+import com.woogleFX.gameData.level.WOG2Level;
 import com.woogleFX.gameData.level._Level;
 
 import java.util.ArrayList;
@@ -27,54 +32,67 @@ public class ClipboardHandler {
 
         ArrayList<EditorObject> selectionBuilder = new ArrayList<>();
 
-        for (int i = 0; i < clipboard.length(); i++){
-            char part = clipboard.charAt(i);
+        if (LevelManager.getLevel() instanceof WOG1Level) {
 
-            if (settingAttribute) {
-                if (part == '=') {
-                    attributeName = currentWord.toString();
-                    currentWord = new StringBuilder();
-                } else if (part == ';') {
-                    object.setAttribute(attributeName, currentWord.toString());
-                    currentWord = new StringBuilder();
-                } else if (part == '>') {
-                    settingAttribute = false;
-                    object.setAttribute(attributeName, currentWord.toString());
-                    selectionBuilder.add(object);
-                    currentWord = new StringBuilder();
-                } else {
-                    currentWord.append(part);
-                }
-            } else {
-                if (part == ':') {
-                    if (!currentWord.toString().equals("WOGEditor")) {
-                        return null;
+            for (int i = 0; i < clipboard.length(); i++) {
+                char part = clipboard.charAt(i);
+
+                if (settingAttribute) {
+                    if (part == '=') {
+                        attributeName = currentWord.toString();
+                        currentWord = new StringBuilder();
+                    } else if (part == ';') {
+                        object.setAttribute(attributeName, currentWord.toString());
+                        currentWord = new StringBuilder();
+                    } else if (part == '>') {
+                        settingAttribute = false;
+                        object.setAttribute(attributeName, currentWord.toString());
+                        selectionBuilder.add(object);
+                        currentWord = new StringBuilder();
+                    } else {
+                        currentWord.append(part);
                     }
-                    currentWord = new StringBuilder();
-                } else if (part == '<') {
+                } else {
+                    if (part == ':') {
+                        if (!currentWord.toString().equals("WOGEditor")) {
+                            return null;
+                        }
+                        currentWord = new StringBuilder();
+                    } else if (part == '<') {
 
-                    _Level level = LevelManager.getLevel();
+                        _Level level = LevelManager.getLevel();
 
-                    boolean okayToBeChild = selected != null && selected.getParent() != null;
+                        boolean okayToBeChild = selected != null && selected.getParent() != null;
 
-                    if (okayToBeChild) {
-                        okayToBeChild = false;
-                        for (String possibleChild : selected.getParent().getPossibleChildren()) {
-                            if (possibleChild.contentEquals(currentWord)) {
-                                okayToBeChild = true;
-                                break;
+                        if (okayToBeChild) {
+                            okayToBeChild = false;
+                            for (String possibleChild : selected.getParent().getPossibleChildren()) {
+                                if (possibleChild.contentEquals(currentWord)) {
+                                    okayToBeChild = true;
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    EditorObject parent = okayToBeChild ? selected.getParent() : null;
-                    object = ObjectCreator.create(currentWord.toString(), parent, level.getVersion());
-                    currentWord = new StringBuilder();
-                    settingAttribute = true;
-                } else {
-                    currentWord.append(part);
+                        EditorObject parent = okayToBeChild ? selected.getParent() : null;
+                        object = ObjectCreator.create(currentWord.toString(), parent, level.getVersion());
+                        currentWord = new StringBuilder();
+                        settingAttribute = true;
+                    } else {
+                        currentWord.append(part);
+                    }
                 }
             }
+
+        } else if (LevelManager.getLevel() instanceof WOG2Level) {
+
+            String type = clipboard.substring(10, clipboard.indexOf(";"));
+            String type2 = clipboard.substring(clipboard.indexOf(";") + 1, clipboard.indexOf("<"));
+            String content = clipboard.substring(clipboard.indexOf("<") + 1);
+            selectionBuilder.add(ObjectGOOParser.read(type, content));
+            selectionBuilder.get(0).setTypeID(type2);
+            return selectionBuilder.toArray(new EditorObject[0]);
+
         }
 
         return selectionBuilder.toArray(new EditorObject[0]);
@@ -83,29 +101,39 @@ public class ClipboardHandler {
 
     public static String exportToClipBoardString(EditorObject[] selectedList) {
 
-        StringBuilder clipboard = new StringBuilder("WOGEditor:");
+        if (selectedList[0].getVersion() == GameVersion.VERSION_WOG2) {
 
-        for (EditorObject object : selectedList) {
+            StringBuilder export = new StringBuilder();
+            GOOWriter.recursiveGOOExport(export, selectedList[0], 0);
+            return "WOGEditor:" + selectedList[0].getParent().getAttributeChildAlias().get(selectedList[0].getTypeID()) + ";" + selectedList[0].getTypeID() + "<" + export;
 
-            clipboard.append(object.getType());
+        } else {
 
-            clipboard.append("<");
+            StringBuilder clipboard = new StringBuilder("WOGEditor:");
 
-            for (int i = 0; i < object.getAttributes().length; i++) {
-                EditorAttribute attribute = object.getAttributes()[i];
-                if (attribute.stringValue() != null && !attribute.stringValue().equals(attribute.getDefaultValue()) && !attribute.stringValue().isEmpty()) {
-                    clipboard.append(attribute.getName()).append("=").append(attribute.stringValue());
-                    clipboard.append(";");
+            for (EditorObject object : selectedList) {
+
+                clipboard.append(object.getParent().getAttributeChildAlias().get(object.getTypeID()));
+
+                clipboard.append("<");
+
+                for (int i = 0; i < object.getAttributes().length; i++) {
+                    EditorAttribute attribute = object.getAttributes()[i];
+                    if (attribute.stringValue() != null && !attribute.stringValue().equals(attribute.getDefaultValue()) && !attribute.stringValue().isEmpty()) {
+                        clipboard.append(attribute.getName()).append("=").append(attribute.stringValue());
+                        clipboard.append(";");
+                    }
                 }
+
+                clipboard.deleteCharAt(clipboard.length() - 1);
+
+                clipboard.append(">");
+
             }
 
-            clipboard.deleteCharAt(clipboard.length() - 1);
-
-            clipboard.append(">");
+            return clipboard.toString();
 
         }
-
-        return clipboard.toString();
 
     }
 

@@ -1,5 +1,7 @@
 package com.woogleFX.engine.inputEvents;
 
+import com.woogleFX.editorObjects.EditorObject;
+import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.editorObjects.splineGeom.SplineGeometryPlacer;
 import com.woogleFX.editorObjects.splineGeom.SplineManager;
@@ -8,13 +10,14 @@ import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.engine.renderer.Renderer;
 import com.woogleFX.engine.SelectionManager;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.attributes.EditorAttribute;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.DragSettings;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.CreateSplinePointAction;
+import com.woogleFX.gameData.level.WOG1Level;
+import com.woogleFX.gameData.level.WOG2Level;
 import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.level.BallInstance;
+import com.worldOfGoo2.level._2_Level_BallInstance;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.SplitPane;
@@ -25,25 +28,36 @@ import javafx.scene.input.MouseEvent;
 import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class MousePressedManager {
 
-    private static EditorObject getEditorObjectThatHasThis(ObjectComponent objectComponent, _Level level) {
+    private static EditorObject getEditorObjectThatHasThis(ObjectComponent objectComponent, _Level _level) {
 
-        for (EditorObject editorObject : level.getLevel()) {
-            if (List.of(editorObject.getObjectComponents()).contains(objectComponent)) return editorObject;
-        }
-        for (EditorObject editorObject : level.getScene()) {
-            if (List.of(editorObject.getObjectComponents()).contains(objectComponent)) return editorObject;
-        }
-        for (EditorObject editorObject : level.getResrc()) {
-            if (List.of(editorObject.getObjectComponents()).contains(objectComponent)) return editorObject;
-        }
-        for (EditorObject editorObject : level.getAddin()) {
-            if (List.of(editorObject.getObjectComponents()).contains(objectComponent)) return editorObject;
-        }
-        for (EditorObject editorObject : level.getText()) {
-            if (List.of(editorObject.getObjectComponents()).contains(objectComponent)) return editorObject;
+        if (_level instanceof WOG1Level level) {
+
+            for (EditorObject EditorObject : level.getLevel()) {
+                if (List.of(EditorObject.getObjectComponents()).contains(objectComponent)) return EditorObject;
+            }
+            for (EditorObject EditorObject : level.getScene()) {
+                if (List.of(EditorObject.getObjectComponents()).contains(objectComponent)) return EditorObject;
+            }
+            for (EditorObject EditorObject : level.getResrc()) {
+                if (List.of(EditorObject.getObjectComponents()).contains(objectComponent)) return EditorObject;
+            }
+            for (EditorObject EditorObject : level.getAddin()) {
+                if (List.of(EditorObject.getObjectComponents()).contains(objectComponent)) return EditorObject;
+            }
+            for (EditorObject EditorObject : level.getText()) {
+                if (List.of(EditorObject.getObjectComponents()).contains(objectComponent)) return EditorObject;
+            }
+
+        } else if (_level instanceof WOG2Level level) {
+
+            for (EditorObject editorObject : level.getObjects()) {
+                if (List.of(editorObject.getObjectComponents()).contains(objectComponent)) return editorObject;
+            }
+
         }
 
         return null;
@@ -155,21 +169,35 @@ public class MousePressedManager {
     }
 
 
-    private static void tryToPlaceStrand(MouseEvent event, _Level level) {
+    private static void tryToPlaceStrand(MouseEvent event, _Level _level) {
 
-        double mouseX = (event.getX() - level.getOffsetX()) / level.getZoom();
-        double mouseY = (event.getY() - FXCanvas.getMouseYOffset() - level.getOffsetY()) / level.getZoom();
+        double mouseX = (event.getX() - _level.getOffsetX()) / _level.getZoom();
+        double mouseY = (event.getY() - FXCanvas.getMouseYOffset() - _level.getOffsetY()) / _level.getZoom();
 
-        for (EditorObject editorObject : level.getLevel()) if (editorObject instanceof BallInstance ballInstance) {
-            for (ObjectComponent objectComponent : ballInstance.getObjectComponents()) {
-                if (objectComponent.mouseIntersection(mouseX, mouseY) != DragSettings.NULL) {
-                    if (SelectionManager.getStrand1Gooball() == null) {
-                        SelectionManager.setStrand1Gooball(ballInstance);
-                        return;
+        if (_level instanceof WOG1Level level) {
+            for (EditorObject EditorObject : level.getLevel()) if (EditorObject instanceof BallInstance ballInstance) {
+                for (ObjectComponent objectComponent : ballInstance.getObjectComponents()) {
+                    if (objectComponent.mouseIntersection(mouseX, mouseY) != DragSettings.NULL) {
+                        if (SelectionManager.getStrand1Gooball() == null) {
+                            SelectionManager.setStrand1Gooball(ballInstance);
+                            return;
+                        }
+                    }
+                }
+            }
+        } else if (_level instanceof WOG2Level level) {
+            for (EditorObject EditorObject : level.getObjects()) if (EditorObject instanceof _2_Level_BallInstance ballInstance) {
+                for (ObjectComponent objectComponent : ballInstance.getObjectComponents()) {
+                    if (objectComponent.mouseIntersection(mouseX, mouseY) != DragSettings.NULL) {
+                        if (SelectionManager.getStrand1Gooball() == null) {
+                            SelectionManager.setStrand1Gooball(ballInstance);
+                            return;
+                        }
                     }
                 }
             }
         }
+
 
     }
 
@@ -219,6 +247,7 @@ public class MousePressedManager {
         }
 
         ArrayList<ObjectComponent> byDepth = Renderer.orderObjectPositionsByDepth(level);
+        byDepth.sort((o1, o2) -> (int)Math.signum(o1.getDepth() - o2.getDepth()));
         for (int i = byDepth.size() - 1; i >= 0; i--) {
             ObjectComponent object = byDepth.get(i);
             if (!object.isVisible()) continue;

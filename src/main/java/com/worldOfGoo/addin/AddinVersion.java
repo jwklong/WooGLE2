@@ -10,7 +10,7 @@ public class AddinVersion extends EditorObject {
     public AddinVersion(EditorObject _parent, GameVersion version) {
         super(_parent, "version", version);
 
-        addAttribute("value", InputField.NUMBER_POSITIVE).assertRequired();
+        addAttribute("value", InputField._1_NUMBER_POSITIVE).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("value,"));
 

@@ -113,7 +113,7 @@ public class VisibilitySettings {
 
     private static final Image showHideBGColor0 = FileManager.getIcon("ButtonIcons\\ShowHide\\showhide_scenebgcolor_disabled.png");
     private static final Image showHideBGColor1 = FileManager.getIcon("ButtonIcons\\ShowHide\\showhide_scenebgcolor.png");
-    private boolean showSceneBGColor = false;
+    private boolean showSceneBGColor = true;
     public boolean isShowSceneBGColor() {
         return showSceneBGColor;
     }

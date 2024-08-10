@@ -2,6 +2,7 @@ package com.worldOfGoo.scene;
 
 import java.io.FileNotFoundException;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.ImageUtility;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
@@ -10,9 +11,9 @@ import com.woogleFX.gameData.animation.Keyframe;
 import com.woogleFX.gameData.animation.WoGAnimation;
 import com.woogleFX.gameData.level.GameVersion;
 
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 
+import com.woogleFX.gameData.level.WOG1Level;
 import javafx.scene.image.Image;
 
 public class SceneLayer extends EditorObject {
@@ -30,27 +31,27 @@ public class SceneLayer extends EditorObject {
     public SceneLayer(EditorObject _parent, GameVersion version) {
         super(_parent, "SceneLayer", version);
 
-        addAttribute("id",         InputField.ANY);
-        addAttribute("name",       InputField.ANY);
-        addAttribute("depth",      InputField.NUMBER)         .setDefaultValue("0")            .assertRequired();
-        addAttribute("x",          InputField.NUMBER)         .setDefaultValue("0")            .assertRequired();
-        addAttribute("y",          InputField.NUMBER)         .setDefaultValue("0")            .assertRequired();
-        addAttribute("scalex",     InputField.NUMBER)         .setDefaultValue("1");
-        addAttribute("scaley",     InputField.NUMBER)         .setDefaultValue("1");
-        addAttribute("rotation",   InputField.NUMBER)         .setDefaultValue("0");
-        addAttribute("alpha",      InputField.NUMBER)         .setDefaultValue("1");
-        addAttribute("colorize",   InputField.COLOR)          .setDefaultValue("255,255,255");
-        addAttribute("image",      InputField.IMAGE_REQUIRED)                                  .assertRequired();
-        addAttribute("tilex",      InputField.FLAG)           .setDefaultValue("false");
-        addAttribute("tiley",      InputField.FLAG)           .setDefaultValue("false");
-        addAttribute("tilecountx", InputField.NUMBER)         .setDefaultValue("0");
-        addAttribute("tilecounty", InputField.NUMBER)         .setDefaultValue("0");
-        addAttribute("anim",       InputField.ANIMATION);
-        addAttribute("animspeed",  InputField.NUMBER)         .setDefaultValue("1");
-        addAttribute("animdelay",  InputField.NUMBER)         .setDefaultValue("0");
-        addAttribute("animloop",   InputField.FLAG)           .setDefaultValue("false");
-        addAttribute("anchor",     InputField.GEOMETRY);
-        addAttribute("context",    InputField.CONTEXT)        .setDefaultValue("screen");
+        addAttribute("id",         InputField._1_STRING);
+        addAttribute("name",       InputField._1_STRING);
+        addAttribute("depth",      InputField._1_NUMBER)         .setDefaultValue("0")            .assertRequired();
+        addAttribute("x",          InputField._1_NUMBER)         .setDefaultValue("0")            .assertRequired();
+        addAttribute("y",          InputField._1_NUMBER)         .setDefaultValue("0")            .assertRequired();
+        addAttribute("scalex",     InputField._1_NUMBER)         .setDefaultValue("1");
+        addAttribute("scaley",     InputField._1_NUMBER)         .setDefaultValue("1");
+        addAttribute("rotation",   InputField._1_NUMBER)         .setDefaultValue("0");
+        addAttribute("alpha",      InputField._1_NUMBER)         .setDefaultValue("1");
+        addAttribute("colorize",   InputField._1_COLOR)          .setDefaultValue("255,255,255");
+        addAttribute("image",      InputField._1_IMAGE_REQUIRED)                                  .assertRequired();
+        addAttribute("tilex",      InputField._1_FLAG)           .setDefaultValue("false");
+        addAttribute("tiley",      InputField._1_FLAG)           .setDefaultValue("false");
+        addAttribute("tilecountx", InputField._1_NUMBER)         .setDefaultValue("0");
+        addAttribute("tilecounty", InputField._1_NUMBER)         .setDefaultValue("0");
+        addAttribute("anim",       InputField._1_ANIMATION);
+        addAttribute("animspeed",  InputField._1_NUMBER)         .setDefaultValue("1");
+        addAttribute("animdelay",  InputField._1_NUMBER)         .setDefaultValue("0");
+        addAttribute("animloop",   InputField._1_FLAG)           .setDefaultValue("false");
+        addAttribute("anchor",     InputField._1_GEOMETRY);
+        addAttribute("context",    InputField._1_CONTEXT)        .setDefaultValue("screen");
 
         addObjectComponent(new ImageComponent() {
             public double getX() {
@@ -191,7 +192,7 @@ public class SceneLayer extends EditorObject {
 
         try {
             if (!getAttribute("image").stringValue().isEmpty()) {
-                image = getAttribute("image").imageValue(LevelManager.getLevel().getResrc(), getVersion());
+                image = getAttribute("image").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
                 image = ImageUtility.colorize(image, getAttribute("colorize").colorValue());
             }
         } catch (FileNotFoundException ignored) {

@@ -10,7 +10,7 @@ public class Resources extends EditorObject {
     public Resources(EditorObject _parent, GameVersion version) {
         super(_parent, "Resources", version);
 
-        addAttribute("id", InputField.ANY).assertRequired();
+        addAttribute("id", InputField._1_STRING).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("id,"));
 

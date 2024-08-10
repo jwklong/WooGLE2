@@ -10,9 +10,9 @@ public class Endoncollision extends EditorObject {
     public Endoncollision(EditorObject _parent, GameVersion version) {
         super(_parent, "endoncollision", version);
 
-        addAttribute("id1", InputField.GEOMETRY).assertRequired();
-        addAttribute("id2", InputField.GEOMETRY).assertRequired();
-        addAttribute("delay", InputField.NUMBER).assertRequired();
+        addAttribute("id1", InputField._1_GEOMETRY).assertRequired();
+        addAttribute("id2", InputField._1_GEOMETRY).assertRequired();
+        addAttribute("delay", InputField._1_NUMBER).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("id1,id2,delay"));
 

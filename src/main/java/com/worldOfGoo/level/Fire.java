@@ -1,10 +1,10 @@
 package com.worldOfGoo.level;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.gameData.particle.ParticleGraphicsInstance;
 import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -30,11 +30,11 @@ public class Fire extends EditorObject {
     public Fire(EditorObject _parent, GameVersion version) {
         super(_parent, "fire", version);
 
-        addAttribute("depth",     InputField.NUMBER)   .setDefaultValue("0") .assertRequired();
-        addAttribute("particles", InputField.PARTICLES)                      .assertRequired();
-        addAttribute("x",         InputField.NUMBER)   .setDefaultValue("0") .assertRequired();
-        addAttribute("y",         InputField.NUMBER)   .setDefaultValue("0") .assertRequired();
-        addAttribute("radius",    InputField.NUMBER)   .setDefaultValue("50").assertRequired();
+        addAttribute("depth",     InputField._1_NUMBER)   .setDefaultValue("0") .assertRequired();
+        addAttribute("particles", InputField._1_PARTICLES)                      .assertRequired();
+        addAttribute("x",         InputField._1_NUMBER)   .setDefaultValue("0") .assertRequired();
+        addAttribute("y",         InputField._1_NUMBER)   .setDefaultValue("0") .assertRequired();
+        addAttribute("radius",    InputField._1_NUMBER)   .setDefaultValue("50").assertRequired();
 
         addObjectComponent(new CircleComponent() {
             public double getX() {

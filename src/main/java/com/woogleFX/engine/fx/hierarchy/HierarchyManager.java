@@ -1,19 +1,21 @@
 package com.woogleFX.engine.fx.hierarchy;
 
-import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.EditorObject;
+import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.objectCreators.ObjectAdder;
 import com.woogleFX.engine.LevelManager;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.HierarchyDragAction;
-import com.woogleFX.gameData.level._Level;
+import com.woogleFX.gameData.level.GameVersion;
+import com.woogleFX.gameData.level.WOG1Level;
 import com.worldOfGoo.addin.*;
 import com.worldOfGoo.level.*;
 import com.worldOfGoo.resrc.*;
 import com.worldOfGoo.scene.*;
 import com.worldOfGoo.text.TextStrings;
+import com.worldOfGoo2.level._2_Level_BallInstance;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -29,9 +31,9 @@ import java.util.stream.Stream;
 
 public class HierarchyManager {
 
-    public static Image getObjectIcon(String name) {
+    public static Image getObjectIcon(String type, boolean terrain) {
 
-        String iconName = switch (name) {
+        String iconName = switch (type) {
             case "addin", "Addin_addin", "Addin_id", "Addin_name",
                     "Addin_type", "Addin_version", "Addin_description",
                     "Addin_author", "Addin_levels", "Addin_level",
@@ -76,7 +78,40 @@ public class HierarchyManager {
             case "strings" -> "text\\textstrings";
             case "targetheight" -> "level\\targetheight";
             case "Vertex" -> "level\\Vertex";
+
+            // case "_2_Level_Ball" -> "level\\BallInstance";
+            case "CameraKeyFrame" -> "level\\camera";
+            case "Pin" -> "scene\\hinge";
+            case "Item" -> "scene\\SceneLayer";
+            // case "Strand" -> "level\\Strand";
+            case "UserVariable" -> "addin\\addin";
+
             default -> null;
+        };
+        if (iconName == null) return null;
+
+        if (terrain)
+            iconName = "WoG2\\TerrainBallInstance";
+
+        return FileManager.getIcon("ObjectIcons\\" + iconName + ".png");
+
+    }
+
+    public static Image getItemIcon(String name) {
+
+        String iconName = switch (name) {
+
+            case "LevelExit" -> "level\\levelexit";
+            case "CameraEOL", "CameraControl" -> "level\\camera";
+            case "Pool" -> "level\\pipe";
+            case "TerrainClear" -> "WoG2\\terrainClear";
+            case "TerrainDeadly" -> "WoG2\\terrainDeadly";
+            case "TerrainFrictionless" -> "WoG2\\terrainFrictionless";
+            case "TerrainNonSticky" -> "WoG2\\terrainNonSticky";
+            case "TerrainSticky" -> "WoG2\\terrainSticky";
+            case "TerrainUnwalkable" -> "WoG2\\terrainUnwalkable";
+
+            default -> "scene\\SceneLayer";
         };
         if (iconName == null) return null;
 
@@ -131,10 +166,19 @@ public class HierarchyManager {
             if (cell.getTableRow().getItem() != null) {
                 ImageView imageView;
 
-                imageView = new ImageView(getObjectIcon(cell.getTableRow().getItem().getType()));
+                boolean terrain = false;
+                if (cell.getTableRow().getItem() instanceof _2_Level_BallInstance && cell.getTableRow().getItem().getAttribute("type").stringValue().equals("Terrain")) {
+                    terrain = true;
+                }
+                imageView = new ImageView(getObjectIcon(cell.getTableRow().getItem().getType(), terrain));
+                if (cell.getTableRow().getItem().getType().equals("Item")) {
+                    cell.setText(cell.getTableRow().getItem().getAttribute("type").stringValue());
+                    imageView.setImage(getItemIcon(cell.getTableRow().getItem().getAttribute("type").stringValue()));
+                    imageView.setFitWidth(16);
+                    imageView.setFitHeight(16);
+                }
 
-                // If the cell's EditorObject is invalid, display its graphic with a warning
-                // symbol.
+                // If the cell's EditorObject is invalid, display its graphic with a warning symbol.
                 // Otherwise, just display its graphic.
 
                 boolean valid = true;
@@ -170,53 +214,68 @@ public class HierarchyManager {
         if (toIndex == oldDropIndex) return false;
 
         EditorObject toItem = hierarchy.getTreeItem(toIndex).getValue();
-        EditorObject fromItem = hierarchy.getTreeItem(oldDropIndex).getValue();
 
-        EditorObject absoluteParent = fromItem;
-        while (absoluteParent.getParent() != null) absoluteParent = absoluteParent.getParent();
+        if (toItem.getVersion() != GameVersion.VERSION_WOG2) {
 
-        _Level level = LevelManager.getLevel();
+            EditorObject fromItem = hierarchy.getTreeItem(oldDropIndex).getValue();
 
-        ArrayList<EditorObject> list;
-        if (absoluteParent instanceof Scene) list = level.getScene();
-        else if (absoluteParent instanceof Level) list = level.getLevel();
-        else if (absoluteParent instanceof ResourceManifest) list = level.getResrc();
-        else if (absoluteParent instanceof Addin) list = level.getAddin();
-        else if (absoluteParent instanceof TextStrings) list = level.getText();
-        else return false;
+            EditorObject absoluteParent = fromItem;
 
-        int indexOfToItemInList = list.indexOf(toItem);
+            while (absoluteParent.getParent() != null) absoluteParent = absoluteParent.getParent();
 
-        // YOU CAN'T PUT AN OBJECT INSIDE ITSELF
-        if (toItem.getChildren().contains(fromItem)) return false;
+            WOG1Level level = (WOG1Level)LevelManager.getLevel();
 
-        // Or inside an object that doesn't have it as a possible child
-        if (Stream.of(toItem.getParent().getPossibleChildren()).noneMatch(e -> e.equals(fromItem.getType()))) return false;
+            ArrayList<EditorObject> list;
+            if (absoluteParent instanceof Scene) list = level.getScene();
+            else if (absoluteParent instanceof Level) list = level.getLevel();
+            else if (absoluteParent instanceof ResourceManifest) list = level.getResrc();
+            else if (absoluteParent instanceof Addin) list = level.getAddin();
+            else if (absoluteParent instanceof TextStrings) list = level.getText();
+            else return false;
 
-        // Or above every SetDefaults (meaning at position 2) if it's a resource
-        if ((fromItem instanceof ResrcImage || fromItem instanceof Sound || fromItem instanceof Font) && toIndex == 2) return false;
+            int indexOfToItemInList = list.indexOf(toItem);
 
-        // Or anywhere that would put a resource at position 2 if it's a SetDefaults
-        if (fromItem instanceof SetDefaults && (oldDropIndex == 2 && !(hierarchy.getTreeItem(3).getValue() instanceof SetDefaults))) return false;
+            // YOU CAN'T PUT AN OBJECT INSIDE ITSELF
+            if (toItem.getChildren().contains(fromItem)) return false;
 
-        // Add the dragged item just above the item that it gets dragged to
-        int indexOfToItem = toItem.getParent().getChildren().indexOf(toItem);
+            // Or inside an object that doesn't have it as a possible child
+            if (Stream.of(toItem.getParent().getPossibleChildren()).noneMatch(e -> e.equals(fromItem.getType())))
+                return false;
 
-        fromItem.getParent().getChildren().remove(fromItem);
-        fromItem.getParent().getTreeItem().getChildren().remove(fromItem.getTreeItem());
+            // Or above every SetDefaults (meaning at position 2) if it's a resource
+            if ((fromItem instanceof ResrcImage || fromItem instanceof Sound || fromItem instanceof Font) && toIndex == 2)
+                return false;
 
-        fromItem.setParent(toItem.getParent(), indexOfToItem);
+            // Or anywhere that would put a resource at position 2 if it's a SetDefaults
+            if (fromItem instanceof SetDefaults && (oldDropIndex == 2 && !(hierarchy.getTreeItem(3).getValue() instanceof SetDefaults)))
+                return false;
 
-        list.remove(fromItem);
-        list.add(indexOfToItemInList, fromItem);
+            // Add the dragged item just above the item that it gets dragged to
+            int indexOfToItem = toItem.getParent().getChildren().indexOf(toItem);
 
-        if (fromItem.getParent() instanceof Resources) LevelManager.getLevel().reAssignSetDefaultsToAllResources();
-        else if (fromItem instanceof Vertex) fromItem.getParent().update();
+            fromItem.getParent().getChildren().remove(fromItem);
+            fromItem.getParent().getTreeItem().getChildren().remove(fromItem.getTreeItem());
 
-        hierarchy.getSelectionModel().select(toIndex);
-        hierarchy.refresh();
+            fromItem.setParent(toItem.getParent(), indexOfToItem);
 
-        return true;
+            list.remove(fromItem);
+            list.add(indexOfToItemInList, fromItem);
+
+            if (fromItem.getParent() instanceof Resources) LevelManager.getLevel().reAssignSetDefaultsToAllResources();
+            else if (fromItem instanceof Vertex) fromItem.getParent().update();
+
+            hierarchy.getSelectionModel().select(toIndex);
+            hierarchy.refresh();
+
+            return true;
+
+        } else {
+
+            // TODO
+
+            return true;
+
+        }
 
     }
 
@@ -308,16 +367,22 @@ public class HierarchyManager {
         ContextMenu menu = new ContextMenu();
 
         // For every object that can be created as a child of this object:
+        int i = 0;
         for (String childToAdd : object.getPossibleChildren()) {
 
             // Create a menu item representing creating this child.
             MenuItem addItemItem = new MenuItem("Add " + childToAdd);
 
             // Attempt to set graphics for this menu item.
-            addItemItem.setGraphic(new ImageView(getObjectIcon(childToAdd)));
+            addItemItem.setGraphic(new ImageView(getObjectIcon(childToAdd, false)));
 
             // Set the item's action to creating the child, with the object as its parent.
-            addItemItem.setOnAction(event -> ObjectAdder.addObject(childToAdd, object));
+            int finalI = i;
+            addItemItem.setOnAction(event -> {
+                if (object.getVersion() == GameVersion.VERSION_WOG2) ObjectAdder.addObject2(childToAdd, object.getPossibleChildrenTypeIDs()[finalI], object);
+                else ObjectAdder.addObject(childToAdd, object);
+            });
+            i++;
 
             menu.getItems().add(addItemItem);
         }

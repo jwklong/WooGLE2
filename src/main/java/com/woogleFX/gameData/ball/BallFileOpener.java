@@ -1,12 +1,11 @@
 package com.woogleFX.gameData.ball;
 import java.util.ArrayList;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
 import com.woogleFX.gameData.level.GameVersion;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
-
-import com.woogleFX.editorObjects.EditorObject;
 
 public class BallFileOpener extends DefaultHandler {
     public static EditorObject parent = null;

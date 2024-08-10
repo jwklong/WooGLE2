@@ -4,6 +4,7 @@ module com.example.WOGAnniversaryEditor {
   requires javafx.swing;
   requires transitive javafx.graphics;
   requires org.bouncycastle.provider;
+  requires org.apache.commons.compress;
   requires java.xml;
   requires org.slf4j;
 

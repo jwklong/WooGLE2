@@ -1,14 +1,15 @@
 package com.worldOfGoo.scene;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.ImageUtility;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.engine.LevelManager;
 
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 
+import com.woogleFX.gameData.level.WOG1Level;
 import javafx.scene.image.Image;
 
 import java.io.FileNotFoundException;
@@ -21,42 +22,42 @@ public class Button extends EditorObject {
     public Button(EditorObject _parent, GameVersion version) {
         super(_parent, "button", version);
 
-        addAttribute("id",                    InputField.ANY)                                  .assertRequired();
-        addAttribute("depth",                 InputField.NUMBER).setDefaultValue("0")          .assertRequired();
-        addAttribute("x",                     InputField.NUMBER)                               .assertRequired();
-        addAttribute("y",                     InputField.NUMBER).setDefaultValue("0")          .assertRequired();
-        addAttribute("scalex",                InputField.NUMBER).setDefaultValue("1")          .assertRequired();
-        addAttribute("scaley",                InputField.NUMBER).setDefaultValue("1")          .assertRequired();
-        addAttribute("rotation",              InputField.NUMBER).setDefaultValue("0")          .assertRequired();
-        addAttribute("anchor",                InputField.ANY);
-        addAttribute("alpha",                 InputField.ANY)   .setDefaultValue("1")          .assertRequired();
-        addAttribute("colorize",              InputField.ANY)   .setDefaultValue("255,255,255").assertRequired();
-        addAttribute("up",                    InputField.IMAGE);
-        addAttribute("over",                  InputField.IMAGE);
-        addAttribute("down",                  InputField.IMAGE);
-        addAttribute("downover",              InputField.IMAGE);
-        addAttribute("armed",                 InputField.IMAGE);
-        addAttribute("downarmed",             InputField.IMAGE);
-        addAttribute("disabled",              InputField.IMAGE);
-        addAttribute("downdisabled",          InputField.IMAGE);
-        addAttribute("latch",                 InputField.FLAG);
-        addAttribute("font",                  InputField.ANY);
-        addAttribute("text",                  InputField.ANY);
-        addAttribute("onclick",               InputField.ANY);
-        addAttribute("onmouseenter",          InputField.ANY);
-        addAttribute("onmouseexit",           InputField.ANY);
-        addAttribute("textcolorup",           InputField.ANY);
-        addAttribute("textcolorupover",       InputField.ANY);
-        addAttribute("textcoloruparmed",      InputField.ANY);
-        addAttribute("textcolorupdisabled",   InputField.ANY);
-        addAttribute("textcolordown",         InputField.ANY);
-        addAttribute("textcolordownover",     InputField.ANY);
-        addAttribute("textcolordownarmed",    InputField.ANY);
-        addAttribute("textcolordowndisabled", InputField.ANY);
-        addAttribute("tooltip",               InputField.ANY);
-        addAttribute("overlay",               InputField.ANY);
-        addAttribute("screenspace",           InputField.ANY);
-        addAttribute("context",               InputField.ANY);
+        addAttribute("id",                    InputField._1_STRING)                                  .assertRequired();
+        addAttribute("depth",                 InputField._1_NUMBER).setDefaultValue("0")          .assertRequired();
+        addAttribute("x",                     InputField._1_NUMBER)                               .assertRequired();
+        addAttribute("y",                     InputField._1_NUMBER).setDefaultValue("0")          .assertRequired();
+        addAttribute("scalex",                InputField._1_NUMBER).setDefaultValue("1")          .assertRequired();
+        addAttribute("scaley",                InputField._1_NUMBER).setDefaultValue("1")          .assertRequired();
+        addAttribute("rotation",              InputField._1_NUMBER).setDefaultValue("0")          .assertRequired();
+        addAttribute("anchor",                InputField._1_STRING);
+        addAttribute("alpha",                 InputField._1_STRING)   .setDefaultValue("1")          .assertRequired();
+        addAttribute("colorize",              InputField._1_STRING)   .setDefaultValue("255,255,255").assertRequired();
+        addAttribute("up",                    InputField._1_IMAGE);
+        addAttribute("over",                  InputField._1_IMAGE);
+        addAttribute("down",                  InputField._1_IMAGE);
+        addAttribute("downover",              InputField._1_IMAGE);
+        addAttribute("armed",                 InputField._1_IMAGE);
+        addAttribute("downarmed",             InputField._1_IMAGE);
+        addAttribute("disabled",              InputField._1_IMAGE);
+        addAttribute("downdisabled",          InputField._1_IMAGE);
+        addAttribute("latch",                 InputField._1_FLAG);
+        addAttribute("font",                  InputField._1_STRING);
+        addAttribute("text",                  InputField._1_STRING);
+        addAttribute("onclick",               InputField._1_STRING);
+        addAttribute("onmouseenter",          InputField._1_STRING);
+        addAttribute("onmouseexit",           InputField._1_STRING);
+        addAttribute("textcolorup",           InputField._1_STRING);
+        addAttribute("textcolorupover",       InputField._1_STRING);
+        addAttribute("textcoloruparmed",      InputField._1_STRING);
+        addAttribute("textcolorupdisabled",   InputField._1_STRING);
+        addAttribute("textcolordown",         InputField._1_STRING);
+        addAttribute("textcolordownover",     InputField._1_STRING);
+        addAttribute("textcolordownarmed",    InputField._1_STRING);
+        addAttribute("textcolordowndisabled", InputField._1_STRING);
+        addAttribute("tooltip",               InputField._1_STRING);
+        addAttribute("overlay",               InputField._1_STRING);
+        addAttribute("screenspace",           InputField._1_STRING);
+        addAttribute("context",               InputField._1_STRING);
 
         addObjectComponent(new ImageComponent() {
             public double getX() {
@@ -126,7 +127,7 @@ public class Button extends EditorObject {
 
         try {
             if (!getAttribute("up").stringValue().isEmpty()) {
-                image = getAttribute("up").imageValue(LevelManager.getLevel().getResrc(), getVersion());
+                image = getAttribute("up").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
                 image = ImageUtility.colorize(image, getAttribute("colorize").colorValue());
             }
         } catch (FileNotFoundException ignored) {

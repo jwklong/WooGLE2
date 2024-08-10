@@ -3,16 +3,15 @@ package com.worldOfGoo.scene;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.editorObjects.objectComponents.TextComponent;
 import com.woogleFX.engine.LevelManager;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
-import com.woogleFX.gameData.font.FontReader;
 import com.woogleFX.gameData.font._Font;
 import com.woogleFX.gameData.particle.ParticleGraphicsInstance;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -36,25 +35,25 @@ public class Particles extends EditorObject {
     public Particles(EditorObject _parent, GameVersion version) {
         super(_parent, "particles", version);
 
-        addAttribute("effect",  InputField.PARTICLES)                      .assertRequired();
-        addAttribute("depth",   InputField.NUMBER)  .setDefaultValue("-20").assertRequired();
-        addAttribute("pos",     InputField.POSITION).setDefaultValue("0,0");
-        addAttribute("pretick", InputField.NUMBER)  .setDefaultValue("0");
-        addAttribute("enabled", InputField.FLAG);
+        addAttribute("effect",  InputField._1_PARTICLES)                      .assertRequired();
+        addAttribute("depth",   InputField._1_NUMBER)  .setDefaultValue("-20").assertRequired();
+        addAttribute("pos",     InputField._1_POSITION).setDefaultValue("0,0");
+        addAttribute("pretick", InputField._1_NUMBER)  .setDefaultValue("0");
+        addAttribute("enabled", InputField._1_FLAG);
 
         setMetaAttributes(MetaEditorAttribute.parse("effect,pos,depth,pretick,enabled,"));
 
         addObjectComponent(new TextComponent() {
             public _Font getFont() {
-                if (FileManager.getGameDir(GameVersion.NEW) != null) {
+                if (FileManager.getGameDir(GameVersion.VERSION_WOG1_NEW) != null) {
                     try {
-                        return ResourceManager.getFont(null, "FONT_SIGNPOST", GameVersion.NEW);
+                        return ResourceManager.getFont(null, "FONT_SIGNPOST", GameVersion.VERSION_WOG1_NEW);
                     } catch (FileNotFoundException e) {
                         return null;
                     }
                 } else {
                     try {
-                        return ResourceManager.getFont(null, "FONT_SIGNPOST", GameVersion.OLD);
+                        return ResourceManager.getFont(null, "FONT_SIGNPOST", GameVersion.VERSION_WOG1_OLD);
                     } catch (FileNotFoundException e) {
                         return null;
                     }

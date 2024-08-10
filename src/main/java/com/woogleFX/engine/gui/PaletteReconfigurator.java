@@ -54,9 +54,9 @@ public class PaletteReconfigurator extends Application {
 
         stage.setTitle("Configure Goo Ball Palette");
 
-        for (GameVersion version : GameVersion.ALL) {
+        for (GameVersion version : GameVersion.values()) {
 
-            VBox vBox = (version == GameVersion.OLD) ? oldVBox : newVBox;
+            VBox vBox = (version == GameVersion.VERSION_WOG1_OLD) ? oldVBox : newVBox;
 
             String dir = FileManager.getGameDir(version);
             if (dir.isEmpty()) continue;
@@ -93,7 +93,11 @@ public class PaletteReconfigurator extends Application {
                 CheckBox checkBox = (CheckBox)((HBox)ballHBox).getChildren().get(0);
                 if (checkBox.isSelected()) {
                     String ballName = label.getText();
-                    GameVersion ballVersion = label.getId().equals("1.3") ? GameVersion.OLD : GameVersion.NEW;
+                    GameVersion ballVersion = switch (label.getId()) {
+                        case "1.3" -> GameVersion.VERSION_WOG1_OLD;
+                        case "1.5" -> GameVersion.VERSION_WOG1_NEW;
+                        default -> GameVersion.VERSION_WOG2;
+                    };
 
                     PaletteManager.addPaletteBall(ballName);
                     PaletteManager.addPaletteVersion(ballVersion);
@@ -103,6 +107,7 @@ public class PaletteReconfigurator extends Application {
 
             FXEditorButtons.getOldGooballsToolbar().getItems().clear();
             FXEditorButtons.getNewGooballsToolbar().getItems().clear();
+            FXEditorButtons.getSequelGooballsToolbar().getItems().clear();
             FXEditorButtons.addBallsTo();
 
             try {

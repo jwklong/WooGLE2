@@ -9,8 +9,8 @@ public class Shadow extends EditorObject {
     public Shadow(EditorObject _parent, GameVersion version) {
         super(_parent, "shadow", version);
 
-        addAttribute("image",    InputField.ANY)  .assertRequired();
-        addAttribute("additive", InputField.ANY);
+        addAttribute("image",    InputField._1_STRING)  .assertRequired();
+        addAttribute("additive", InputField._1_STRING);
 
     }
 

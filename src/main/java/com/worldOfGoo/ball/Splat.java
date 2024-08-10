@@ -9,7 +9,7 @@ public class Splat extends EditorObject {
     public Splat(EditorObject _parent, GameVersion version) {
         super(_parent, "splat", version);
 
-        addAttribute("image", InputField.ANY).assertRequired();
+        addAttribute("image", InputField._1_STRING).assertRequired();
 
     }
 

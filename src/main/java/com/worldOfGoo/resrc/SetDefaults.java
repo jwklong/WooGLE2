@@ -10,8 +10,8 @@ public class SetDefaults extends EditorObject {
     public SetDefaults(EditorObject _parent, GameVersion version) {
         super(_parent, "SetDefaults", version);
 
-        addAttribute("path", InputField.ANY).setDefaultValue("./").assertRequired();
-        addAttribute("idprefix", InputField.ANY)                  .assertRequired();
+        addAttribute("path", InputField._1_STRING).setDefaultValue("./").assertRequired();
+        addAttribute("idprefix", InputField._1_STRING)                  .assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("path,idprefix,"));
 

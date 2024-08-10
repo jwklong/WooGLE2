@@ -1,13 +1,16 @@
 package com.woogleFX.engine.renderer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.engine.SelectionManager;
 import com.woogleFX.engine.fx.FXCanvas;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
+import com.woogleFX.gameData.level.WOG1Level;
+import com.woogleFX.gameData.level.WOG2Level;
 import com.woogleFX.gameData.level._Level;
 
 import javafx.geometry.Point2D;
@@ -42,12 +45,12 @@ public class Renderer {
         Canvas canvas = FXCanvas.getCanvas();
 
         if (level != null) {
-            if (level.getVisibilitySettings().isShowSceneBGColor()) {
-                canvas.getGraphicsContext2D().setFill(Paint.valueOf(level.getSceneObject().getAttribute("backgroundcolor").colorValue().toHexRGBA()));
-                canvas.getGraphicsContext2D().fillRect(-5000000, -5000000, 10000000, 10000000);
-            } else {
-                canvas.getGraphicsContext2D().clearRect(-5000000, -5000000, 10000000, 10000000);
-            }
+            //if (level.getVisibilitySettings().isShowSceneBGColor()) {
+               // canvas.getGraphicsContext2D().setFill(Paint.valueOf(((WOG1Level)level).getSceneObject().getAttribute("backgroundcolor").colorValue().toHexRGBA()));
+               // canvas.getGraphicsContext2D().fillRect(-5000000, -5000000, 10000000, 10000000);
+            //} else {
+               // canvas.getGraphicsContext2D().clearRect(-5000000, -5000000, 10000000, 10000000);
+            //}
             canvas.getGraphicsContext2D().clearRect(-5000000, -5000000, 10000000, 10000000);
             drawLevelToCanvas(level, canvas);
 
@@ -65,33 +68,37 @@ public class Renderer {
     private static void addObjectPositionToListByDepth(ArrayList<ObjectComponent> objectComponents,
                                                        ObjectComponent objectComponent) {
 
+        if (objectComponent == null || !objectComponent.isVisible()) return;
+
         int i = 0;
-        while (i < objectComponents.size() && objectComponents.get(i).getDepth() <= objectComponent.getDepth()) {
-            i++;
-        }
+        //while (i < objectComponents.size() && objectComponents.get(i).getDepth() <= objectComponent.getDepth()) {
+        //    i++;
+        //}
 
         objectComponents.add(i, objectComponent);
 
     }
 
 
-    private static void recursiveGetAllObjectsInList(ArrayList<EditorObject> editorObjects,
-                                                     EditorObject editorObject) {
+    private static void recursiveGetAllObjectsInList(ArrayList<EditorObject> EditorObjects,
+                                                     EditorObject EditorObject) {
 
-        editorObjects.add(editorObject);
+        if (EditorObject == null) return;
 
-        for (EditorObject child : editorObject.getChildren()) {
-            recursiveGetAllObjectsInList(editorObjects, child);
+        EditorObjects.add(EditorObject);
+
+        for (EditorObject child : EditorObject.getChildren()) {
+            recursiveGetAllObjectsInList(EditorObjects, child);
         }
 
     }
 
 
     private static void addAllObjectPositionsToList(ArrayList<ObjectComponent> objectComponents,
-                                                    EditorObject editorObject) {
+                                                    EditorObject EditorObject) {
 
         ArrayList<EditorObject> allObjects = new ArrayList<>();
-        recursiveGetAllObjectsInList(allObjects, editorObject);
+        recursiveGetAllObjectsInList(allObjects, EditorObject);
 
         for (EditorObject object : allObjects) {
             for (ObjectComponent objectComponent : object.getObjectComponents()) {
@@ -106,11 +113,18 @@ public class Renderer {
 
         ArrayList<ObjectComponent> objectComponents = new ArrayList<>();
 
-        addAllObjectPositionsToList(objectComponents, level.getLevelObject());
-        addAllObjectPositionsToList(objectComponents, level.getSceneObject());
-        addAllObjectPositionsToList(objectComponents, level.getResrcObject());
-        addAllObjectPositionsToList(objectComponents, level.getAddinObject());
-        addAllObjectPositionsToList(objectComponents, level.getTextObject());
+        if (level instanceof WOG2Level wog2Level) {
+
+            addAllObjectPositionsToList(objectComponents, wog2Level.getLevel());
+            return objectComponents;
+
+        }
+
+        addAllObjectPositionsToList(objectComponents, ((WOG1Level)level).getLevelObject());
+        addAllObjectPositionsToList(objectComponents, ((WOG1Level)level).getSceneObject());
+        addAllObjectPositionsToList(objectComponents, ((WOG1Level)level).getResrcObject());
+        addAllObjectPositionsToList(objectComponents, ((WOG1Level)level).getAddinObject());
+        addAllObjectPositionsToList(objectComponents, ((WOG1Level)level).getTextObject());
 
         return objectComponents;
 
@@ -128,6 +142,8 @@ public class Renderer {
             double gameRelativeY = (SelectionManager.getMouseY() - level.getOffsetY()) / level.getZoom();
             addObjectPositionToListByDepth(objectPositionsOrderedByDepth, EffectsManager.getPlacingStrand(SelectionManager.getStrand1Gooball(), gameRelativeX, gameRelativeY));
         }
+
+        objectPositionsOrderedByDepth.sort((o1, o2) -> (int)Math.signum(o1.getDepth() - o2.getDepth()));
 
         for (ObjectComponent objectComponent : objectPositionsOrderedByDepth) {
 

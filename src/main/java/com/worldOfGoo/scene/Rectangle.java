@@ -1,15 +1,16 @@
 package com.worldOfGoo.scene;
 
 import com.woogleFX.editorObjects.ObjectUtil;
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.editorObjects.attributes.dataTypes.Position;
+import com.woogleFX.gameData.level.WOG1Level;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -25,25 +26,25 @@ public class Rectangle extends EditorObject {
     public Rectangle(EditorObject _parent, GameVersion version) {
         super(_parent, "rectangle", version);
 
-        addAttribute("id",               InputField.ANY)                                   .assertRequired();
-        addAttribute("mass",             InputField.NUMBER)     .setDefaultValue("0");
-        addAttribute("static",           InputField.FLAG);
-        addAttribute("tag",              InputField.TAG);
-        addAttribute("material",         InputField.MATERIAL);
-        addAttribute("image",            InputField.IMAGE);
-        addAttribute("imagepos",         InputField.POSITION);
-        addAttribute("imagerot",         InputField.NUMBER)     .setDefaultValue("0");
-        addAttribute("imagescale",       InputField.POSITION)   .setDefaultValue("1,1");
-        addAttribute("contacts",         InputField.FLAG)       .setDefaultValue("true");
-        addAttribute("x",                InputField.NUMBER)     .setDefaultValue("0")      .assertRequired();
-        addAttribute("y",                InputField.NUMBER)     .setDefaultValue("0")      .assertRequired();
-        addAttribute("width",            InputField.NUMBER)     .setDefaultValue("100")    .assertRequired();
-        addAttribute("height",           InputField.NUMBER)     .setDefaultValue("100")    .assertRequired();
-        addAttribute("rotation",         InputField.NUMBER)     .setDefaultValue("0")      .assertRequired();
-        addAttribute("break",            InputField.NUMBER);
-        addAttribute("rotspeed",         InputField.NUMBER);
-        addAttribute("collide",          InputField.FLAG);
-        addAttribute("nogeomcollisions", InputField.FLAG);
+        addAttribute("id",               InputField._1_STRING)                                   .assertRequired();
+        addAttribute("mass",             InputField._1_NUMBER)     .setDefaultValue("0");
+        addAttribute("static",           InputField._1_FLAG);
+        addAttribute("tag",              InputField._1_TAG);
+        addAttribute("material",         InputField._1_MATERIAL);
+        addAttribute("image",            InputField._1_IMAGE);
+        addAttribute("imagepos",         InputField._1_POSITION);
+        addAttribute("imagerot",         InputField._1_NUMBER)     .setDefaultValue("0");
+        addAttribute("imagescale",       InputField._1_POSITION)   .setDefaultValue("1,1");
+        addAttribute("contacts",         InputField._1_FLAG)       .setDefaultValue("true");
+        addAttribute("x",                InputField._1_NUMBER)     .setDefaultValue("0")      .assertRequired();
+        addAttribute("y",                InputField._1_NUMBER)     .setDefaultValue("0")      .assertRequired();
+        addAttribute("width",            InputField._1_NUMBER)     .setDefaultValue("100")    .assertRequired();
+        addAttribute("height",           InputField._1_NUMBER)     .setDefaultValue("100")    .assertRequired();
+        addAttribute("rotation",         InputField._1_NUMBER)     .setDefaultValue("0")      .assertRequired();
+        addAttribute("break",            InputField._1_NUMBER);
+        addAttribute("rotspeed",         InputField._1_NUMBER);
+        addAttribute("collide",          InputField._1_FLAG);
+        addAttribute("nogeomcollisions", InputField._1_FLAG);
 
 
         addObjectComponent(new RectangleComponent() {
@@ -306,7 +307,7 @@ public class Rectangle extends EditorObject {
 
         try {
             if (!getAttribute("image").stringValue().isEmpty()) {
-                image = getAttribute("image").imageValue(LevelManager.getLevel().getResrc(), getVersion());
+                image = getAttribute("image").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
             }
         } catch (FileNotFoundException ignored) {
 

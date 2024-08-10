@@ -1,9 +1,9 @@
 package com.worldOfGoo.level;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -15,9 +15,9 @@ public class Camera extends EditorObject {
     public Camera(EditorObject _parent, GameVersion version) {
         super(_parent, "camera", version);
 
-        addAttribute("aspect",  InputField.ANY)       .setDefaultValue("normal");
-        addAttribute("endpos",  InputField.POSITION)  .setDefaultValue("0,0");
-        addAttribute("endzoom", InputField.NUMBER)    .setDefaultValue("1");
+        addAttribute("aspect",  InputField._1_STRING)       .setDefaultValue("normal");
+        addAttribute("endpos",  InputField._1_POSITION)  .setDefaultValue("0,0");
+        addAttribute("endzoom", InputField._1_NUMBER)    .setDefaultValue("1");
 
         addObjectComponent(new RectangleComponent() {
             public double getX() {

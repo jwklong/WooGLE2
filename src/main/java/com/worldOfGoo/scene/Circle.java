@@ -1,7 +1,7 @@
 package com.worldOfGoo.scene;
 
-import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.EditorObject;
+import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
@@ -11,6 +11,7 @@ import com.woogleFX.engine.LevelManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.editorObjects.attributes.dataTypes.Position;
+import com.woogleFX.gameData.level.WOG1Level;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -23,22 +24,22 @@ public class Circle extends EditorObject {
     public Circle(EditorObject _parent, GameVersion version) {
         super(_parent, "circle", version);
 
-        addAttribute("id",               InputField.ANY)                                   .assertRequired();
-        addAttribute("mass",             InputField.NUMBER)     .setDefaultValue("0");
-        addAttribute("static",           InputField.FLAG);
-        addAttribute("tag",              InputField.TAG);
-        addAttribute("material",         InputField.MATERIAL);
-        addAttribute("contacts",         InputField.FLAG)       .setDefaultValue("true");
-        addAttribute("x",                InputField.NUMBER)     .setDefaultValue("0")      .assertRequired();
-        addAttribute("y",                InputField.NUMBER)     .setDefaultValue("0")      .assertRequired();
-        addAttribute("radius",           InputField.NUMBER)     .setDefaultValue("75")     .assertRequired();
-        addAttribute("break",            InputField.NUMBER);
-        addAttribute("image",            InputField.IMAGE);
-        addAttribute("imagepos",         InputField.POSITION);
-        addAttribute("imagerot",         InputField.NUMBER);
-        addAttribute("imagescale",       InputField.POSITION)   .setDefaultValue("1,1");
-        addAttribute("rotspeed",         InputField.NUMBER);
-        addAttribute("nogeomcollisions", InputField.FLAG);
+        addAttribute("id",               InputField._1_STRING)                                   .assertRequired();
+        addAttribute("mass",             InputField._1_NUMBER)     .setDefaultValue("0");
+        addAttribute("static",           InputField._1_FLAG);
+        addAttribute("tag",              InputField._1_TAG);
+        addAttribute("material",         InputField._1_MATERIAL);
+        addAttribute("contacts",         InputField._1_FLAG)       .setDefaultValue("true");
+        addAttribute("x",                InputField._1_NUMBER)     .setDefaultValue("0")      .assertRequired();
+        addAttribute("y",                InputField._1_NUMBER)     .setDefaultValue("0")      .assertRequired();
+        addAttribute("radius",           InputField._1_NUMBER)     .setDefaultValue("75")     .assertRequired();
+        addAttribute("break",            InputField._1_NUMBER);
+        addAttribute("image",            InputField._1_IMAGE);
+        addAttribute("imagepos",         InputField._1_POSITION);
+        addAttribute("imagerot",         InputField._1_NUMBER);
+        addAttribute("imagescale",       InputField._1_POSITION)   .setDefaultValue("1,1");
+        addAttribute("rotspeed",         InputField._1_NUMBER);
+        addAttribute("nogeomcollisions", InputField._1_FLAG);
 
         addObjectComponent(new CircleComponent() {
             public double getX() {
@@ -200,7 +201,7 @@ public class Circle extends EditorObject {
             }
             public Image getImage() {
                 try {
-                    return getAttribute("image").imageValue(LevelManager.getLevel().getResrc(), getVersion());
+                    return getAttribute("image").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
                 } catch (FileNotFoundException e) {
                     return null;
                 }

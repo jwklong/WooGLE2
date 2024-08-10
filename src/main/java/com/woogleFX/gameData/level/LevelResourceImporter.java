@@ -38,7 +38,7 @@ public class LevelResourceImporter {
         if (path.startsWith("/")) path = path.substring(1);
         if (path.endsWith(".png")) path = path.substring(0, path.length() - 4);
 
-        if (version == GameVersion.NEW && path.endsWith("@2x")) {
+        if (version == GameVersion.VERSION_WOG1_NEW && path.endsWith("@2x")) {
             // Strip @2x suffix, since this is handled transparently by the game already
             path = path.substring(0, path.length() - 3);
         }
@@ -53,18 +53,18 @@ public class LevelResourceImporter {
         assert object != null;
         object.setAttribute("id", id);
         object.setAttribute("path", path);
-        level.getResrc().add(object);
+        ((WOG1Level)level).getResrc().add(object);
 
         int whereToPlaceResource = 0;
         int count = 0;
-        for (EditorObject editorObject : level.getResrcObject().getChildren().get(0).getChildren()) {
+        for (EditorObject EditorObject : ((WOG1Level)level).getResrcObject().getChildren().get(0).getChildren()) {
             count++;
-            if (editorObject instanceof ResrcImage) {
+            if (EditorObject instanceof ResrcImage) {
                 whereToPlaceResource = count;
             }
         }
 
-        object.setParent(level.getResrcObject().getChildren().get(0), whereToPlaceResource);
+        object.setParent(((WOG1Level)level).getResrcObject().getChildren().get(0), whereToPlaceResource);
 
         FXHierarchy.getHierarchy().refresh();
 
@@ -123,7 +123,7 @@ public class LevelResourceImporter {
         String baseGameEquivalentPath = cleanImagePath(imgPath, level.getVersion());
         if (BaseGameResources.containsImage(baseGameEquivalentPath)) {
             path = baseGameEquivalentPath;
-            if (level.getVersion() == GameVersion.NEW && normalizedFilename.endsWith("@2x")) {
+            if (level.getVersion() == GameVersion.VERSION_WOG1_NEW && normalizedFilename.endsWith("@2x")) {
                 // Strip @2x suffix from here too
                 normalizedFilename = normalizedFilename.substring(0, normalizedFilename.length() - 3);
             }
@@ -194,18 +194,18 @@ public class LevelResourceImporter {
 
         int whereToPlaceResource = 0;
         int count = 0;
-        for (EditorObject resourceThing : level.getResrcObject().getChildren().get(0).getChildren()) {
+        for (EditorObject resourceThing : ((WOG1Level)level).getResrcObject().getChildren().get(0).getChildren()) {
             count++;
             if (resourceThing instanceof Sound) {
                 whereToPlaceResource = count;
             }
         }
 
-        level.getResrc().add(soundResourceObject);
-        soundResourceObject.setParent(level.getResrcObject().getChildren().get(0), whereToPlaceResource);
+        ((WOG1Level)level).getResrc().add(soundResourceObject);
+        soundResourceObject.setParent(((WOG1Level)level).getResrcObject().getChildren().get(0), whereToPlaceResource);
 
         /* If a music object already exists, change its sound attribute. */
-        for (EditorObject music : level.getLevel()) {
+        for (EditorObject music : ((WOG1Level)level).getLevel()) {
             if (music instanceof Music) {
                 String oldID = music.getAttribute("id").stringValue();
                 music.setAttribute("id", soundResourceName);
@@ -220,13 +220,13 @@ public class LevelResourceImporter {
         }
 
         /* Otherwise, create a new music object set to the sound resource's ID. */
-        EditorObject musicObject = ObjectCreator.create("music", level.getLevelObject(), level.getVersion());
+        EditorObject musicObject = ObjectCreator.create("music", ((WOG1Level)level).getLevelObject(), level.getVersion());
         musicObject.setAttribute("id", soundResourceName);
-        level.getLevel().add(musicObject);
+        ((WOG1Level)level).getLevel().add(musicObject);
         try {
             UndoManager.registerChange(new CreateFileAction(resrcFile.getPath(), Files.readAllBytes(resrcFile.toPath())),
                     new ObjectCreationAction(soundResourceObject, whereToPlaceResource),
-                    new ObjectCreationAction(musicObject, level.getLevel().size() - 1));
+                    new ObjectCreationAction(musicObject, ((WOG1Level)level).getLevel().size() - 1));
         } catch (IOException ignored) {
 
         }
@@ -276,18 +276,18 @@ public class LevelResourceImporter {
 
         int whereToPlaceResource = 0;
         int count = 0;
-        for (EditorObject resourceThing : level.getResrcObject().getChildren().get(0).getChildren()) {
+        for (EditorObject resourceThing : ((WOG1Level)level).getResrcObject().getChildren().get(0).getChildren()) {
             count++;
             if (resourceThing instanceof Sound) {
                 whereToPlaceResource = count;
             }
         }
 
-        level.getResrc().add(soundResourceObject);
-        soundResourceObject.setParent(level.getResrcObject().getChildren().get(0), whereToPlaceResource);
+        ((WOG1Level)level).getResrc().add(soundResourceObject);
+        soundResourceObject.setParent(((WOG1Level)level).getResrcObject().getChildren().get(0), whereToPlaceResource);
 
         /* If a music object already exists, change its sound attribute. */
-        for (EditorObject music : level.getLevel()) {
+        for (EditorObject music : ((WOG1Level)level).getLevel()) {
             if (music instanceof Loopsound) {
                 String oldID = music.getAttribute("id").stringValue();
                 music.setAttribute("id", soundResourceName);
@@ -302,13 +302,13 @@ public class LevelResourceImporter {
         }
 
         /* Otherwise, create a new music object set to the sound resource's ID. */
-        EditorObject musicObject = ObjectCreator.create("loopsound", level.getLevelObject(), level.getVersion());
+        EditorObject musicObject = ObjectCreator.create("loopsound", ((WOG1Level)level).getLevelObject(), level.getVersion());
         musicObject.setAttribute("id", soundResourceName);
-        level.getLevel().add(musicObject);
+        ((WOG1Level)level).getLevel().add(musicObject);
         try {
             UndoManager.registerChange(new CreateFileAction(resrcFile.getPath(), Files.readAllBytes(resrcFile.toPath())),
                     new ObjectCreationAction(soundResourceObject, whereToPlaceResource),
-                    new ObjectCreationAction(musicObject, level.getLevel().size() - 1));
+                    new ObjectCreationAction(musicObject, ((WOG1Level)level).getLevel().size() - 1));
         } catch (IOException ignored) {
 
         }

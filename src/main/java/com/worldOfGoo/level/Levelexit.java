@@ -1,9 +1,9 @@
 package com.worldOfGoo.level;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -15,10 +15,10 @@ public class Levelexit extends EditorObject {
     public Levelexit(EditorObject _parent, GameVersion version) {
         super(_parent, "levelexit", version);
 
-        addAttribute("id",     InputField.ANY)     .setDefaultValue("theExit").assertRequired();
-        addAttribute("pos",    InputField.POSITION).setDefaultValue("0,0")    .assertRequired();
-        addAttribute("radius", InputField.NUMBER)  .setDefaultValue("75")     .assertRequired();
-        addAttribute("filter", InputField.ANY)                                .assertRequired();
+        addAttribute("id",     InputField._1_STRING)     .setDefaultValue("theExit").assertRequired();
+        addAttribute("pos",    InputField._1_POSITION).setDefaultValue("0,0")    .assertRequired();
+        addAttribute("radius", InputField._1_NUMBER)  .setDefaultValue("75")     .assertRequired();
+        addAttribute("filter", InputField._1_STRING)                                .assertRequired();
 
         addObjectComponent(new CircleComponent() {
             public double getX() {

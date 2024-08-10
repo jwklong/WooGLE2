@@ -38,34 +38,52 @@ public class GameResourceManager {
     /** Changes the location of a World of Goo version. */
     public static boolean changeWorldOfGooDirectory(GameVersion version, boolean editorJustLaunched) {
         FileChooser findWorldOfGoo = new FileChooser();
-        findWorldOfGoo.getExtensionFilters()
-                .add(new FileChooser.ExtensionFilter("World of Goo executable", "WorldOfGoo.exe"));
+
+        if (version == GameVersion.VERSION_WOG1_OLD || version == GameVersion.VERSION_WOG1_NEW) {
+            findWorldOfGoo.getExtensionFilters()
+                    .add(new FileChooser.ExtensionFilter("World of Goo executable", "WorldOfGoo.exe"));
+        } else if (version == GameVersion.VERSION_WOG2) {
+            findWorldOfGoo.getExtensionFilters()
+                    .add(new FileChooser.ExtensionFilter("World of Goo 2 executable", "World Of Goo 2.exe"));
+        }
+
         File worldOfGoo = findWorldOfGoo.showOpenDialog(new Stage());
         if (worldOfGoo == null) {
             return false;
         } else {
-            if (version == GameVersion.OLD) {
-                FileManager.setOldWOGdir(worldOfGoo.getParent());
+            if (version == GameVersion.VERSION_WOG1_OLD) {
+                FileManager.setOldWOG1dir(worldOfGoo.getParent());
                 try {
                     FileManager.saveProperties();
                 } catch (IOException e) {
                     ErrorAlarm.show(e);
                 }
-                reloadWorldOfGoo(GameVersion.OLD);
-            } else {
-                FileManager.setNewWOGdir(worldOfGoo.getParent() + "\\game");
+                reloadWorldOfGoo(GameVersion.VERSION_WOG1_OLD);
+            } else if (version == GameVersion.VERSION_WOG1_NEW) {
+                FileManager.setNewWOG1dir(worldOfGoo.getParent() + "\\game");
                 try {
                     FileManager.saveProperties();
                 } catch (IOException e) {
                     ErrorAlarm.show(e);
                 }
-                reloadWorldOfGoo(GameVersion.NEW);
+                reloadWorldOfGoo(GameVersion.VERSION_WOG1_NEW);
+            } else if (version == GameVersion.VERSION_WOG2) {
+                FileManager.setWOG2dir(worldOfGoo.getParent() + "\\game");
+                try {
+                    FileManager.saveProperties();
+                } catch (IOException e) {
+                    ErrorAlarm.show(e);
+                }
+                reloadWorldOfGoo(GameVersion.VERSION_WOG2);
             }
             if (FXEditorButtons.getOldGooballsToolbar() != null) {
                 FXEditorButtons.getOldGooballsToolbar().getItems().clear();
             }
             if (FXEditorButtons.getNewGooballsToolbar() != null) {
                 FXEditorButtons.getNewGooballsToolbar().getItems().clear();
+            }
+            if (FXEditorButtons.getSequelGooballsToolbar() != null) {
+                FXEditorButtons.getSequelGooballsToolbar().getItems().clear();
             }
             if (!editorJustLaunched) FXEditorButtons.addBallsTo();
             if (!editorJustLaunched) FXEditorButtons.updateAllButtons();

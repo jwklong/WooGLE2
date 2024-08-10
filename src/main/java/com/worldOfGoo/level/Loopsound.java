@@ -10,7 +10,7 @@ public class Loopsound extends EditorObject {
     public Loopsound(EditorObject _parent, GameVersion version) {
         super(_parent, "loopsound", version);
 
-        addAttribute("id", InputField.ANY).assertRequired();
+        addAttribute("id", InputField._1_STRING).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("id,"));
 

@@ -1,9 +1,9 @@
 package com.worldOfGoo.scene;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -15,14 +15,14 @@ public class Hinge extends EditorObject {
     public Hinge(EditorObject _parent, GameVersion version) {
         super(_parent, "hinge", version);
 
-        addAttribute("body1", InputField.ANY)                             .assertRequired();
-        addAttribute("body2", InputField.ANY);
-        addAttribute("anchor", InputField.POSITION).setDefaultValue("0,0").assertRequired();
-        addAttribute("lostop", InputField.NUMBER);
-        addAttribute("histop", InputField.NUMBER);
-        addAttribute("bounce", InputField.NUMBER);
-        addAttribute("stopcfm", InputField.NUMBER);
-        addAttribute("stoperp", InputField.NUMBER);
+        addAttribute("body1", InputField._1_STRING)                             .assertRequired();
+        addAttribute("body2", InputField._1_STRING);
+        addAttribute("anchor", InputField._1_POSITION).setDefaultValue("0,0").assertRequired();
+        addAttribute("lostop", InputField._1_NUMBER);
+        addAttribute("histop", InputField._1_NUMBER);
+        addAttribute("bounce", InputField._1_NUMBER);
+        addAttribute("stopcfm", InputField._1_NUMBER);
+        addAttribute("stoperp", InputField._1_NUMBER);
 
         addObjectComponent(new RectangleComponent() {
             public double getX() {

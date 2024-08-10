@@ -28,8 +28,8 @@ public class Sound extends EditorObject {
     public Sound(EditorObject _parent, GameVersion version) {
         super(_parent, "Sound", version);
 
-        addAttribute("id", InputField.ANY).assertRequired();
-        addAttribute("path", InputField.SOUND_PATH).assertRequired();
+        addAttribute("id", InputField._1_STRING).assertRequired();
+        addAttribute("path", InputField._1_SOUND_PATH).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("id,path,"));
 

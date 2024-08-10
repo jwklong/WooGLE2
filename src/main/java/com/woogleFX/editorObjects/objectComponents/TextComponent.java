@@ -5,8 +5,12 @@ import com.woogleFX.gameData.font._Font;
 import com.woogleFX.editorObjects.objectComponents.generic.RotatableProperty;
 import com.woogleFX.engine.LevelManager;
 import com.woogleFX.editorObjects.DragSettings;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
 
 public abstract class TextComponent extends ObjectComponent implements RotatableProperty {
@@ -14,6 +18,10 @@ public abstract class TextComponent extends ObjectComponent implements Rotatable
     public abstract _Font getFont();
     public void setFont(_Font font) {
 
+    }
+
+    public Font getOtherFont() {
+        return null;
     }
 
 
@@ -35,7 +43,7 @@ public abstract class TextComponent extends ObjectComponent implements Rotatable
     public void draw(GraphicsContext graphicsContext, boolean selected) {
 
         _Font font = getFont();
-        if (font == null) return;
+        Font otherFont = getOtherFont();
 
         String text = getText();
         if (text == null) return;
@@ -58,7 +66,16 @@ public abstract class TextComponent extends ObjectComponent implements Rotatable
         t.appendRotation(Math.toDegrees(rotation), x, y);
         graphicsContext.setTransform(t);
 
-        for (Layer layer : font.getLayers()) {
+        if (font == null) {
+
+            graphicsContext.setFont(Font.font(0.5));
+            graphicsContext.setFill(Color.WHITE);
+            graphicsContext.setStroke(Color.BLACK);
+            graphicsContext.setLineWidth(0.03);
+            graphicsContext.strokeText(getText(), x, y);
+            graphicsContext.fillText(getText(), x, y);
+
+        } else for (Layer layer : font.getLayers()) {
 
             String id = layer.getId();
             double ascent = layer.getAscent();

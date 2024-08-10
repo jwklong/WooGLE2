@@ -37,13 +37,13 @@ public class Font extends EditorObject {
     public Font(EditorObject _parent, GameVersion version) {
         super(_parent, "font", version);
 
-        addAttribute("id", InputField.ANY);
-        addAttribute("path", InputField.ANY);
+        addAttribute("id", InputField._1_STRING);
+        addAttribute("path", InputField._1_STRING);
 
         // extra attributes from 1.5
-        addAttribute("cn", InputField.ANY);
-        addAttribute("ko", InputField.ANY);
-        addAttribute("jp", InputField.ANY);
+        addAttribute("cn", InputField._1_STRING);
+        addAttribute("ko", InputField._1_STRING);
+        addAttribute("jp", InputField._1_STRING);
 
     }
 

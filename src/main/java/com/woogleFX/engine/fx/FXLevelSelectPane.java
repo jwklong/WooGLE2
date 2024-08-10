@@ -5,6 +5,8 @@ import com.woogleFX.engine.LevelManager;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.engine.gui.alarms.CloseTabAlarm;
 import com.woogleFX.gameData.level.LevelTab;
+import com.woogleFX.gameData.level.WOG1Level;
+import com.woogleFX.gameData.level.WOG2Level;
 import com.woogleFX.gameData.level._Level;
 import javafx.scene.control.TabPane;
 
@@ -50,26 +52,43 @@ public class FXLevelSelectPane {
                 // Set this tab's level to be the currently selected level.
                 LevelManager.setLevel(level);
 
-                EditorObject rootObject = switch (level.getCurrentlySelectedSection()) {
-                    case "Scene" -> level.getSceneObject();
-                    case "Level" -> level.getLevelObject();
-                    case "Resrc" -> level.getResrcObject();
-                    case "Text" -> level.getTextObject();
-                    case "Addin" -> level.getAddinObject();
-                    default -> null;
-                };
-                if (rootObject == null) return;
-                FXHierarchy.getHierarchy().setRoot(rootObject.getTreeItem());
+                if (level instanceof WOG1Level _level) {
 
-                int i = switch (level.getCurrentlySelectedSection()) {
-                    case "Scene" -> 0;
-                    case "Level" -> 1;
-                    case "Resrc" -> 2;
-                    case "Text" -> 3;
-                    case "Addin" -> 4;
-                    default -> -1;
-                };
-                FXHierarchy.getHierarchySwitcherButtons().getSelectionModel().select(i);
+                    EditorObject rootObject = switch (_level.getCurrentlySelectedSection()) {
+                        case "Scene" -> _level.getSceneObject();
+                        case "Level" -> _level.getLevelObject();
+                        case "Resrc" -> _level.getResrcObject();
+                        case "Text" -> _level.getTextObject();
+                        case "Addin" -> _level.getAddinObject();
+                        default -> null;
+                    };
+                    if (rootObject == null) return;
+                    FXHierarchy.getHierarchy().setRoot(rootObject.getTreeItem());
+
+                    int i = switch (_level.getCurrentlySelectedSection()) {
+                        case "Scene" -> 0;
+                        case "Level" -> 1;
+                        case "Resrc" -> 2;
+                        case "Text" -> 3;
+                        case "Addin" -> 4;
+                        default -> -1;
+                    };
+                    FXHierarchy.getHierarchySwitcherButtons().getSelectionModel().select(i);
+
+                } else if (level instanceof WOG2Level) {
+
+                    int i = switch (level.getCurrentlySelectedSection()) {
+                        case "Terrain" -> 0;
+                        case "Balls" -> 1;
+                        case "Items" -> 2;
+                        case "Pins" -> 3;
+                        case "Camera" -> 4;
+                        default -> -1;
+                    };
+                    FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select((i + 1) % 5);
+                    FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select(i);
+
+                }
 
             } else {
                 // Destroy and replace the level tab to prevent an unknown freezing issue.
@@ -78,6 +97,7 @@ public class FXLevelSelectPane {
                         && !level.getLevelTab().getTabPane().getTabs().isEmpty()) {
                     level.setEditingStatus(level.getEditingStatus(), false);
                 }
+
             }
         });
 

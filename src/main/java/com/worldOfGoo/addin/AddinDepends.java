@@ -10,9 +10,9 @@ public class AddinDepends extends EditorObject {
     public AddinDepends(EditorObject _parent, GameVersion version) {
         super(_parent, "depends", version);
 
-        addAttribute("ref", InputField.ANY)                    .assertRequired();
-        addAttribute("min-version", InputField.NUMBER_POSITIVE).assertRequired();
-        addAttribute("max-version", InputField.NUMBER_POSITIVE).assertRequired();
+        addAttribute("ref", InputField._1_STRING)                    .assertRequired();
+        addAttribute("min-version", InputField._1_NUMBER_POSITIVE).assertRequired();
+        addAttribute("max-version", InputField._1_NUMBER_POSITIVE).assertRequired();
         
         setMetaAttributes(MetaEditorAttribute.parse("ref,min-version,max-version,"));
 

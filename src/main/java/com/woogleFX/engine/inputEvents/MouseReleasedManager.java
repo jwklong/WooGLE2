@@ -1,5 +1,6 @@
 package com.woogleFX.engine.inputEvents;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.editorObjects.splineGeom.SplineGeometryPlacer;
@@ -13,14 +14,16 @@ import com.woogleFX.engine.LevelManager;
 import com.woogleFX.editorObjects.objectCreators.ObjectAdder;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.editorObjects.attributes.EditorAttribute;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.DragSettings;
 import com.woogleFX.engine.undoHandling.userActions.AttributeChangeAction;
 import com.woogleFX.engine.undoHandling.userActions.CreateSplinePointAction;
 import com.woogleFX.engine.undoHandling.userActions.MoveSplinePointAction;
 import com.woogleFX.engine.undoHandling.userActions.UserAction;
+import com.woogleFX.gameData.level.WOG1Level;
+import com.woogleFX.gameData.level.WOG2Level;
 import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.level.BallInstance;
+import com.worldOfGoo2.level._2_Level_BallInstance;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.SplitPane;
@@ -50,10 +53,6 @@ public class MouseReleasedManager {
         _Level level = LevelManager.getLevel();
         if (level == null) return;
 
-        SplitPane splitPane = FXContainers.getSplitPane();
-        double canvasWidth = splitPane.getDividerPositions()[0] * splitPane.getWidth();
-        if (event.getX() > canvasWidth) return;
-
         // Record the changes made to the selected object.
         // Clear all possible redos if changes have been made.
         if (level.getSelected() == SelectionManager.getOldSelected() && SelectionManager.getOldAttributes() != null) {
@@ -79,43 +78,79 @@ public class MouseReleasedManager {
 
         }
 
+        SplitPane splitPane = FXContainers.getSplitPane();
+        double canvasWidth = splitPane.getDividerPositions()[0] * splitPane.getWidth();
+        if (event.getX() > canvasWidth) return;
+
         // Reset the cursor's appearance.
         //FXScene.getScene().setCursor(Cursor.DEFAULT);
+
+        double mouseX = (event.getX() - level.getOffsetX()) / level.getZoom();
+        double mouseY = (event.getY() - FXCanvas.getMouseYOffset() - level.getOffsetY()) / level.getZoom();
 
         // Clear all drag settings now that the mouse has been released.
         SelectionManager.setDragSettings(DragSettings.NULL);
         // If we have started placing a strand, attempt to complete the strand.
         if (SelectionManager.getMode() == SelectionManager.STRAND && SelectionManager.getStrand1Gooball() != null) {
-            for (EditorObject ball : level.getLevel().toArray(new EditorObject[0])) {
-                if (ball instanceof BallInstance ballInstance) {
-                    if (ball != SelectionManager.getStrand1Gooball()) {
+            if (level instanceof WOG1Level wog1Level) {
+                for (EditorObject ball : wog1Level.getLevel().toArray(new EditorObject[0])) {
+                    if (ball instanceof BallInstance ballInstance) {
+                        if (ball != SelectionManager.getStrand1Gooball()) {
 
-                        double mouseX = (event.getX() - level.getOffsetX()) / level.getZoom();
-                        double mouseY = (event.getY() - FXCanvas.getMouseYOffset() - level.getOffsetY()) / level.getZoom();
+                            for (ObjectComponent objectComponent : ballInstance.getObjectComponents()) {
+                                if (!objectComponent.isVisible()) continue;
+                                if (objectComponent.mouseIntersection(mouseX, mouseY) != DragSettings.NULL) {
 
-                        for (ObjectComponent objectComponent : ballInstance.getObjectComponents()) {
-                            if (!objectComponent.isVisible()) continue;
-                            if (objectComponent.mouseIntersection(mouseX, mouseY) != DragSettings.NULL) {
+                                    EditorObject strand = ObjectCreator.create("Strand", ((WOG1Level)level).getLevelObject(), level.getVersion());
+                                    if (strand == null) continue;
 
-                                EditorObject strand = ObjectCreator.create("Strand", level.getLevelObject(), level.getVersion());
-                                if (strand == null) continue;
+                                    strand.setAttribute("gb1", SelectionManager.getStrand1Gooball().getAttribute("id").stringValue());
+                                    strand.setAttribute("gb2", ball.getAttribute("id").stringValue());
 
-                                strand.setAttribute("gb1", SelectionManager.getStrand1Gooball().getAttribute("id").stringValue());
-                                strand.setAttribute("gb2", ball.getAttribute("id").stringValue());
+                                    ((WOG1Level)level).getLevel().add(strand);
+                                    ObjectAdder.addAnything(strand);
 
-                                level.getLevel().add(strand);
-                                ObjectAdder.addAnything(strand);
+                                    SelectionManager.getStrand1Gooball().update();
+                                    ball.update();
 
-                                SelectionManager.getStrand1Gooball().update();
-                                ball.update();
+                                    break;
 
-                                break;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (level instanceof WOG2Level wog2Level) {
+                for (EditorObject ball : wog2Level.getObjects().toArray(new EditorObject[0])) {
+                    if (ball instanceof _2_Level_BallInstance ballInstance) {
+                        if (ball != SelectionManager.getStrand1Gooball()) {
 
+                            for (ObjectComponent objectComponent : ballInstance.getObjectComponents()) {
+                                if (!objectComponent.isVisible()) continue;
+                                if (objectComponent.mouseIntersection(mouseX, mouseY) != DragSettings.NULL) {
+
+                                    EditorObject strand = ObjectCreator.create2("_2_Level_Strand", wog2Level.getLevel(), level.getVersion());
+                                    strand.setTypeID("strands");
+                                    if (strand == null) continue;
+
+                                    strand.setAttribute("ball1UID", SelectionManager.getStrand1Gooball().getAttribute("uid").stringValue());
+                                    strand.setAttribute("ball2UID", ball.getAttribute("uid").stringValue());
+
+                                    wog2Level.getObjects().add(strand);
+                                    ObjectAdder.addAnything(strand);
+
+                                    SelectionManager.getStrand1Gooball().update();
+                                    ball.update();
+
+                                    break;
+
+                                }
                             }
                         }
                     }
                 }
             }
+
             SelectionManager.setStrand1Gooball(null);
         }
 

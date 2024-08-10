@@ -1,9 +1,9 @@
 package com.worldOfGoo.level;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.LineComponent;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.engine.LevelManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -15,7 +15,7 @@ public class Targetheight extends EditorObject {
     public Targetheight(EditorObject _parent, GameVersion version) {
         super(_parent, "targetheight", version);
 
-        addAttribute("y", InputField.NUMBER).setDefaultValue("1000").assertRequired();
+        addAttribute("y", InputField._1_NUMBER).setDefaultValue("1000").assertRequired();
 
         addObjectComponent(new LineComponent() {
             public double getX() {

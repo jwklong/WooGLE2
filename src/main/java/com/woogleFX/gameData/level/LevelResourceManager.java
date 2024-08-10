@@ -1,5 +1,6 @@
 package com.woogleFX.gameData.level;
 
+import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
 import com.woogleFX.engine.gui.alarms.ConfirmCleanResourcesAlarm;
 import com.woogleFX.engine.gui.alarms.LoadingResourcesAlarm;
@@ -8,7 +9,6 @@ import com.woogleFX.editorObjects.objectCreators.ObjectAdder;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.editorObjects.ObjectManager;
 import com.woogleFX.engine.undoHandling.UndoManager;
-import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.engine.undoHandling.userActions.ObjectDestructionAction;
 import com.woogleFX.engine.undoHandling.userActions.ObjectCreationAction;
 import com.woogleFX.gameData.level.levelOpening.LevelLoader;
@@ -46,22 +46,22 @@ public class LevelResourceManager {
         StringBuilder failedToLoad = new StringBuilder();
 
         /* Loop through all the images in the level's resources */
-        for (EditorObject editorObject : level.getResrc()) {
-            if (editorObject instanceof ResrcImage resrcImage) {
+        for (EditorObject EditorObject : ((WOG1Level)level).getResrc()) {
+            if (EditorObject instanceof ResrcImage resrcImage) {
                 if (!ResourceManager.updateResource(resrcImage, level.getVersion())) {
-                    failedToLoad.append(editorObject.getAttribute("id").stringValue()).append("\n");
-                    logger.error("Failed to load resource: " + editorObject.getAttribute("id").stringValue());
+                    failedToLoad.append(EditorObject.getAttribute("id").stringValue()).append("\n");
+                    logger.error("Failed to load resource: " + EditorObject.getAttribute("id").stringValue());
                 }
             }
         }
 
         /* Update every object in the level */
         /* I hope this doesn't break anything */
-        for (EditorObject editorObject : level.getScene()) {
-            editorObject.update();
+        for (EditorObject EditorObject : ((WOG1Level)level).getScene()) {
+            EditorObject.update();
         }
-        for (EditorObject editorObject : level.getLevel()) {
-            editorObject.update();
+        for (EditorObject EditorObject : ((WOG1Level)level).getLevel()) {
+            EditorObject.update();
         }
 
         if (!failedToLoad.toString().isEmpty()) {
@@ -74,14 +74,14 @@ public class LevelResourceManager {
     /** Creates a new text resource in the given level. */
     public static void newTextResource(_Level level) {
 
-        EditorObject newTextObject = ObjectCreator.create("string", level.getTextObject(), level.getVersion());
+        EditorObject newTextObject = ObjectCreator.create("string", ((WOG1Level)level).getTextObject(), level.getVersion());
         ObjectAdder.fixString(newTextObject);
 
-        level.getText().add(newTextObject);
+        ((WOG1Level)level).getText().add(newTextObject);
 
         level.setSelected(new EditorObject[]{ newTextObject });
 
-        int childIndex = level.getTextObject().getChildren().indexOf(newTextObject);
+        int childIndex = ((WOG1Level)level).getTextObject().getChildren().indexOf(newTextObject);
         UndoManager.registerChange(new ObjectCreationAction(newTextObject, childIndex));
 
     }
@@ -89,14 +89,14 @@ public class LevelResourceManager {
 
     private static boolean isResourceUsed(EditorObject resource, _Level level) {
         String resourceID = resource.getAttribute("id").stringValue();
-        for (EditorObject object : level.getScene()) if (isResourceUsed_SingleObject(resourceID, object)) return true;
-        for (EditorObject object : level.getLevel()) if (isResourceUsed_SingleObject(resourceID, object)) return true;
+        for (EditorObject object : ((WOG1Level)level).getScene()) if (isResourceUsed_SingleObject(resourceID, object)) return true;
+        for (EditorObject object : ((WOG1Level)level).getLevel()) if (isResourceUsed_SingleObject(resourceID, object)) return true;
         return false;
     }
 
 
-    private static boolean isResourceUsed_SingleObject(String resourceID, EditorObject editorObject) {
-        return Arrays.stream(editorObject.getAttributes()).anyMatch(
+    private static boolean isResourceUsed_SingleObject(String resourceID, EditorObject EditorObject) {
+        return Arrays.stream(EditorObject.getAttributes()).anyMatch(
                 attribute -> !attribute.stringValue().isEmpty() && attribute.stringValue().equals(resourceID));
     }
 
@@ -106,9 +106,9 @@ public class LevelResourceManager {
 
         ArrayList<EditorObject> unused = new ArrayList<>();
 
-        for (EditorObject editorObject : level.getResrc()) {
-            if (editorObject instanceof ResrcImage || editorObject instanceof Sound || editorObject instanceof Font) {
-                if (!isResourceUsed(editorObject, level)) unused.add(editorObject);
+        for (EditorObject EditorObject : ((WOG1Level)level).getResrc()) {
+            if (EditorObject instanceof ResrcImage || EditorObject instanceof Sound || EditorObject instanceof Font) {
+                if (!isResourceUsed(EditorObject, level)) unused.add(EditorObject);
             }
         }
 

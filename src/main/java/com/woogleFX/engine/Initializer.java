@@ -7,9 +7,9 @@ import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.engine.gui.alarms.MissingWOGAlarm;
 import com.woogleFX.file.resourceManagers.BaseGameResources;
 import com.woogleFX.file.FileManager;
-import com.woogleFX.gameData.font.FontReader;
 import com.woogleFX.file.resourceManagers.GlobalResourceManager;
 import com.woogleFX.engine.inputEvents.*;
+import com.woogleFX.gameData.animation.AnimBinReader;
 import com.woogleFX.gameData.level.levelOpening.LevelLoader;
 import com.woogleFX.gameData.level.GameVersion;
 import javafx.scene.input.KeyEvent;
@@ -43,15 +43,18 @@ public class Initializer {
             ErrorAlarm.show(e);
         }
 
-        /* Check that the world of goo directory from properties.txt actually points to a file */
-        /* This might require users to reset their WoG directory */
-        String oldGameDir = FileManager.getGameDir(GameVersion.OLD);
-        if (!oldGameDir.isEmpty() && !Files.exists(Path.of(oldGameDir))) FileManager.setOldWOGdir("");
+        // Check that the world of goo directory from properties.txt actually points to a file.
+        // This might require users to reset their WoG directory.
+        String oldWOG1Dir = FileManager.getGameDir(GameVersion.VERSION_WOG1_OLD);
+        if (!oldWOG1Dir.isEmpty() && !Files.exists(Path.of(oldWOG1Dir))) FileManager.setOldWOG1dir("");
 
-        String newGameDir = FileManager.getGameDir(GameVersion.NEW);
-        if (!newGameDir.isEmpty() && !Files.exists(Path.of(newGameDir))) FileManager.setNewWOGdir("");
+        String newWOG1Dir = FileManager.getGameDir(GameVersion.VERSION_WOG1_NEW);
+        if (!newWOG1Dir.isEmpty() && !Files.exists(Path.of(newWOG1Dir))) FileManager.setNewWOG1dir("");
 
-        if (oldGameDir.isEmpty() && newGameDir.isEmpty()) {
+        String wog2Dir = FileManager.getGameDir(GameVersion.VERSION_WOG2);
+        if (!wog2Dir.isEmpty() && !Files.exists(Path.of(wog2Dir))) FileManager.setWOG2dir("");
+
+        if (oldWOG1Dir.isEmpty() && newWOG1Dir.isEmpty() && wog2Dir.isEmpty()) {
             MissingWOGAlarm.show();
         } else {
             startWithWorldOfGooVersion();
@@ -104,12 +107,15 @@ public class Initializer {
 
         if (launchArguments.length > 0) {
             logger.info("Opening level " + launchArguments[0]);
-            if (!FileManager.getGameDir(GameVersion.NEW).isEmpty()) {
-                LevelLoader.openLevel(launchArguments[0], GameVersion.NEW);
+            if (!FileManager.getGameDir(GameVersion.VERSION_WOG1_NEW).isEmpty()) {
+                LevelLoader.openLevel(launchArguments[0], GameVersion.VERSION_WOG1_NEW);
             } else {
-                LevelLoader.openLevel(launchArguments[0], GameVersion.OLD);
+                LevelLoader.openLevel(launchArguments[0], GameVersion.VERSION_WOG1_OLD);
             }
         }
+
+        // AnimBinReader.attemptToRead(Path.of(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\anim\\TransitionBlackScreen\\TransitionBlackScreen.anim.bin"));
+        // AnimBinReader.attemptToRead(Path.of(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\anim\\DishConnectedLadyHair\\LadyHair.anim.bin"));
 
     }
 

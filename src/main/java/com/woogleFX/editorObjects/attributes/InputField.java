@@ -12,6 +12,7 @@ import com.woogleFX.file.FileManager;
 import com.woogleFX.gameData.animation.AnimationManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.engine.LevelManager;
+import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.particle.ParticleManager;
 import com.worldOfGoo.level.BallInstance;
 import com.worldOfGoo.particle.Ambientparticleeffect;
@@ -24,67 +25,99 @@ import com.worldOfGoo.scene.Rectangle;
 
 public enum InputField {
 
-    ANY,
-    ANY_REQUIRED,
-    NUMBER,
-    NUMBER_NON_NEGATIVE,
-    NUMBER_POSITIVE,
-    POSITION,
-    IMAGE,
-    IMAGE_REQUIRED,
-    COLOR,
-    ANIMATION,
-    FLAG,
-    RANGE,
-    MATERIAL,
-    TAG,
-    GEOMETRY,
-    TEXT,
-    PARTICLES,
-    BALL,
-    OCD_TYPE,
-    IMAGE_TYPE,
-    GOOBALL_ID,
-    UNIQUE_GOOBALL_ID,
-    IMAGE_PATH,
-    SOUND_PATH,
-    FONT,
-    CONTEXT;
+    _1_STRING,
+    _1_NUMBER,
+    _1_NUMBER_NON_NEGATIVE,
+    _1_NUMBER_POSITIVE,
+    _1_POSITION,
+    _1_IMAGE,
+    _1_IMAGE_REQUIRED,
+    _1_COLOR,
+    _1_ANIMATION,
+    _1_FLAG,
+    _1_RANGE,
+    _1_MATERIAL,
+    _1_TAG,
+    _1_GEOMETRY,
+    _1_TEXT,
+    _1_PARTICLES,
+    _1_BALL,
+    _1_OCD_TYPE,
+    _1_IMAGE_TYPE,
+    _1_GOOBALL_ID,
+    _1_UNIQUE_GOOBALL_ID,
+    _1_IMAGE_PATH,
+    _1_SOUND_PATH,
+    _1_FONT,
+    _1_CONTEXT,
+
+    _2_STRING,
+    _2_NUMBER,
+    _2_LEVEL_TYPE,
+    _2_BOOLEAN,
+    _2_UUID,
+    _2_UID,
+    _2_ISLAND_ID,
+    _2_OBJECT,
+    _2_LIST_STRING,
+    _2_LIST_NUMBER,
+    _2_BALL_TYPE,
+    _2_TERRAIN_GROUP_TYPE_INDEX,
+    _2_TERRAIN_GROUP,
+    _2_ITEM_TYPE,
+    _2_SKIN,
+    _2_GAME_LEVEL,
+    _2_SOUND_ID,
+    _2_MUSIC_ID,
+    _2_BALL_UID,
+    _2_STRAND_TYPE,
+    _2_ENVIRONMENT_ID,
+    _2_BACKGROUND_ID,
+    _2_LIQUID_TYPE,
+    _2_PARTICLE_EFFECT_NAME,
+    _2_COLLISION_GROUP,
+
+    _2_CHILD,
+    _2_CHILD_HIDDEN,
+    _2_LIST_CHILD,
+    _2_LIST_CHILD_HIDDEN,
+
+    ;
 
     public static boolean verify(EditorObject object, InputField type, String potential) {
 
         if (type == null) return true;
 
-        if (potential.isEmpty()) return !(type == ANY_REQUIRED || type == IMAGE_REQUIRED);
+        if (potential.isEmpty()) return !(type == _1_IMAGE_REQUIRED);
 
         switch (type) {
 
-            case ANY, ANY_REQUIRED -> {
+            case _1_STRING -> {
                 return true;
             }
 
-            case NUMBER, NUMBER_POSITIVE, NUMBER_NON_NEGATIVE, POSITION, COLOR, FLAG -> {
+            case _1_NUMBER, _1_NUMBER_POSITIVE, _1_NUMBER_NON_NEGATIVE, _1_POSITION, _1_COLOR, _1_FLAG -> {
                 return verifyDataType(type, potential);
             }
 
-            case GOOBALL_ID, UNIQUE_GOOBALL_ID, IMAGE, IMAGE_REQUIRED, GEOMETRY -> {
+            case _1_GOOBALL_ID, _1_UNIQUE_GOOBALL_ID, _1_IMAGE, _1_IMAGE_REQUIRED, _1_GEOMETRY -> {
                 return verifyLevelObject(object, type, potential);
             }
 
-            case ANIMATION, TEXT, BALL, PARTICLES, MATERIAL, TAG, FONT -> {
+            case _1_ANIMATION, _1_TEXT, _1_BALL, _1_PARTICLES, _1_MATERIAL, _1_TAG, _1_FONT -> {
                 return verifyResource(object, type, potential);
             }
 
-            case IMAGE_PATH, SOUND_PATH -> {
+            case _1_IMAGE_PATH, _1_SOUND_PATH -> {
                 return verifyFilePath(object, type, potential);
             }
 
-            case OCD_TYPE, CONTEXT -> {
+            case _1_OCD_TYPE, _1_CONTEXT -> {
                 return verifyGameValue(type, potential);
             }
 
             default -> {
-                return false;
+                return true;
             }
 
         }
@@ -95,7 +128,7 @@ public enum InputField {
 
         switch (type) {
 
-            case NUMBER -> {
+            case _1_NUMBER -> {
                 try {
                     Double.parseDouble(potential);
                     return true;
@@ -104,7 +137,7 @@ public enum InputField {
                 }
             }
 
-            case NUMBER_POSITIVE -> {
+            case _1_NUMBER_POSITIVE -> {
                 try {
                     return Double.parseDouble(potential) > 0;
                 } catch (NumberFormatException e) {
@@ -112,7 +145,7 @@ public enum InputField {
                 }
             }
 
-            case NUMBER_NON_NEGATIVE -> {
+            case _1_NUMBER_NON_NEGATIVE -> {
                 try {
                     return Double.parseDouble(potential) >= 0;
                 } catch (NumberFormatException e) {
@@ -120,7 +153,7 @@ public enum InputField {
                 }
             }
 
-            case POSITION -> {
+            case _1_POSITION -> {
                 try {
                     Position.parse(potential);
                     return true;
@@ -129,7 +162,7 @@ public enum InputField {
                 }
             }
 
-            case COLOR -> {
+            case _1_COLOR -> {
                 try {
                     Color.parse(potential);
                     return true;
@@ -138,7 +171,7 @@ public enum InputField {
                 }
             }
 
-            case FLAG -> {
+            case _1_FLAG -> {
                 return potential.equals("true") || potential.equals("false");
             }
 
@@ -155,33 +188,37 @@ public enum InputField {
 
         switch (type) {
 
-            case GOOBALL_ID -> {
-                for (EditorObject ball : LevelManager.getLevel().getLevel())
+            case _1_GOOBALL_ID -> {
+                WOG1Level level = (WOG1Level)LevelManager.getLevel();
+                for (EditorObject ball : level.getLevel())
                     if (ball instanceof BallInstance &&
                             ball.getAttribute("id").stringValue().equals(potential)) return true;
                 return false;
             }
 
-            case UNIQUE_GOOBALL_ID -> {
-                for (EditorObject ball : LevelManager.getLevel().getLevel())
+            case _1_UNIQUE_GOOBALL_ID -> {
+                WOG1Level level = (WOG1Level)LevelManager.getLevel();
+                for (EditorObject ball : level.getLevel())
                     if (ball instanceof BallInstance && ball != object &&
                             ball.getAttribute("id").stringValue().equals(potential)) return false;
                 return true;
             }
 
-            case IMAGE, IMAGE_REQUIRED -> {
-                for (EditorObject resrc : LevelManager.getLevel().getResrc())
+            case _1_IMAGE, _1_IMAGE_REQUIRED -> {
+                WOG1Level level = (WOG1Level)LevelManager.getLevel();
+                for (EditorObject resrc : level.getResrc())
                     if (resrc instanceof ResrcImage image &&
                             image.getAttribute("id").stringValue().equals(potential)) return true;
                 return false;
             }
 
-            case GEOMETRY -> {
-                for (EditorObject editorObject : LevelManager.getLevel().getScene()) {
-                    if (editorObject instanceof Rectangle ||
-                        editorObject instanceof Circle ||
-                        editorObject instanceof Compositegeom) {
-                        if (editorObject.getAttribute("id").stringValue().equals(potential)) {
+            case _1_GEOMETRY -> {
+                WOG1Level level = (WOG1Level)LevelManager.getLevel();
+                for (EditorObject EditorObject : level.getScene()) {
+                    if (EditorObject instanceof Rectangle ||
+                        EditorObject instanceof Circle ||
+                        EditorObject instanceof Compositegeom) {
+                        if (EditorObject.getAttribute("id").stringValue().equals(potential)) {
                             return true;
                         }
                     }
@@ -202,11 +239,11 @@ public enum InputField {
 
         switch (type) {
 
-            case ANIMATION -> {
+            case _1_ANIMATION -> {
                 return AnimationManager.hasAnimation(potential);
             }
 
-            case BALL -> {
+            case _1_BALL -> {
                 String dir = FileManager.getGameDir(object.getVersion());
                 File[] ballFiles = new File(dir + "\\res\\balls").listFiles();
                 if (ballFiles == null) return false;
@@ -218,7 +255,7 @@ public enum InputField {
                 return false;
             }
 
-            case TEXT -> {
+            case _1_TEXT -> {
                 try {
                     ResourceManager.getText(null, potential, object.getVersion());
                     return true;
@@ -227,7 +264,7 @@ public enum InputField {
                 }
             }
 
-            case PARTICLES -> {
+            case _1_PARTICLES -> {
                 for (EditorObject particle : ParticleManager.getParticles()) {
                     if ((particle instanceof Particleeffect || particle instanceof Ambientparticleeffect) &&
                             particle.getAttribute("name").stringValue().equals(potential)) {
@@ -237,7 +274,7 @@ public enum InputField {
                 return false;
             }
 
-            case MATERIAL -> {
+            case _1_MATERIAL -> {
                 try {
                     ResourceManager.getMaterial(null, potential, object.getVersion());
                     return true;
@@ -246,11 +283,11 @@ public enum InputField {
                 }
             }
 
-            case TAG -> {
+            case _1_TAG -> {
                 return Arrays.stream(potential.split(",")).allMatch(BaseGameResources.TAGS::contains);
             }
 
-            case FONT -> {
+            case _1_FONT -> {
                 try {
                     ResourceManager.getFont(null, potential, object.getVersion());
                     return true;
@@ -272,7 +309,7 @@ public enum InputField {
 
         switch (type) {
 
-            case IMAGE_PATH -> {
+            case _1_IMAGE_PATH -> {
                 if (object instanceof ResrcImage resrcImage) {
                     String path = resrcImage.getAttribute("path").stringValue();
                     String adjustedPath = resrcImage.getAdjustedPath();
@@ -282,7 +319,7 @@ public enum InputField {
                 } else return false;
             }
 
-            case SOUND_PATH -> {
+            case _1_SOUND_PATH -> {
                 if (object instanceof Sound sound) {
                     String path = sound.getAttribute("path").stringValue();
                     String adjustedPath = sound.getAdjustedPath();
@@ -305,11 +342,11 @@ public enum InputField {
 
         switch (type) {
 
-            case OCD_TYPE -> {
+            case _1_OCD_TYPE -> {
                 return potential.equals("balls") || potential.equals("moves") || potential.equals("time");
             }
 
-            case CONTEXT -> {
+            case _1_CONTEXT -> {
                 return potential.equals("screen");
             }
 

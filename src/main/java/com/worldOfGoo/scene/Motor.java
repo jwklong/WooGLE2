@@ -10,9 +10,9 @@ public class Motor extends EditorObject {
     public Motor(EditorObject _parent, GameVersion version) {
         super(_parent, "motor", version);
 
-        addAttribute("body",     InputField.ANY)                            .assertRequired();
-        addAttribute("speed",    InputField.NUMBER).setDefaultValue("-0.01").assertRequired();
-        addAttribute("maxforce", InputField.NUMBER).setDefaultValue("20")   .assertRequired();
+        addAttribute("body",     InputField._1_STRING)                            .assertRequired();
+        addAttribute("speed",    InputField._1_NUMBER).setDefaultValue("-0.01").assertRequired();
+        addAttribute("maxforce", InputField._1_NUMBER).setDefaultValue("20")   .assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("body,maxforce,speed,"));
 

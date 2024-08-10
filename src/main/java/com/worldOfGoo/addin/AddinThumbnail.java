@@ -10,10 +10,10 @@ public class AddinThumbnail extends EditorObject {
     public AddinThumbnail(EditorObject _parent, GameVersion version) {
         super(_parent, "thumbnail", version);
 
-        addAttribute("value", InputField.ANY).assertRequired();
-        addAttribute("type", InputField.IMAGE_TYPE).assertRequired();
-        addAttribute("width", InputField.NUMBER_POSITIVE).assertRequired();
-        addAttribute("height", InputField.NUMBER_POSITIVE).assertRequired();
+        addAttribute("value", InputField._1_STRING).assertRequired();
+        addAttribute("type", InputField._1_IMAGE_TYPE).assertRequired();
+        addAttribute("width", InputField._1_NUMBER_POSITIVE).assertRequired();
+        addAttribute("height", InputField._1_NUMBER_POSITIVE).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("value,type,width,height,"));
 
