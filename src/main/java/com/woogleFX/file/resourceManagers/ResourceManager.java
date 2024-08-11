@@ -18,6 +18,8 @@ import com.worldOfGoo2.items._2_Item;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -173,7 +175,9 @@ public class ResourceManager {
                 if (Files.exists(Path.of(dir + "\\" + resrcImage.getAdjustedPath() + ".png"))) {
                     resrcImage.setImage(FileManager.openImageFromFilePath(dir + "\\" + resrcImage.getAdjustedPath() + ".png"));
                 } else if (Files.exists(Path.of(dir + "\\" + resrcImage.getAdjustedPath() + ".image"))) {
-                    resrcImage.setImage(SwingFXUtils.toFXImage(KTXFileManager.readKTXImage(Path.of(dir + "\\" + resrcImage.getAdjustedPath() + ".image")), null));
+                    BufferedImage maybe = ImageIO.read(new File(dir + "\\" + resrcImage.getAdjustedPath() + ".image"));
+                    if (maybe != null) resrcImage.setImage(SwingFXUtils.toFXImage(maybe, null));
+                    else resrcImage.setImage(SwingFXUtils.toFXImage(KTXFileManager.readKTXImage(Path.of(dir + "\\" + resrcImage.getAdjustedPath() + ".image")), null));
                 }
                 return true;
             } catch (IOException ignored) {

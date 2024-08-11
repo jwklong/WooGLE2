@@ -115,7 +115,7 @@ public class Initializer {
             }
         }
 
-        KTXFileManager.readKTXImage(Path.of(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\balls\\_atlas.image"));
+        // KTXFileManager.readKTXImage(Path.of(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\balls\\_atlas.image"));
 
         // AnimBinReader.attemptToRead(Path.of(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\anim\\TransitionBlackScreen\\TransitionBlackScreen.anim.bin"));
         // AnimBinReader.attemptToRead(Path.of(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\anim\\DishConnectedLadyHair\\LadyHair.anim.bin"));
