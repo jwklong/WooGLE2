@@ -1,7 +1,17 @@
 package com.woogleFX.file.aesEncryption;
 
-import java.awt.image.BufferedImage;
+import com.github.luben.zstd.Zstd;
+import org.apache.commons.compress.compressors.zstandard.ZstdCompressorOutputStream;
+
+import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageInputStream;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.file.Files;
@@ -17,101 +27,34 @@ public class KTXFileManager {
 
             ByteArrayInputStream inputStream = new ByteArrayInputStream(Files.readAllBytes(ktxImagePath));
 
-            inputStream.skipNBytes(50);
+            String header = new String(inputStream.readNBytes(4));
 
-            String header = new String(inputStream.readNBytes(12));
-            System.out.println("Header: " + header);
+            int version = ByteBuffer.wrap(inputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt();
+            int width = ByteBuffer.wrap(inputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort();
+            int height = ByteBuffer.wrap(inputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort();
+            int width2 = ByteBuffer.wrap(inputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort();
+            int height2 = ByteBuffer.wrap(inputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort();
+            int compressedSize = ByteBuffer.wrap(inputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt();
+            int uncompressedSize = ByteBuffer.wrap(inputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt();
+            int maskWidth = ByteBuffer.wrap(inputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort();
+            int maskHeight = ByteBuffer.wrap(inputStream.readNBytes(2)).order(ByteOrder.LITTLE_ENDIAN).getShort();
+            int maskCompressedSize = ByteBuffer.wrap(inputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt();
+            int maskUncompressedSize = ByteBuffer.wrap(inputStream.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt();
 
-            int endianness = ByteBuffer.wrap(inputStream.readNBytes(4)).getInt();
-            System.out.println("Endianness: " + endianness);
+            byte[] compressedData = inputStream.readNBytes(compressedSize);
 
-            ByteOrder byteOrder = ByteOrder.LITTLE_ENDIAN;
+            byte[] output1 = new byte[uncompressedSize];
+            Zstd.decompress(output1, compressedData);
+            byte[] output = new byte[uncompressedSize - 64];
+            System.arraycopy(output1, 64, output, 0, output.length);
+            DataBuffer buffer = new DataBufferByte(output, output.length);
+            WritableRaster raster = Raster.createInterleavedRaster(buffer, width2, height2, 4 * width, 4, new int[]{ 0, 1, 2, 3}, null);
+            ColorModel colorModel = new ComponentColorModel(ColorModel.getRGBdefault().getColorSpace(), true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
+            BufferedImage image = new BufferedImage(colorModel, raster, true, null);
 
-            long glType = ByteBuffer.wrap(inputStream.readNBytes(4)).order(byteOrder).getInt();
-            if (glType < 0) {
-                glType += (1L << 32);
-                // glType ^= (0xFFFFFFFFL);
-            }
-            System.out.println("glType: " + glType);
+            return image;
 
-            long glTypeSize = ByteBuffer.wrap(inputStream.readNBytes(4)).order(byteOrder).getInt();
-            if (glTypeSize < 0) {
-                glTypeSize += (1L << 31);
-                //glTypeSize ^= (0xFFFFL);
-            }
-            System.out.println("glTypeSize: " + glTypeSize);
-
-            long glFormat = ByteBuffer.wrap(inputStream.readNBytes(4)).order(byteOrder).getInt();
-            if (glFormat < 0) {
-                glFormat += (1L << 32);
-                // glFormat ^= (0xFFFFFFFFL);
-            }
-            System.out.println("glFormat: " + glFormat);
-
-            long glInternalFormat = ByteBuffer.wrap(inputStream.readNBytes(4)).order(byteOrder).getInt();
-            if (glInternalFormat < 0) {
-                glInternalFormat += (1L << 32);
-                // glInternalFormat ^= (0xFFFFFFFFL);
-            }
-            System.out.println("glInternalFormat: " + glInternalFormat);
-
-            long glBaseInternalFormat = ByteBuffer.wrap(inputStream.readNBytes(4)).order(byteOrder).getInt();
-            if (glBaseInternalFormat < 0) {
-                glBaseInternalFormat += (1L << 32);
-                // glBaseInternalFormat ^= (0xFFFFFFFFL);
-            }
-            System.out.println("glBaseInternalFormat: " + glBaseInternalFormat);
-
-            long pixelWidth = ByteBuffer.wrap(inputStream.readNBytes(4)).order(byteOrder).getInt();
-            if (pixelWidth < 0) {
-                pixelWidth += (1L << 32);
-                // pixelWidth ^= (0xFFFFFFFFL);
-            }
-            System.out.println("pixelWidth: " + pixelWidth);
-
-            long pixelHeight = ByteBuffer.wrap(inputStream.readNBytes(4)).order(byteOrder).getInt();
-            if (pixelHeight < 0) {
-                pixelHeight += (1L << 32);
-                // pixelHeight ^= (0xFFFFFFFFL);
-            }
-            System.out.println("pixelHeight: " + pixelHeight);
-
-            long pixelDepth = ByteBuffer.wrap(inputStream.readNBytes(4)).order(byteOrder).getInt();
-            if (pixelDepth < 0) {
-                pixelDepth += (1L << 32);
-                // pixelDepth ^= (0xFFFFFFFFL);
-            }
-            System.out.println("pixelDepth: " + pixelDepth);
-
-            long numberOfArrayElements = ByteBuffer.wrap(inputStream.readNBytes(4)).order(byteOrder).getInt();
-            if (numberOfArrayElements < 0) {
-                numberOfArrayElements += (1L << 32);
-                // numberOfArrayElements ^= (0xFFFFFFFFL);
-            }
-            System.out.println("numberOfArrayElements: " + numberOfArrayElements);
-
-            long numberOfFaces = ByteBuffer.wrap(inputStream.readNBytes(4)).order(byteOrder).getInt();
-            if (numberOfFaces < 0) {
-                numberOfFaces += (1L << 32);
-                // numberOfFaces ^= (0xFFFFFFFFL);
-            }
-            System.out.println("numberOfFaces: " + numberOfFaces);
-
-            long numberOfMipmapLevels = ByteBuffer.wrap(inputStream.readNBytes(4)).order(byteOrder).getInt();
-            if (numberOfMipmapLevels < 0) {
-                numberOfMipmapLevels += (1L << 32);
-                // numberOfMipmapLevels ^= (0xFFFFFFFFL);
-            }
-            System.out.println("numberOfMipmapLevels: " + numberOfMipmapLevels);
-
-
-
-
-
-
-            return null;
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }

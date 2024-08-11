@@ -5,6 +5,7 @@ import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.engine.gui.EditorWindow;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.engine.gui.alarms.MissingWOGAlarm;
+import com.woogleFX.file.aesEncryption.KTXFileManager;
 import com.woogleFX.file.resourceManagers.BaseGameResources;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.resourceManagers.GlobalResourceManager;
@@ -113,6 +114,8 @@ public class Initializer {
                 LevelLoader.openLevel(launchArguments[0], GameVersion.VERSION_WOG1_OLD);
             }
         }
+
+        KTXFileManager.readKTXImage(Path.of(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\balls\\_atlas.image"));
 
         // AnimBinReader.attemptToRead(Path.of(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\anim\\TransitionBlackScreen\\TransitionBlackScreen.anim.bin"));
         // AnimBinReader.attemptToRead(Path.of(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\anim\\DishConnectedLadyHair\\LadyHair.anim.bin"));

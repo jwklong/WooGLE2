@@ -7,6 +7,7 @@ module com.example.WOGAnniversaryEditor {
   requires org.apache.commons.compress;
   requires java.xml;
   requires org.slf4j;
+  requires com.github.luben.zstd_jni;
 
   exports com.worldOfGoo.scene;
   exports com.worldOfGoo.level;

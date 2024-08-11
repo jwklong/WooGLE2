@@ -1,6 +1,7 @@
 package com.woogleFX.gameData.ball;
 
 import com.woogleFX.file.FileManager;
+import com.woogleFX.file.aesEncryption.KTXFileManager;
 import com.woogleFX.gameData.level.GameVersion;
 
 import javax.imageio.ImageIO;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +37,8 @@ public class AtlasManager {
             // Image count
             int imageCount = ByteBuffer.wrap(input.readNBytes(4)).order(ByteOrder.LITTLE_ENDIAN).getInt(0);
 
-            BufferedImage image = ImageIO.read(new File(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\balls\\_atlas.png"));
+
+            BufferedImage image = KTXFileManager.readKTXImage(Path.of(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "\\res\\balls\\_atlas.image"));
 
             for (int i = 0; i < imageCount; i++) {
 

@@ -2,6 +2,7 @@ package com.woogleFX.file.resourceManagers;
 
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
+import com.woogleFX.file.aesEncryption.KTXFileManager;
 import com.woogleFX.file.fileImport.ObjectGOOParser;
 import com.woogleFX.gameData.font._Font;
 import com.woogleFX.file.FileManager;
@@ -14,12 +15,14 @@ import com.worldOfGoo.resrc.Sound;
 import com.worldOfGoo.text.TextString;
 import com.worldOfGoo2.environments._2_Environment;
 import com.worldOfGoo2.items._2_Item;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class ResourceManager {
@@ -167,7 +170,11 @@ public class ResourceManager {
         String dir = FileManager.getGameDir(version);
         if (resource instanceof ResrcImage resrcImage) {
             try {
-                resrcImage.setImage(FileManager.openImageFromFilePath(dir + "\\" + resrcImage.getAdjustedPath() + ".png"));
+                if (Files.exists(Path.of(dir + "\\" + resrcImage.getAdjustedPath() + ".png"))) {
+                    resrcImage.setImage(FileManager.openImageFromFilePath(dir + "\\" + resrcImage.getAdjustedPath() + ".png"));
+                } else if (Files.exists(Path.of(dir + "\\" + resrcImage.getAdjustedPath() + ".image"))) {
+                    resrcImage.setImage(SwingFXUtils.toFXImage(KTXFileManager.readKTXImage(Path.of(dir + "\\" + resrcImage.getAdjustedPath() + ".image")), null));
+                }
                 return true;
             } catch (IOException ignored) {
                 return false;
