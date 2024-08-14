@@ -43,4 +43,4 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: WooGLE
-        path: D:\a\WooGLE\WooGLE\target\WOGAnniversaryEditor.zip
+        path: D:\a\WooGLE2\WooGLE2\target\WOGAnniversaryEditor.zip
