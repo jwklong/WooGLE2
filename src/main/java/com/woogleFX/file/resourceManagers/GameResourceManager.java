@@ -1,7 +1,7 @@
 package com.woogleFX.file.resourceManagers;
 
 import com.woogleFX.engine.fx.FXEditorButtons;
-import com.woogleFX.engine.fx.FXMenu;
+import com.woogleFX.engine.fx.menu.FXMenu;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.gameData.ball.PaletteManager;

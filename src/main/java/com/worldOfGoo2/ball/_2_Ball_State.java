@@ -9,7 +9,7 @@ public class _2_Ball_State extends EditorObject {
     public _2_Ball_State(EditorObject parent) {
         super(parent, "BallState", GameVersion.VERSION_WOG2);
 
-        addAttribute("ballState", InputField._2_STRING).assertRequired();
+        addAttribute("ballState", InputField._2_NUMBER).assertRequired();
 
     }
 

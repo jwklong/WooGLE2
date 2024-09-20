@@ -4,7 +4,7 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.AnchorComponent;
 import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.engine.renderer.Depth;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -63,7 +63,7 @@ public class Radialforcefield extends EditorObject {
                 return new Color(1.0, 1.0, 0, 0.05);
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowForcefields();
+                return AssetManager.getAsset().getVisibilitySettings().isShowForcefields();
             }
         });
 
@@ -94,7 +94,7 @@ public class Radialforcefield extends EditorObject {
                         new Stop(0, Color.valueOf("802000FF")), new Stop(1, Color.valueOf("FFC040FF")));
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowForcefields();
+                return AssetManager.getAsset().getVisibilitySettings().isShowForcefields();
             }
         });
 
@@ -125,7 +125,7 @@ public class Radialforcefield extends EditorObject {
                         new Stop(0, Color.valueOf("802000FF")), new Stop(1, Color.valueOf("FFC040FF")));
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowForcefields();
+                return AssetManager.getAsset().getVisibilitySettings().isShowForcefields();
             }
         });
 

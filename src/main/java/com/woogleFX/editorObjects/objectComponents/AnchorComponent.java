@@ -3,7 +3,7 @@ package com.woogleFX.editorObjects.objectComponents;
 import com.woogleFX.editorObjects.ObjectUtil;
 import com.woogleFX.editorObjects.objectComponents.generic.ColoredProperty;
 import com.woogleFX.engine.renderer.Renderer;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.DragSettings;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -41,9 +41,9 @@ public abstract class AnchorComponent extends ObjectComponent implements Colored
         double anchorX = getAnchorX();
         double anchorY = getAnchorY();
 
-        double offsetX = LevelManager.getLevel().getOffsetX();
-        double offsetY = LevelManager.getLevel().getOffsetY();
-        double zoom = LevelManager.getLevel().getZoom();
+        double offsetX = AssetManager.getAsset().getOffsetX();
+        double offsetY = AssetManager.getAsset().getOffsetY();
+        double zoom = AssetManager.getAsset().getZoom();
 
         double angle = Renderer.angleTo(new Point2D(0, 0), new Point2D(anchorX, anchorY));
 
@@ -129,10 +129,10 @@ public abstract class AnchorComponent extends ObjectComponent implements Colored
         Point2D right = new Point2D(x + forceMagnitude, y);
 
         Point2D rotated = ObjectUtil.rotate(new Point2D(mouseX, mouseY), -angle, new Point2D(x, y));
-        if (forceMagnitude != 0 && rotated.getX() > right.getX() - 4 / LevelManager.getLevel().getZoom() &&
-                rotated.getX() < right.getX() + 4 / LevelManager.getLevel().getZoom() &&
-                rotated.getY() > right.getY() - 4 / LevelManager.getLevel().getZoom() &&
-                rotated.getY() < right.getY() + 4 / LevelManager.getLevel().getZoom()) {
+        if (forceMagnitude != 0 && rotated.getX() > right.getX() - 4 / AssetManager.getAsset().getZoom() &&
+                rotated.getX() < right.getX() + 4 / AssetManager.getAsset().getZoom() &&
+                rotated.getY() > right.getY() - 4 / AssetManager.getAsset().getZoom() &&
+                rotated.getY() < right.getY() + 4 / AssetManager.getAsset().getZoom()) {
             DragSettings anchorSettings = new DragSettings(DragSettings.SETANCHOR, this);
             anchorSettings.setInitialSourceX(mouseX - anchorX);
             anchorSettings.setInitialSourceY(mouseY - anchorY);

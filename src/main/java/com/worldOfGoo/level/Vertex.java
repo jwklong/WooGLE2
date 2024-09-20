@@ -2,7 +2,7 @@ package com.worldOfGoo.level;
 
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -28,7 +28,7 @@ public class Vertex extends EditorObject {
             public void setX(double x) {
 
                 EditorObject pipe = null;
-                for (EditorObject EditorObject : ((WOG1Level)LevelManager.getLevel()).getLevelObject().getChildren())
+                for (EditorObject EditorObject : ((WOG1Level) AssetManager.getAsset()).getLevelObject().getChildren())
                     if (EditorObject instanceof Pipe) {
                         pipe = EditorObject;
                         break;
@@ -59,7 +59,7 @@ public class Vertex extends EditorObject {
             public void setY(double y) {
 
                 EditorObject pipe = null;
-                for (EditorObject EditorObject : ((WOG1Level)LevelManager.getLevel()).getLevelObject().getChildren())
+                for (EditorObject EditorObject : ((WOG1Level) AssetManager.getAsset()).getLevelObject().getChildren())
                     if (EditorObject instanceof Pipe) {
                         pipe = EditorObject;
                         break;
@@ -109,7 +109,7 @@ public class Vertex extends EditorObject {
                 return new Color(1.0, 0, 1.0, 0.1);
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 0;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 0;
             }
             public boolean isResizable() {
                 return false;

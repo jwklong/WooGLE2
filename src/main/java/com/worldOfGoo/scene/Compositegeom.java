@@ -4,7 +4,7 @@ import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.engine.renderer.Depth;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
@@ -80,7 +80,7 @@ public class Compositegeom extends EditorObject {
                 return new Color(0, 1.0, 0, 0.25);
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 0;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 0;
             }
             public boolean isResizable() {
                 return false;
@@ -134,7 +134,7 @@ public class Compositegeom extends EditorObject {
                 return true;
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 0;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 0;
             }
             public boolean isResizable() {
                 return false;
@@ -167,12 +167,12 @@ public class Compositegeom extends EditorObject {
 
     private void updateImage() {
 
-        if (LevelManager.getLevel() == null) return;
+        if (AssetManager.getAsset() == null) return;
 
         if (getAttribute("image").stringValue().isEmpty()) return;
 
         try {
-            image = getAttribute("image").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
+            image = getAttribute("image").imageValue(((WOG1Level) AssetManager.getAsset()).getResrc(), getVersion());
         } catch (FileNotFoundException ignored) {
             image = null;
         }

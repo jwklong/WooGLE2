@@ -1,11 +1,9 @@
 package com.woogleFX.editorObjects.objectCreators;
 
 import com.woogleFX.editorObjects.EditorObject;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.gameData.level.WOG1Level;
-import com.woogleFX.gameData.level.WOG2Level;
-import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.addin.*;
 import com.worldOfGoo.ball.*;
 import com.worldOfGoo.level.*;
@@ -14,25 +12,19 @@ import com.worldOfGoo.resrc.*;
 import com.worldOfGoo.scene.*;
 import com.worldOfGoo.text.TextString;
 import com.worldOfGoo.text.TextStrings;
-import com.worldOfGoo2.environments.*;
-import com.worldOfGoo2.misc._2_SoundEvent;
-import com.worldOfGoo2.ball.*;
-import com.worldOfGoo2.items.*;
-import com.worldOfGoo2.level.*;
-import com.worldOfGoo2.misc.*;
-import com.worldOfGoo2.terrain._2_Terrain_Collection;
-import com.worldOfGoo2.terrain._2_Terrain_EdgeTypesSettings;
-import com.worldOfGoo2.terrain._2_Terrain_TerrainType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 
 public class ObjectCreator {
 
+    private static final Logger logger = LoggerFactory.getLogger(ObjectCreator.class);
+
+
     public static EditorObject getDefaultParent(String name) {
 
-        WOG1Level level = (WOG1Level) LevelManager.getLevel();
-
-        return switch(name) {
+        if (AssetManager.getAsset() instanceof WOG1Level level) return switch(name) {
 
             case "linearforcefield", "radialforcefield", "particles",
                     "SceneLayer", "buttongroup", "button", "circle",
@@ -50,25 +42,14 @@ public class ObjectCreator {
 
         };
 
+        else return null;
+
     }
 
 
     public static EditorObject create(String name, EditorObject _parent, GameVersion version) {
 
-        _Level level = LevelManager.getLevel();
-
-        /*
-        if (level instanceof WOG2Level) {
-            try {
-                return create2((Class<? extends EditorObject>) Class.forName(name), _parent, version);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-         */
-
-        EditorObject parent = (_parent != null || !(level instanceof WOG1Level)) ? _parent : getDefaultParent(name);
+        EditorObject parent = _parent != null ? _parent : getDefaultParent(name);
 
         EditorObject toAdd = switch (name) {
             case "addin", "Addin_addin" -> new Addin(parent, version);
@@ -159,7 +140,7 @@ public class ObjectCreator {
         try {
             toAdd = (EditorObject) tClass.getConstructors()[0].newInstance(parent);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            logger.error("", e);
             return null;
         }
 

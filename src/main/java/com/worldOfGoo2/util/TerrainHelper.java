@@ -1,7 +1,7 @@
 package com.worldOfGoo2.util;
 
 import com.woogleFX.editorObjects.EditorObject;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.fileImport.ObjectGOOParser;
 import com.woogleFX.file.resourceManagers.ResourceManager;
@@ -109,7 +109,7 @@ public class TerrainHelper {
         if (terrainColorCache.get(index) != null) {
             return terrainColorCache.get(index);
         }
-        if (LevelManager.getLevel() instanceof WOG2Level level) {
+        if (AssetManager.getAsset() instanceof WOG2Level level) {
             if (level.getLevel().getChildren("terrainGroups").isEmpty()) return new Color(0.5, 0.5, 0.5, 1);
             EditorObject terrainGroup = level.getLevel().getChildren("terrainGroups").get(index);
             var type = terrainGroup.getAttribute("type").stringValue();

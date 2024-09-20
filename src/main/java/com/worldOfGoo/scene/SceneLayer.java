@@ -6,7 +6,7 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.ImageUtility;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.animation.Keyframe;
 import com.woogleFX.gameData.animation.WoGAnimation;
 import com.woogleFX.gameData.level.GameVersion;
@@ -55,35 +55,35 @@ public class SceneLayer extends EditorObject {
 
         addObjectComponent(new ImageComponent() {
             public double getX() {
-                double extraX = LevelManager.getLevel().getVisibilitySettings().isShowAnimations() ? animx : 0;
+                double extraX = AssetManager.getAsset().getVisibilitySettings().isShowAnimations() ? animx : 0;
                 return getAttribute("x").doubleValue() + extraX;
             }
             public void setX(double x) {
                 setAttribute("x", x);
             }
             public double getY() {
-                double extraY = LevelManager.getLevel().getVisibilitySettings().isShowAnimations() ? animy : 0;
+                double extraY = AssetManager.getAsset().getVisibilitySettings().isShowAnimations() ? animy : 0;
                 return -getAttribute("y").doubleValue() + extraY;
             }
             public void setY(double y) {
                 setAttribute("y", -y);
             }
             public double getRotation() {
-                double extraRotation = LevelManager.getLevel().getVisibilitySettings().isShowAnimations() ? animrotation : 0;
+                double extraRotation = AssetManager.getAsset().getVisibilitySettings().isShowAnimations() ? animrotation : 0;
                 return -Math.toRadians(getAttribute("rotation").doubleValue() + extraRotation);
             }
             public void setRotation(double rotation) {
                 setAttribute("rotation", -Math.toDegrees(rotation));
             }
             public double getScaleX() {
-                double extraScaleX = LevelManager.getLevel().getVisibilitySettings().isShowAnimations() ? animscalex : 1;
+                double extraScaleX = AssetManager.getAsset().getVisibilitySettings().isShowAnimations() ? animscalex : 1;
                 return getAttribute("scalex").doubleValue() * extraScaleX;
             }
             public void setScaleX(double scaleX) {
                 setAttribute("scalex", scaleX);
             }
             public double getScaleY() {
-                double extraScaleY = LevelManager.getLevel().getVisibilitySettings().isShowAnimations() ? animscaley : 1;
+                double extraScaleY = AssetManager.getAsset().getVisibilitySettings().isShowAnimations() ? animscaley : 1;
                 return getAttribute("scaley").doubleValue() * extraScaleY;
             }
             public void setScaleY(double scaleY) {
@@ -99,7 +99,7 @@ public class SceneLayer extends EditorObject {
                 return image;
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowGraphics();
+                return AssetManager.getAsset().getVisibilitySettings().isShowGraphics();
             }
         });
 
@@ -188,11 +188,11 @@ public class SceneLayer extends EditorObject {
 
     private void updateImage() {
 
-        if (LevelManager.getLevel() == null) return;
+        if (AssetManager.getAsset() == null) return;
 
         try {
             if (!getAttribute("image").stringValue().isEmpty()) {
-                image = getAttribute("image").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
+                image = getAttribute("image").imageValue(((WOG1Level) AssetManager.getAsset()).getResrc(), getVersion());
                 image = ImageUtility.colorize(image, getAttribute("colorize").colorValue());
             }
         } catch (FileNotFoundException ignored) {

@@ -3,7 +3,7 @@ package com.worldOfGoo.scene;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.renderer.Depth;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -62,7 +62,7 @@ public class Hinge extends EditorObject {
                 return new Color(1.0, 1.0, 0, 0.1);
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 0;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 0;
             }
             public boolean isResizable() {
                 return false;

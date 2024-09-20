@@ -9,7 +9,7 @@ public class _2_Ball_Axis extends EditorObject {
     public _2_Ball_Axis(EditorObject parent) {
         super(parent, "Axis", GameVersion.VERSION_WOG2);
 
-        addAttribute("axis", InputField._2_STRING);
+        addAttribute("axis", InputField._2_NUMBER);
 
     }
 

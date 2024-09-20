@@ -1,7 +1,7 @@
 package com.woogleFX.gameData.animation;
 
 import com.woogleFX.editorObjects.EditorObject;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.worldOfGoo.scene.SceneLayer;
 
@@ -28,8 +28,8 @@ public class AnimationManager {
 
 
     public static void updateAnimations(float timeElapsed) {
-        if (LevelManager.getLevel() != null && LevelManager.getLevel() instanceof WOG1Level) {
-            for (EditorObject object : ((WOG1Level)LevelManager.getLevel()).getScene()) {
+        if (AssetManager.getAsset() != null && AssetManager.getAsset() instanceof WOG1Level wog1Level) {
+            for (EditorObject object : wog1Level.getScene()) {
                 if (object instanceof SceneLayer sceneLayer) {
                     String anim = object.getAttribute("anim").stringValue();
                     if (!anim.isEmpty()) {

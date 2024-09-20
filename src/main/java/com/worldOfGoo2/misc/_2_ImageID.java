@@ -9,7 +9,7 @@ public class _2_ImageID extends EditorObject {
     public _2_ImageID(EditorObject parent) {
         super(parent, "ImageID", GameVersion.VERSION_WOG2);
 
-        addAttribute("imageId", InputField._2_STRING);
+        addAttribute("imageId", InputField._2_STRING).assertRequired();
 
     }
 

@@ -7,7 +7,7 @@ import com.woogleFX.engine.gui.BackgroundViewer;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.resourceManagers.GlobalResourceManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.particle.ParticleManager;
 import com.woogleFX.engine.undoHandling.UndoManager;
@@ -31,10 +31,7 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class FXPropertiesView {
 
@@ -47,6 +44,8 @@ public class FXPropertiesView {
 
 
     public static void init() {
+
+        propertiesView.prefHeightProperty().bind(FXContainers.getViewPane().heightProperty().subtract(FXPropertiesView.getPropertiesView().layoutYProperty()));
 
         // This seems to break when the user double-clicks on a hierarchy item with children (like those in "Addin").
         // TODO: figure out how to fix this or make some equivalent placeholder display
@@ -186,7 +185,7 @@ public class FXPropertiesView {
                         double y = bounds.getMinY() + 18;
 
                         if (contextMenu != null) contextMenu.hide();
-                        contextMenu = possibleAttributeValues(this, getItem(), LevelManager.getLevel().getVersion());
+                        contextMenu = possibleAttributeValues(this, getItem(), AssetManager.getAsset().getVersion());
 
 
                         if (contextMenu.getItems().isEmpty() || ((VBox)((ScrollPane)contextMenu.getItems().get(0).getGraphic()).getContent()).getChildren().isEmpty()) return;
@@ -240,7 +239,7 @@ public class FXPropertiesView {
                         textField.textProperty().addListener((observable, oldValue, newValue) -> {
                             if (contextMenu == null) return;
                             contextMenu.hide();
-                            contextMenu = possibleAttributeValues(cell, newValue, LevelManager.getLevel().getVersion());
+                            contextMenu = possibleAttributeValues(cell, newValue, AssetManager.getAsset().getVersion());
 
                             Bounds bounds = localToScreen(getBoundsInLocal());
 
@@ -348,38 +347,44 @@ public class FXPropertiesView {
 
         // Loop over the object's meta attributes.
         for (MetaEditorAttribute metaEditorAttribute : object.getMetaAttributes()) {
-
-            // Find the object's EditorAttribute associated with this meta attribute
-            // (sharing the same name).
-            EditorAttribute attribute;
-            if (object.attributeExists(metaEditorAttribute.getName())) {
-                attribute = object.getAttribute(metaEditorAttribute.getName());
-            } else {
-                // If no such attribute exists, this attribute is instead the name of a category
-                // of attributes.
-                // In this case, create a dummy attribute with no value.
-                attribute = new EditorAttribute(metaEditorAttribute.getName(), null, object);
-            }
-            if (attribute.getType() == InputField._2_LIST_CHILD || attribute.getType() == InputField._2_LIST_CHILD_HIDDEN) continue;
-            TreeItem<EditorAttribute> thisAttribute = new TreeItem<>(attribute);
-
-            // If this attribute is set to be open by default, set its tree item to open.
-            if (metaEditorAttribute.getOpenByDefault()) {
-                thisAttribute.setExpanded(true);
-            }
-
-            // If this attribute represents a category of attributes, it will have children.
-            // Add the children's TreeItems as children of the category's TreeItem.
-            for (MetaEditorAttribute childAttribute : metaEditorAttribute.getChildren()) {
-                thisAttribute.getChildren().add(new TreeItem<>(object.getAttribute(childAttribute.getName())));
-            }
-
-            // Add the attribute's TreeItem as a child of the root's TreeItem.
-            treeItem.getChildren().add(thisAttribute);
-
+            recursiveMetaAttributeAdd(metaEditorAttribute, treeItem, object);
         }
 
         return treeItem;
+
+    }
+
+
+    private static void recursiveMetaAttributeAdd(MetaEditorAttribute metaEditorAttribute, TreeItem<EditorAttribute> parent, EditorObject object) {
+
+        // Find the object's EditorAttribute associated with this meta attribute
+        // (sharing the same name).
+        EditorAttribute attribute;
+        if (object.attributeExists(metaEditorAttribute.getName())) {
+            attribute = object.getAttribute(metaEditorAttribute.getName());
+        } else {
+            // If no such attribute exists, this attribute is instead the name of a category
+            // of attributes.
+            // In this case, create a dummy attribute with no value.
+            attribute = new EditorAttribute(metaEditorAttribute.getName(), null, object);
+        }
+        if (attribute.getType() == InputField._2_LIST_CHILD || attribute.getType() == InputField._2_LIST_CHILD_HIDDEN) return;
+        TreeItem<EditorAttribute> thisAttribute = new TreeItem<>(attribute);
+
+        // If this attribute is set to be open by default, set its tree item to open.
+        if (metaEditorAttribute.getOpenByDefault()) {
+            thisAttribute.setExpanded(true);
+        }
+
+        // If this attribute represents a category of attributes, it will have children.
+        // Add the children's TreeItems as children of the category's TreeItem.
+        for (MetaEditorAttribute child : metaEditorAttribute.getChildren()) {
+            recursiveMetaAttributeAdd(child, thisAttribute, object);
+        }
+
+        // Add the attribute's TreeItem as a child of the root's TreeItem.
+        parent.getChildren().add(thisAttribute);
+
 
     }
 
@@ -395,7 +400,7 @@ public class FXPropertiesView {
 
         switch (attribute.getType()) {
             case _1_IMAGE -> {
-                for (EditorObject resource : ((WOG1Level)LevelManager.getLevel()).getResrc()) {
+                for (EditorObject resource : ((WOG1Level) AssetManager.getAsset()).getResrc()) {
                     if (resource instanceof ResrcImage) {
                         Button setImageItem = new Button(resource.getAttribute("id").stringValue());
 
@@ -403,7 +408,7 @@ public class FXPropertiesView {
 
                         // Add thumbnail of the image to the menu item
                         try {
-                            ImageView graphic = new ImageView(ResourceManager.getImage(((WOG1Level)LevelManager.getLevel()).getResrc(), resource.getAttribute("id").stringValue(), version));
+                            ImageView graphic = new ImageView(ResourceManager.getImage(((WOG1Level) AssetManager.getAsset()).getResrc(), resource.getAttribute("id").stringValue(), version));
                             graphic.setFitHeight(30);
                             // Set width depending on height
                             graphic.setFitWidth(graphic.getImage().getWidth() * 30 / graphic.getImage().getHeight());

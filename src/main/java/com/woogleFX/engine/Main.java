@@ -1,16 +1,9 @@
 package com.woogleFX.engine;
 
 import javafx.application.Application;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Stack;
 
 public class Main extends Application {
 

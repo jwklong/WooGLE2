@@ -31,21 +31,21 @@ public class BallSelector extends Application {
     public static File ballDir = null;
 
 
-    private void addBallLabels(Stage stage, VBox allBallsBox) {
+    private void addBallLabels(Stage stage, VBox allBallsBox, GameVersion version) {
 
         if (ballDir == null) return;
 
         File[] balls = ballDir.listFiles();
         if (balls == null) return;
 
-        for (File ballFile : balls) addBallLabel(ballFile, stage, allBallsBox);
+        for (File ballFile : balls) addBallLabel(ballFile, stage, allBallsBox, version);
 
     }
 
 
-    private void addBallLabel(File ballFile, Stage stage, VBox allBallsBox) {
+    private void addBallLabel(File ballFile, Stage stage, VBox allBallsBox, GameVersion version) {
 
-        for (String ballName : BaseGameResources.GOO_BALL_TYPES) if (ballName.equals(ballFile.getName())) return;
+        for (String ballName : BaseGameResources.GOO_BALL_TYPES.get(version)) if (ballName.equals(ballFile.getName())) return;
 
         Label label = new Label(ballFile.getName());
 
@@ -84,7 +84,7 @@ public class BallSelector extends Application {
 
         Label selectBallToSave = new Label("Select ball to save:");
 
-        addBallLabels(stage, allBallsBox);
+        addBallLabels(stage, allBallsBox, oldVersion);
 
         Button openButton = new Button("Save");
         Button cancelButton = new Button("Cancel");

@@ -52,5 +52,7 @@ module com.example.WOGAnniversaryEditor {
   exports com.woogleFX.file.aesEncryption;
   exports com.woogleFX.editorObjects.clipboardHandling;
   exports com.woogleFX.engine.fx.hierarchy;
+    exports com.woogleFX.engine.fx.menu;
+    exports com.woogleFX.engine.fx.assetSelectPane;
 
 }

@@ -3,7 +3,7 @@ package com.woogleFX.editorObjects.objectComponents;
 import com.woogleFX.editorObjects.ObjectUtil;
 import com.woogleFX.editorObjects.objectComponents.generic.RotatableProperty;
 import com.woogleFX.engine.renderer.Renderer;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.DragSettings;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -73,9 +73,9 @@ public abstract class ImageComponent extends ObjectComponent implements Rotatabl
         double width = image.getWidth() * getScaleX();
         double height = image.getHeight() * getScaleY();
 
-        double offsetX = LevelManager.getLevel().getOffsetX();
-        double offsetY = LevelManager.getLevel().getOffsetY();
-        double zoom = LevelManager.getLevel().getZoom();
+        double offsetX = AssetManager.getAsset().getOffsetX();
+        double offsetY = AssetManager.getAsset().getOffsetY();
+        double zoom = AssetManager.getAsset().getZoom();
 
         graphicsContext.save();
 
@@ -242,7 +242,7 @@ public abstract class ImageComponent extends ObjectComponent implements Rotatabl
         Point2D bottomRight = new Point2D(x + width / 2, y - height / 2);
         bottomRight = ObjectUtil.rotate(bottomRight, rotation, center);
 
-        double distance = 4 / LevelManager.getLevel().getZoom();
+        double distance = 4 / AssetManager.getAsset().getZoom();
 
         DragSettings resizeSettings = new DragSettings(DragSettings.RESIZE, this);
 

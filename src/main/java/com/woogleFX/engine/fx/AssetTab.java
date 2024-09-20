@@ -11,6 +11,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
@@ -27,50 +28,17 @@ public class AssetTab extends Tab {
         this.asset = asset;
     }
 
+
     public static final int NO_UNSAVED_CHANGES = 0;
     public static final int UNSAVED_CHANGES = 1;
     public static final int UNSAVED_CHANGES_UNMODIFIABLE = 2;
 
-    private static final Image noChangesImageOld = FileManager.getIcon("ButtonIcons/Level/no_unsaved_changes_old.png");
-    private static final Image changesImageOld = FileManager.getIcon("ButtonIcons/Level/unsaved_changes_old.png");
-    private static final Image changesUnmodifiableImageOld = FileManager.getIcon("ButtonIcons/Level/unsaved_changes_unmodifiable_old.png");
-
-    private static final Image noChangesImageNew = FileManager.getIcon("ButtonIcons/Level/no_unsaved_changes_new.png");
-    private static final Image changesImageNew = FileManager.getIcon("ButtonIcons/Level/unsaved_changes_new.png");
-    private static final Image changesUnmodifiableImageNew = FileManager.getIcon("ButtonIcons/Level/unsaved_changes_unmodifiable_new.png");
-
-    private static final Image noChangesImage2 = FileManager.getIcon("ButtonIcons/Level/no_unsaved_changes_2.png");
-    private static final Image changesImage2 = FileManager.getIcon("ButtonIcons/Level/unsaved_changes_2.png");
-    private static final Image changesUnmodifiableImage2 = FileManager.getIcon("ButtonIcons/Level/unsaved_changes_unmodifiable_2.png");
-
 
     public void update(int editingStatus, boolean shouldSelect) {
 
-        Image currentStatusImage = null;
-
-        if (editingStatus == NO_UNSAVED_CHANGES) {
-            currentStatusImage = switch (asset.getVersion()) {
-                case VERSION_WOG1_OLD -> noChangesImageOld;
-                case VERSION_WOG1_NEW -> noChangesImageNew;
-                default -> noChangesImage2;
-            };
-        } else if (editingStatus == UNSAVED_CHANGES) {
-            currentStatusImage = switch (asset.getVersion()) {
-                case VERSION_WOG1_OLD -> changesImageOld;
-                case VERSION_WOG1_NEW -> changesImageNew;
-                default -> changesImage2;
-            };
-        } else if (editingStatus == UNSAVED_CHANGES_UNMODIFIABLE) {
-            currentStatusImage = switch (asset.getVersion()) {
-                case VERSION_WOG1_OLD -> changesUnmodifiableImageOld;
-                case VERSION_WOG1_NEW -> changesUnmodifiableImageNew;
-                default -> changesUnmodifiableImage2;
-            };
-        }
-
         AnchorPane pane = new AnchorPane();
 
-        pane.getChildren().add(new ImageView(currentStatusImage));
+        pane.getChildren().add(new ImageView(buildGraphics(asset)));
 
         TreeItem<EditorObject> root = FXHierarchy.getHierarchy().getRoot();
 
@@ -83,6 +51,21 @@ public class AssetTab extends Tab {
             getTabPane().getSelectionModel().select(this);
             FXHierarchy.getHierarchy().setRoot(root);
         }
+    }
+
+
+    public static Image buildGraphics(Asset asset) {
+        String assetFileName;
+        if (asset instanceof _Level) assetFileName = "ObjectIcons/assets/Level.png";
+        else assetFileName = "ObjectIcons/assets/Ball.png";
+
+        ImageView imageView = new ImageView(FileManager.getIcon(assetFileName));
+        imageView.setFitWidth(24);
+        imageView.setFitHeight(24);
+        StackPane stackPane = new StackPane(imageView, new ImageView(FileManager.getIcon("ObjectIcons/assets/versionNumbers/2.png")));
+        WritableImage writableImage = new WritableImage(24, 24);
+        stackPane.snapshot(null, writableImage);
+        return writableImage;
     }
 
 }

@@ -9,7 +9,7 @@ public class _2_Color extends EditorObject {
     public _2_Color(EditorObject parent) {
         super(parent, "Color", GameVersion.VERSION_WOG2);
 
-        addAttribute("color", InputField._2_STRING);
+        addAttribute("color", InputField._2_NUMBER).assertRequired();
 
     }
 

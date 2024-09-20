@@ -4,7 +4,7 @@ import com.woogleFX.editorObjects.ObjectManager;
 import com.woogleFX.editorObjects.clipboardHandling.ClipboardManager;
 import com.woogleFX.editorObjects.splineGeom.SplineGeometryPlacer;
 import com.woogleFX.editorObjects.splineGeom.SplineManager;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.SelectionManager;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.DeleteSplinePointAction;
@@ -78,12 +78,12 @@ public class KeyPressedManager {
                 }
                 UndoManager.registerChange(undoBuilder.toArray(new UserAction[0]));
             } else if (SelectionManager.getMode() == SelectionManager.SELECTION) {
-                ObjectManager.delete(LevelManager.getLevel());
+                ObjectManager.delete(AssetManager.getAsset());
             }
         }
         if (event.isControlDown()) {
             if (event.getCode() == KeyCode.S) {
-                LevelUpdater.saveLevel(LevelManager.getLevel());
+                LevelUpdater.saveLevel(AssetManager.getAsset());
             }
             if (event.getCode() == KeyCode.Z) {
                 if (event.isShiftDown()) UndoManager.redo();

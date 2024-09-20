@@ -7,7 +7,6 @@ import com.woogleFX.gameData.level.GameVersion;
 import com.worldOfGoo2.level._2_Level;
 import javafx.geometry.Point2D;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ObjectUtil {

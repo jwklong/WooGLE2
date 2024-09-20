@@ -1,6 +1,5 @@
 package com.woogleFX.gameData.ball;
 
-import com.woogleFX.engine.LevelManager;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.engine.gui.BallSelector;
@@ -60,7 +59,6 @@ public class BallManager {
         try {
             ball = FileManager.open2Ball(ballName, version);
             if (ball == null) return null;
-            ball.setVersion(version);
             imported2Balls.add(ball);
             return ball;
         } catch (ParserConfigurationException | SAXException | IOException ignored) {

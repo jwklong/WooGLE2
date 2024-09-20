@@ -4,7 +4,6 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.ImageUtility;
 import com.woogleFX.gameData.level.GameVersion;
 import com.worldOfGoo2.environments._2_Environment;
-import com.worldOfGoo2.environments._2_Environment_ForegroundFX;
 import com.worldOfGoo2.environments._2_Environment_Layer;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;

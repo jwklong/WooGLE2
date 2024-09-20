@@ -11,7 +11,7 @@ import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.fx.FXEditorButtons;
 import com.woogleFX.engine.renderer.Renderer;
 import com.woogleFX.engine.undoHandling.userActions.ObjectDestructionAction;
@@ -62,7 +62,7 @@ public class _2_Level_Strand extends EditorObject {
                 int newValue = Integer.parseInt(value);
                 setAttribute2("ball1UID", newValue);
                 
-                ArrayList<EditorObject> gooballs = ((WOG2Level)LevelManager.getLevel()).getLevel().getChildren("balls");
+                ArrayList<EditorObject> gooballs = ((WOG2Level) AssetManager.getAsset()).getLevel().getChildren("balls");
                 for (EditorObject ballInstance : gooballs) {
                     if (ballInstance.getAttribute("uid").intValue() == newValue) {
                         setGoo1((_2_Level_BallInstance)ballInstance);
@@ -87,7 +87,7 @@ public class _2_Level_Strand extends EditorObject {
                 int newValue = Integer.parseInt(value);
                 setAttribute2("ball2UID", newValue);
                 
-                ArrayList<EditorObject> gooballs = ((WOG2Level)LevelManager.getLevel()).getLevel().getChildren("balls");
+                ArrayList<EditorObject> gooballs = ((WOG2Level) AssetManager.getAsset()).getLevel().getChildren("balls");
                 for (EditorObject ballInstance : gooballs) {
                     if (ballInstance.getAttribute("uid").intValue() == newValue) {
                         setGoo2((_2_Level_BallInstance)ballInstance);
@@ -138,11 +138,11 @@ public class _2_Level_Strand extends EditorObject {
     @Override
     public void update() {
 
-        if (LevelManager.getLevel() == null) return;
+        if (AssetManager.getAsset() == null) return;
 
         if (goo1 != null && getAttribute("type").stringValue().equals("Terrain")) setAttribute("type", "10");
 
-        for (EditorObject editorObject : ((WOG2Level)LevelManager.getLevel()).getLevel().getChildren("balls"))
+        for (EditorObject editorObject : ((WOG2Level) AssetManager.getAsset()).getLevel().getChildren("balls"))
             if (editorObject instanceof _2_Level_BallInstance ballInstance) {
                 String uid = ballInstance.getAttribute("uid").stringValue();
                 if (uid.equals(getAttribute("ball1UID").stringValue())) goo1 = ballInstance;
@@ -250,7 +250,7 @@ public class _2_Level_Strand extends EditorObject {
                 return 0.00000001;
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 2;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 2;
             }
             public boolean isDraggable() {
                 return false;
@@ -350,9 +350,9 @@ public class _2_Level_Strand extends EditorObject {
 
             public boolean isVisible() {
                 if (getAttribute("type").stringValue().equals("Terrain")) {
-                    return (LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 1 || LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 2 && goo1.visibilityFunction() && goo2.visibilityFunction()) || FXEditorButtons.comboBoxSelected == goo1.getAttribute("terrainGroup").intValue();
+                    return (AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1 || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 2 && goo1.visibilityFunction() && goo2.visibilityFunction()) || FXEditorButtons.comboBoxSelected == goo1.getAttribute("terrainGroup").intValue();
                 }
-                return LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 1 && goo1.visibilityFunction() && goo2.visibilityFunction();
+                return AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1 && goo1.visibilityFunction() && goo2.visibilityFunction();
             }
             public boolean isDraggable() {
                 return false;

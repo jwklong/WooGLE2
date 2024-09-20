@@ -9,7 +9,7 @@ import com.woogleFX.engine.renderer.Renderer;
 import com.woogleFX.gameData.ball.BallManager;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.levelOpening.LevelLoader;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -89,9 +89,9 @@ public class Strand extends EditorObject {
     @Override
     public void update() {
 
-        if (LevelManager.getLevel() == null) return;
+        if (AssetManager.getAsset() == null) return;
 
-        for (EditorObject obj : ((WOG1Level)LevelManager.getLevel()).getLevel()) if (obj instanceof BallInstance ballInstance) {
+        for (EditorObject obj : ((WOG1Level) AssetManager.getAsset()).getLevel()) if (obj instanceof BallInstance ballInstance) {
 
             String id = ballInstance.getAttribute("id").stringValue();
             String gb1 = getAttribute("gb1").stringValue();
@@ -268,7 +268,7 @@ public class Strand extends EditorObject {
                 return 0.00000001;
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 2;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 2;
             }
             public boolean isDraggable() {
                 return false;
@@ -451,7 +451,7 @@ public class Strand extends EditorObject {
             }
 
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 1;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1;
             }
             public boolean isDraggable() {
                 return false;

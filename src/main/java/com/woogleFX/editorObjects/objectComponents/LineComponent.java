@@ -4,9 +4,9 @@ import com.woogleFX.editorObjects.objectComponents.generic.ColoredProperty;
 import com.woogleFX.editorObjects.objectComponents.generic.RotatableProperty;
 import com.woogleFX.engine.fx.FXCanvas;
 import com.woogleFX.engine.fx.FXContainers;
-import com.woogleFX.engine.fx.FXAssetSelectPane;
+import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
 import com.woogleFX.engine.renderer.Renderer;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.DragSettings;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -25,9 +25,9 @@ public abstract class LineComponent extends ObjectComponent implements Rotatable
 
         double rotation = getRotation();
 
-        double offsetX = LevelManager.getLevel().getOffsetX();
-        double offsetY = LevelManager.getLevel().getOffsetY();
-        double zoom = LevelManager.getLevel().getZoom();
+        double offsetX = AssetManager.getAsset().getOffsetX();
+        double offsetY = AssetManager.getAsset().getOffsetY();
+        double zoom = AssetManager.getAsset().getZoom();
 
         double screenX = x * zoom + offsetX;
         double screenY = y * zoom + offsetY;

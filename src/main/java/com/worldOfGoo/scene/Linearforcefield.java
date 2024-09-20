@@ -4,7 +4,7 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.AnchorComponent;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.renderer.Depth;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -72,7 +72,7 @@ public class Linearforcefield extends EditorObject {
                 return new Color(1.0, 1.0, 0, 0.05);
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowForcefields();
+                return AssetManager.getAsset().getVisibilitySettings().isShowForcefields();
             }
             public boolean isRotatable() {
                 return false;
@@ -112,7 +112,7 @@ public class Linearforcefield extends EditorObject {
                 return Depth.FORCEFIELDS;
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowForcefields();
+                return AssetManager.getAsset().getVisibilitySettings().isShowForcefields();
             }
         });
 

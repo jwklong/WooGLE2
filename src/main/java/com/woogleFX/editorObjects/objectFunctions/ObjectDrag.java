@@ -4,7 +4,7 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects._2_Positionable;
 import com.woogleFX.editorObjects.attributes.dataTypes.Position;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.SelectionManager;
 
 public class ObjectDrag {
@@ -19,7 +19,7 @@ public class ObjectDrag {
         objectComponent.setX(mouseX - dragSourceX);
         objectComponent.setY(mouseY - dragSourceY);
 
-        for (EditorObject object : LevelManager.getLevel().getSelected()) {
+        for (EditorObject object : AssetManager.getAsset().getSelected()) {
             if (object.containsObjectComponent(objectComponent))
                 continue;
             

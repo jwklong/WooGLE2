@@ -1,7 +1,9 @@
 package com.woogleFX.engine;
 
 import com.woogleFX.engine.fx.*;
+import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
+import com.woogleFX.engine.fx.menu.FXMenu;
 import com.woogleFX.engine.gui.EditorWindow;
 import com.woogleFX.engine.gui.LoadingScreen;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;

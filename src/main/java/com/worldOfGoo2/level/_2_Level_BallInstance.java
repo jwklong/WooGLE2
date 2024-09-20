@@ -5,7 +5,7 @@ import com.woogleFX.editorObjects._2_Positionable;
 import com.woogleFX.editorObjects.attributes.AttributeAdapter;
 import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.attributes.InputField;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.fx.FXEditorButtons;
 import com.woogleFX.engine.undoHandling.userActions.ObjectDestructionAction;
 import com.woogleFX.file.resourceManagers.ResourceManager;
@@ -88,7 +88,7 @@ public class _2_Level_BallInstance extends _2_Positionable {
                 int newValue = Integer.parseInt(value);
                 setAttribute2("terrainGroup", newValue);
                 
-                _2_Level level = ((WOG2Level)LevelManager.getLevel()).getLevel();
+                _2_Level level = ((WOG2Level) AssetManager.getAsset()).getLevel();
                 ArrayList<EditorObject> terrainGroups = level.getChildren("terrainGroups");
                 
                 if (newValue >= 0 && newValue < terrainGroups.size()) {
@@ -136,7 +136,7 @@ public class _2_Level_BallInstance extends _2_Positionable {
     @Override
     public void update() {
 
-        if (!(LevelManager.getLevel() instanceof WOG2Level level)) return;
+        if (!(AssetManager.getAsset() instanceof WOG2Level level)) return;
 
         String id = getAttribute("uid").stringValue();
         for (EditorObject object : level.getObjects()) if (object instanceof _2_Level_Strand strand) {
@@ -179,7 +179,7 @@ public class _2_Level_BallInstance extends _2_Positionable {
 
     public boolean visibilityFunction() {
 
-        if (LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 0) return false;
+        if (AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 0) return false;
 
         if (!getAttribute("type").stringValue().equals("Terrain")) return true;
 
@@ -196,7 +196,7 @@ public class _2_Level_BallInstance extends _2_Positionable {
         
         List<ObjectDestructionAction> outActions = new ArrayList<>();
         
-        WOG2Level level = (WOG2Level)LevelManager.getLevel();
+        WOG2Level level = (WOG2Level) AssetManager.getAsset();
         for (EditorObject object : level.getObjects()) if (object instanceof _2_Level_Strand strand) {
             if (this != strand.getGoo1() && this != strand.getGoo2()) continue;
 

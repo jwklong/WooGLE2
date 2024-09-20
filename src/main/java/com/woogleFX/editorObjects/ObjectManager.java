@@ -3,15 +3,15 @@ package com.woogleFX.editorObjects;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.objectCreators.ObjectAdder;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.engine.fx.FXPropertiesView;
+import com.woogleFX.engine.fx.hierarchy.FXHierarchySwitcherButtons;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.ObjectDestructionAction;
 import com.woogleFX.engine.undoHandling.userActions.UserAction;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.WOG2Level;
-import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.level.BallInstance;
 import com.worldOfGoo.level.Level;
 import com.worldOfGoo.level.Strand;
@@ -24,11 +24,9 @@ import java.util.List;
 
 public class ObjectManager {
 
-    public static void create(_Level _level, EditorObject _object, int row) {
+    public static void create(Asset _level, EditorObject object, int row) {
 
-        System.out.println("creating " + _object);
-
-        EditorObject object = _object;
+        System.out.println("creating " + object);
 
         if (object instanceof _2_Level_BallInstance) {
             ObjectAdder.fixGooBall(object);
@@ -51,68 +49,14 @@ public class ObjectManager {
             }
         }
 
-        if (_level instanceof WOG2Level level) {
-
-            level.getObjects().add(object);
-
-            int i = switch (level.getCurrentlySelectedSection()) {
-                case "Terrain" -> 0;
-                case "Terrain Groups" -> 1;
-                case "Balls" -> 2;
-                case "Items" -> 3;
-                case "Pins" -> 4;
-                case "Camera" -> 5;
-                case "Addin" -> 6;
-                default -> -1;
-            };
-            FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select((i + 1) % 7);
-            FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select(i);
-
-            FXHierarchy.getHierarchy().getSelectionModel().clearSelection();
-            FXHierarchy.getHierarchy().getSelectionModel().select(object.getTreeItem());
-
-        } else {
-
-            WOG1Level level = (WOG1Level) _level;
-
-            EditorObject absoluteParent = LevelManager.getLevel().getSelected().length == 0 ? null : LevelManager.getLevel().getSelected()[0];
-            if (absoluteParent == null) absoluteParent = ObjectCreator.getDefaultParent(object.getType());
-            else while (absoluteParent.getParent() != null) absoluteParent = absoluteParent.getParent();
-
-            if (absoluteParent instanceof Scene) level.getScene().add(object);
-            if (absoluteParent instanceof Level) level.getLevel().add(object);
-
-            if (object instanceof BallInstance ballInstance) {
-
-                String id = ballInstance.getAttribute("id").stringValue();
-
-                for (EditorObject EditorObject : level.getLevel())
-                    if (EditorObject instanceof Strand strand) {
-
-                        String gb1 = strand.getAttribute("gb1").stringValue();
-                        if (gb1.equals(id)) {
-                            strand.setGoo1(ballInstance);
-                            strand.update();
-                        }
-
-                        String gb2 = strand.getAttribute("gb2").stringValue();
-                        if (gb2.equals(id)) {
-                            strand.setGoo2(ballInstance);
-                            strand.update();
-                        }
-
-                    }
-
-            } else if (object instanceof Vertex vertex) vertex.getParent().update();
-
-        }
+        _level.addItem(object, row);
 
         object.update();
 
     }
 
 
-    public static List<ObjectDestructionAction> deleteItem(_Level _level, EditorObject _item, boolean parentDeleted) {
+    public static List<ObjectDestructionAction> deleteItem(Asset _level, EditorObject _item, boolean parentDeleted) {
 
         System.out.println("deleting " + _item);
         List<ObjectDestructionAction> childActions = _item.onDelete();
@@ -125,59 +69,14 @@ public class ObjectManager {
             deleteItem(_level, child, true);
         }
 
-        if (_level instanceof WOG1Level level) {
-
-            level.getScene().remove(_item);
-            level.getLevel().remove(_item);
-            level.getResrc().remove(_item);
-            level.getAddin().remove(_item);
-            level.getText().remove(_item);
-
-            if (!parentDeleted) {
-                _item.getParent().getChildren().remove(_item);
-                _item.getParent().getTreeItem().getChildren().remove(_item.getTreeItem());
-            }
-
-            if (_item instanceof BallInstance ballInstance) {
-
-                String id = ballInstance.getAttribute("id").stringValue();
-
-                for (EditorObject EditorObject : level.getLevel())
-                    if (EditorObject instanceof Strand strand) {
-
-                        String gb1 = strand.getAttribute("gb1").stringValue();
-                        if (gb1.equals(id)) {
-                            strand.setGoo1(null);
-                            strand.update();
-                        }
-
-                        String gb2 = strand.getAttribute("gb2").stringValue();
-                        if (gb2.equals(id)) {
-                            strand.setGoo2(null);
-                            strand.update();
-                        }
-
-                    }
-
-            } else if (_item instanceof Vertex vertex) vertex.getParent().update();
-
-        } else if (_level instanceof WOG2Level level) {
-
-            level.getObjects().remove(_item);
-
-            if (!parentDeleted) {
-                _item.getParent().getChildren().remove(_item);
-                _item.getParent().getTreeItem().getChildren().remove(_item.getTreeItem());
-            }
-
-        }
+        _level.removeItem(_item, parentDeleted);
 
         return childActions;
 
     }
 
 
-    public static void delete(_Level level) {
+    public static void delete(Asset level) {
 
         ArrayList<ObjectDestructionAction> objectDestructionActions = new ArrayList<>();
 

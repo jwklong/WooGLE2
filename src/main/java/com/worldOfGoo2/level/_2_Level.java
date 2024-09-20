@@ -2,14 +2,10 @@ package com.worldOfGoo2.level;
 
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.AttributeAdapter;
-import com.woogleFX.editorObjects.attributes.InputField;
-import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
-import com.woogleFX.engine.LevelManager;
-import com.woogleFX.engine.fx.FXCanvas;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.renderer.Depth;
-import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.gameData.environments.EnvironmentManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.worldOfGoo2.environments._2_Environment;
@@ -216,7 +212,7 @@ public class _2_Level extends EditorObject {
                         return image;
                     }
                     public boolean isVisible() {
-                        return LevelManager.getLevel().getVisibilitySettings().isShowSceneBGColor();
+                        return AssetManager.getAsset().getVisibilitySettings().isShowSceneBGColor();
                     }
                     public boolean isResizable() {
                         return false;

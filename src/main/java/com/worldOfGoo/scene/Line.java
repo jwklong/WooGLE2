@@ -6,7 +6,7 @@ import com.woogleFX.editorObjects.objectComponents.LineComponent;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.ObjectUtil;
 import com.woogleFX.engine.renderer.Depth;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import javafx.scene.paint.Color;
@@ -45,7 +45,7 @@ public class Line extends EditorObject {
                 return 3;
             }
             public Paint getColor() {
-                if (LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 2) return new Color(0.0, 0.25, 1.0, 1.0);
+                if (AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 2) return new Color(0.0, 0.25, 1.0, 1.0);
 
                 if (ObjectUtil.attributeContainsTag(getAttribute("tag").listValue(), "deadly")) {
                     return new Color(1.0, 0.25, 0, 1.0);
@@ -66,7 +66,7 @@ public class Line extends EditorObject {
                 return Depth.GEOMETRY;
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 0;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 0;
             }
         });
 
@@ -103,7 +103,7 @@ public class Line extends EditorObject {
                 return Rectangle.geometryColor(getAttribute("tag").listValue(), getParent());
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 0;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 0;
             }
         });
 

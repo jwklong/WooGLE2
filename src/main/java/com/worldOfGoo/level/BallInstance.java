@@ -10,7 +10,7 @@ import com.woogleFX.gameData.ball.BallManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.levelOpening.LevelLoader;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -66,9 +66,9 @@ public class BallInstance extends EditorObject {
 
     private void updateStrands() {
 
-        if (LevelManager.getLevel() == null) return;
+        if (AssetManager.getAsset() == null) return;
 
-        for (EditorObject object : ((WOG1Level)LevelManager.getLevel()).getLevel()) if (object instanceof Strand strand) {
+        for (EditorObject object : ((WOG1Level) AssetManager.getAsset()).getLevel()) if (object instanceof Strand strand) {
 
             String id = getAttribute("id").stringValue();
             String gb1 = strand.getAttribute("gb1").stringValue();
@@ -87,7 +87,7 @@ public class BallInstance extends EditorObject {
 
     private void setBallType(String type) {
 
-        if (LevelManager.getLevel() == null) return;
+        if (AssetManager.getAsset() == null) return;
 
         this.ball = BallManager.getBall(type, getVersion());
         if (ball == null) {
@@ -97,7 +97,7 @@ public class BallInstance extends EditorObject {
         }
 
         String id = getAttribute("id").stringValue();
-        for (EditorObject object : ((WOG1Level)LevelManager.getLevel()).getLevel()) if (object instanceof Strand strand) {
+        for (EditorObject object : ((WOG1Level) AssetManager.getAsset()).getLevel()) if (object instanceof Strand strand) {
             String gb1 = strand.getAttribute("gb1").stringValue();
             String gb2 = strand.getAttribute("gb2").stringValue();
             if (gb1.equals(id) || gb2.equals(id)) {
@@ -203,7 +203,7 @@ public class BallInstance extends EditorObject {
                 return 0.000001;
             }
             public boolean isVisible() {
-                return ball == null || LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 1;
+                return ball == null || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1;
             }
             public boolean isResizable() {
                 return false;
@@ -270,7 +270,7 @@ public class BallInstance extends EditorObject {
             }
 
             public boolean isVisible() {
-                return ball == null || LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 1;
+                return ball == null || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1;
             }
 
             public boolean isResizable() {
@@ -288,7 +288,7 @@ public class BallInstance extends EditorObject {
         if (!getAttribute("discovered").booleanValue()) {
             state = "sleeping";
         } else {
-            for (EditorObject obj : ((WOG1Level)LevelManager.getLevel()).getLevel()) {
+            for (EditorObject obj : ((WOG1Level) AssetManager.getAsset()).getLevel()) {
                 if (obj instanceof Strand strand) {
 
                     String id = getAttribute("id").stringValue();
@@ -348,7 +348,7 @@ public class BallInstance extends EditorObject {
 
         Image img;
         try {
-            img = ResourceManager.getImage(ball.getResources(), imageString, LevelManager.getLevel().getVersion());
+            img = ResourceManager.getImage(ball.getResources(), imageString, AssetManager.getAsset().getVersion());
         } catch (FileNotFoundException e) {
             img = null;
         }
@@ -407,7 +407,7 @@ public class BallInstance extends EditorObject {
                     return finalImg;
                 }
                 public boolean isVisible() {
-                    return LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 2;
+                    return AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 2;
                 }
                 public boolean isSelectable() {
                     String partName = part.getAttribute("name").stringValue();
@@ -430,7 +430,7 @@ public class BallInstance extends EditorObject {
 
         Image pupilImg;
         try {
-            pupilImg = ResourceManager.getImage(ball.getResources(), pupilImageString, LevelManager.getLevel().getVersion());
+            pupilImg = ResourceManager.getImage(ball.getResources(), pupilImageString, AssetManager.getAsset().getVersion());
         } catch (FileNotFoundException e) {
             pupilImg = null;
         }
@@ -485,7 +485,7 @@ public class BallInstance extends EditorObject {
                     return finalPupilImg;
                 }
                 public boolean isVisible() {
-                    return LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 2;
+                    return AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 2;
                 }
                 public boolean isSelectable() {
                     return false;

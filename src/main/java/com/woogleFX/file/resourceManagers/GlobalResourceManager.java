@@ -258,7 +258,6 @@ public class GlobalResourceManager {
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
                 ErrorAlarm.show(e);
-                return;
             }
         }
 

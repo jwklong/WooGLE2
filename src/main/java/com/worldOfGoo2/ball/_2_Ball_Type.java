@@ -9,7 +9,7 @@ public class _2_Ball_Type extends EditorObject {
     public _2_Ball_Type(EditorObject parent) {
         super(parent, "Type", GameVersion.VERSION_WOG2);
 
-        addAttribute("ballType", InputField._2_CHILD).setChildAlias(_2_Ball_Type.class);
+        addAttribute("ballType", InputField._2_BALL_TYPE).assertRequired();
 
     }
 

@@ -1,6 +1,7 @@
 package com.woogleFX.engine.fx;
 
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
+import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 
@@ -13,8 +14,8 @@ public class FXCanvas {
 
 
     public static Point2D getScreenCenter() {
-        return new Point2D((FXContainers.getThingPane().getWidth() / 2 - LevelManager.getLevel().getOffsetX()) / LevelManager.getLevel().getZoom(),
-                (FXContainers.getThingPane().getHeight() / 2 - LevelManager.getLevel().getOffsetY()) / LevelManager.getLevel().getZoom());
+        return new Point2D((FXContainers.getThingPane().getWidth() / 2 - AssetManager.getAsset().getOffsetX()) / AssetManager.getAsset().getZoom(),
+                (FXContainers.getThingPane().getHeight() / 2 - AssetManager.getAsset().getOffsetY()) / AssetManager.getAsset().getZoom());
     }
 
     public static double getMouseYOffset() {

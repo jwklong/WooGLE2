@@ -173,7 +173,7 @@ public class LevelWriter {
 
         String level = getLevel(_level);
 
-        EditorObject addinObject = ((WOG1Level)_level).getAddinObject();
+        EditorObject addinObject = _level.getAddinObject();
         String addin = XMLUtility.fullAddinXMLExport("", addinObject, 0);
 
         EditorObject textObject = ((WOG1Level)_level).getTextObject();

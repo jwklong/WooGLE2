@@ -10,8 +10,8 @@ public class _2_Point extends EditorObject {
     public _2_Point(EditorObject parent) {
         super(parent, "Point", GameVersion.VERSION_WOG2);
 
-        addAttribute("x", InputField._2_NUMBER);
-        addAttribute("y", InputField._2_NUMBER);
+        addAttribute("x", InputField._2_NUMBER).assertRequired();
+        addAttribute("y", InputField._2_NUMBER).assertRequired();
 
         setMetaAttributes(MetaEditorAttribute.parse("x,y,"));
 

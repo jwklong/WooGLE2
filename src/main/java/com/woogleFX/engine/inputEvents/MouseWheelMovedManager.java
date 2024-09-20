@@ -1,12 +1,10 @@
 package com.woogleFX.engine.inputEvents;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.engine.fx.FXCanvas;
 import com.woogleFX.engine.fx.FXContainers;
 import com.woogleFX.engine.renderer.Renderer;
-import com.woogleFX.engine.LevelManager;
-import com.woogleFX.gameData.level.WOG1Level;
-import com.woogleFX.gameData.level.WOG2Level;
-import com.woogleFX.gameData.level._Level;
+import com.woogleFX.engine.AssetManager;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.transform.Affine;
@@ -16,8 +14,8 @@ public class MouseWheelMovedManager {
     /** Called whenever the mouse wheel is scrolled. */
     public static void mouseWheelMoved(ScrollEvent e) {
 
-        _Level level = LevelManager.getLevel();
-        if (level == null) return;
+        Asset asset = AssetManager.getAsset();
+        if (asset == null) return;
 
         // If the mouse was scrolled out the editor window, return
         SplitPane splitPane = FXContainers.getSplitPane();
@@ -27,22 +25,16 @@ public class MouseWheelMovedManager {
         // Calculate the new translation and scale.
         double amt = Math.pow(1.25, (e.getDeltaY() / 40));
 
-        double oldTranslateX = level.getOffsetX();
-        double oldTranslateY = level.getOffsetY();
+        double oldTranslateX = asset.getOffsetX();
+        double oldTranslateY = asset.getOffsetY();
 
-        double oldScaleX = level.getZoom();
-        double oldScaleY = level.getZoom();
+        double oldScaleX = asset.getZoom();
+        double oldScaleY = asset.getZoom();
 
         double mouseX = e.getX();
         double mouseY = e.getY() - FXCanvas.getMouseYOffset();
 
-        if (level instanceof WOG1Level) {
-            if (oldScaleX * amt < 0.001 || oldScaleX * amt > 1000 ||
-                    oldScaleY * amt < 0.001 || oldScaleY * amt > 1000) return;
-        } else if (level instanceof WOG2Level) {
-            if (oldScaleX * amt < 3 || oldScaleX * amt > 100000 ||
-                    oldScaleY * amt < 3 || oldScaleY * amt > 100000) return;
-        }
+        if (asset.isScaleTooFar(oldScaleX * amt, oldScaleY * amt)) return;
 
         double newScaleX = oldScaleX * amt;
         double newScaleY = oldScaleY * amt;
@@ -55,12 +47,9 @@ public class MouseWheelMovedManager {
         Renderer.t.appendTranslation(newTranslateX, newTranslateY);
         Renderer.t.appendScale(newScaleX, newScaleY);
 
-        level.setOffsetX(newTranslateX);
-        level.setOffsetY(newTranslateY);
-        level.setZoom(newScaleX);
-
-        // Redraw the canvas.
-        // Renderer.drawLevelToCanvas(level, FXCanvas.getCanvas());
+        asset.setOffsetX(newTranslateX);
+        asset.setOffsetY(newTranslateY);
+        asset.setZoom(newScaleX);
 
     }
 

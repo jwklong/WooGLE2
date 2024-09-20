@@ -1,7 +1,8 @@
 package com.woogleFX.editorObjects.clipboardHandling;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.engine.fx.FXPropertiesView;
 import com.woogleFX.editorObjects.objectCreators.ObjectAdder;
@@ -11,7 +12,6 @@ import com.woogleFX.engine.undoHandling.userActions.ObjectCreationAction;
 import com.woogleFX.engine.undoHandling.userActions.UserAction;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.WOG2Level;
-import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.level.BallInstance;
 import com.worldOfGoo.level.Strand;
 import com.worldOfGoo2.level._2_Level_BallInstance;
@@ -24,16 +24,16 @@ import java.util.ArrayList;
 public class ClipboardManager {
 
     public static void cut() {
-        if (LevelManager.getLevel().getSelected().length != 0) {
+        if (AssetManager.getAsset().getSelected().length != 0) {
             copy();
-            ObjectManager.delete(LevelManager.getLevel());
+            ObjectManager.delete(AssetManager.getAsset());
         }
     }
 
 
     public static void copy() {
-        if (LevelManager.getLevel().getSelected().length != 0 && FXPropertiesView.getPropertiesView().getEditingCell() == null) {
-            String clipboard = ClipboardHandler.exportToClipBoardString(LevelManager.getLevel().getSelected());
+        if (AssetManager.getAsset().getSelected().length != 0 && FXPropertiesView.getPropertiesView().getEditingCell() == null) {
+            String clipboard = ClipboardHandler.exportToClipBoardString(AssetManager.getAsset().getSelected());
             ClipboardContent clipboardContent = new ClipboardContent();
             clipboardContent.putString(clipboard);
             Clipboard.getSystemClipboard().setContent(clipboardContent);
@@ -43,7 +43,7 @@ public class ClipboardManager {
 
     public static void paste() {
 
-        _Level level = LevelManager.getLevel();
+        Asset level = AssetManager.getAsset();
         if (level == null) return;
 
         if (FXPropertiesView.getPropertiesView().getEditingCell() != null) return;

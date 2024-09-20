@@ -2,7 +2,6 @@ package com.woogleFX.file.fileExport;
 
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.gameData.level.WOG2Level;
-import com.woogleFX.gameData.level._Level;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 

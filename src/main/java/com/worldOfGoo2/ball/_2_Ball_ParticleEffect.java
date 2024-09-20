@@ -10,11 +10,11 @@ public class _2_Ball_ParticleEffect extends EditorObject {
         super(parent, "ParticleEffect", GameVersion.VERSION_WOG2);
 
         addAttribute("particleEffectId", InputField._2_STRING).assertRequired();
-        addAttribute("states", InputField._2_STRING).assertRequired();
-        addAttribute("sleeping", InputField._2_STRING).assertRequired();
-        addAttribute("onFire", InputField._2_STRING).assertRequired();
-        addAttribute("thruster", InputField._2_STRING).assertRequired();
-        addAttribute("depth", InputField._2_STRING).assertRequired();
+        addAttribute("states", InputField._2_LIST_NUMBER).assertRequired();
+        addAttribute("sleeping", InputField._2_BOOLEAN).assertRequired();
+        addAttribute("onFire", InputField._2_BOOLEAN).assertRequired();
+        addAttribute("thruster", InputField._2_BOOLEAN).assertRequired();
+        addAttribute("depth", InputField._2_NUMBER).assertRequired();
 
         addAttribute("particleEffectV2Id", InputField._2_STRING).setChildAlias(_2_Ball_ParticleEffectV2.class);
 

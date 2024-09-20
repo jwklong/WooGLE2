@@ -1,16 +1,10 @@
 package com.woogleFX.file.aesEncryption;
 
 import com.github.luben.zstd.Zstd;
-import org.apache.commons.compress.compressors.zstandard.ZstdCompressorOutputStream;
 
-import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageInputStream;
-import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.*;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

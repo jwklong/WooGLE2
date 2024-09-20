@@ -121,7 +121,7 @@ public class LevelResourceImporter {
         String path;
 
         String baseGameEquivalentPath = cleanImagePath(imgPath, level.getVersion());
-        if (BaseGameResources.containsImage(baseGameEquivalentPath)) {
+        if (BaseGameResources.containsImage(baseGameEquivalentPath, level.getVersion())) {
             path = baseGameEquivalentPath;
             if (level.getVersion() == GameVersion.VERSION_WOG1_NEW && normalizedFilename.endsWith("@2x")) {
                 // Strip @2x suffix from here too

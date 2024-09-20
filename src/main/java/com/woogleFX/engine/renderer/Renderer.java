@@ -3,14 +3,15 @@ package com.woogleFX.engine.renderer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.engine.SelectionManager;
 import com.woogleFX.engine.fx.FXCanvas;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
+import com.woogleFX.gameData.ball._2Ball;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.WOG2Level;
-import com.woogleFX.gameData.level._Level;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -40,7 +41,7 @@ public class Renderer {
 
     public static void draw() {
 
-        _Level level = LevelManager.getLevel();
+        Asset level = AssetManager.getAsset();
         Canvas canvas = FXCanvas.getCanvas();
 
         if (level != null) {
@@ -108,13 +109,20 @@ public class Renderer {
     }
 
 
-    public static ArrayList<ObjectComponent> orderObjectPositionsByDepth(_Level level) {
+    public static ArrayList<ObjectComponent> orderObjectPositionsByDepth(Asset level) {
 
         ArrayList<ObjectComponent> objectComponents = new ArrayList<>();
 
         if (level instanceof WOG2Level wog2Level) {
 
             addAllObjectPositionsToList(objectComponents, wog2Level.getLevel());
+            return objectComponents;
+
+        }
+
+        if (level instanceof _2Ball ball) {
+
+            addAllObjectPositionsToList(objectComponents, ball.getObjects().get(0));
             return objectComponents;
 
         }
@@ -130,7 +138,7 @@ public class Renderer {
     }
 
 
-    public static void drawLevelToCanvas(_Level level, Canvas canvas) {
+    public static void drawLevelToCanvas(Asset level, Canvas canvas) {
 
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
 

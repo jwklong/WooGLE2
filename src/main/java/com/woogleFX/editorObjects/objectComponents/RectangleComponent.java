@@ -5,7 +5,7 @@ import com.woogleFX.editorObjects.objectComponents.generic.BorderProperty;
 import com.woogleFX.editorObjects.objectComponents.generic.ColoredProperty;
 import com.woogleFX.editorObjects.objectComponents.generic.RotatableProperty;
 import com.woogleFX.engine.renderer.Renderer;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.DragSettings;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -61,9 +61,9 @@ public abstract class RectangleComponent extends ObjectComponent
         double woag1 = Math.min(Math.min(getHorizontalEdgeSize(), Math.abs(width) / 2), Math.abs(height) / 2) / 2;
         double woag2 = Math.min(Math.min(getVerticalEdgeSize(), Math.abs(width) / 2), Math.abs(height) / 2) / 2;
 
-        double offsetX = LevelManager.getLevel().getOffsetX();
-        double offsetY = LevelManager.getLevel().getOffsetY();
-        double zoom = LevelManager.getLevel().getZoom();
+        double offsetX = AssetManager.getAsset().getOffsetX();
+        double offsetY = AssetManager.getAsset().getOffsetY();
+        double zoom = AssetManager.getAsset().getZoom();
 
         Point2D topLeft = new Point2D(x - width / 2 + woag2, y - height / 2 + woag1);
         topLeft = ObjectUtil.rotate(topLeft, rotation, center);
@@ -267,7 +267,7 @@ public abstract class RectangleComponent extends ObjectComponent
         Point2D bottomRight = new Point2D(x + width / 2, y - height / 2);
         bottomRight = ObjectUtil.rotate(bottomRight, rotation, center);
 
-        double distance = 4 / LevelManager.getLevel().getZoom();
+        double distance = 4 / AssetManager.getAsset().getZoom();
 
         DragSettings resizeSettings = new DragSettings(DragSettings.RESIZE, this);
 

@@ -1,7 +1,7 @@
 package com.woogleFX.engine.undoHandling.userActions;
 
 import com.woogleFX.editorObjects.EditorObject;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.ObjectManager;
 import com.woogleFX.engine.SelectionManager;
 
@@ -22,7 +22,7 @@ public class ObjectCreationAction extends UserAction {
 
     @Override
     public void execute() {
-        ObjectManager.create(LevelManager.getLevel(), getObject(), position);
+        ObjectManager.create(AssetManager.getAsset(), getObject(), position);
         SelectionManager.selectionMode();
     }
 

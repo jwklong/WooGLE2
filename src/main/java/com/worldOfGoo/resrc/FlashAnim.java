@@ -5,7 +5,6 @@ import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.gameData.animation.SimpleBinAnimation;
 import com.woogleFX.gameData.level.GameVersion;
-import javafx.scene.image.Image;
 
 public class FlashAnim extends EditorObject {
 

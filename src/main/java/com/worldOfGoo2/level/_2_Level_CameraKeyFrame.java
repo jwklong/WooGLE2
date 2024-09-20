@@ -5,7 +5,7 @@ import com.woogleFX.editorObjects.attributes.AttributeAdapter;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.gameData.level.GameVersion;
 import com.worldOfGoo2.misc._2_Point;
@@ -83,7 +83,7 @@ public class _2_Level_CameraKeyFrame extends EditorObject {
                 return new Color(0.25, 0.8, 0.8, 0.1);
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowCameras();
+                return AssetManager.getAsset().getVisibilitySettings().isShowCameras();
             }
         });
 

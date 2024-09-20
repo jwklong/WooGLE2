@@ -1,7 +1,10 @@
 package com.woogleFX.engine.fx;
 
 import com.woogleFX.engine.SelectionManager;
+import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
+import com.woogleFX.engine.fx.hierarchy.FXHierarchySwitcherButtons;
+import com.woogleFX.engine.fx.menu.FXMenu;
 import javafx.scene.Cursor;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SplitPane;
@@ -44,7 +47,7 @@ public class FXContainers {
 
         StackPane pane = new StackPane(thingPane, new Pane(FXCanvas.getCanvas()));
         Separator separator = new Separator();
-        viewPane.getChildren().addAll(FXHierarchy.getHierarchySwitcherButtons(), FXHierarchy.getHierarchy(), separator, FXPropertiesView.getPropertiesView());
+        viewPane.getChildren().addAll(FXHierarchySwitcherButtons.getHierarchySwitcherButtons(), FXHierarchy.getHierarchy(), separator, FXPropertiesView.getPropertiesView());
         separator.hoverProperty().addListener((observableValue, aBoolean, t1) -> {
             if (t1) {
                 FXScene.getScene().setCursor(Cursor.N_RESIZE);
@@ -54,7 +57,7 @@ public class FXContainers {
         });
 
         separator.setOnMouseDragged(event -> {
-            double height = SelectionManager.getMouseY() + FXCanvas.getMouseYOffset() - FXContainers.getvBox().getChildren().get(4).getLayoutY() - FXHierarchy.getHierarchySwitcherButtons().getHeight() - 2;
+            double height = SelectionManager.getMouseY() + FXCanvas.getMouseYOffset() - FXContainers.getvBox().getChildren().get(4).getLayoutY() - FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getHeight() - 2;
             FXHierarchy.getHierarchy().setMinHeight(height);
             FXHierarchy.getHierarchy().setMaxHeight(height);
             FXHierarchy.getHierarchy().setPrefHeight(height);

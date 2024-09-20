@@ -4,7 +4,7 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.ObjectManager;
 import com.woogleFX.editorObjects.clipboardHandling.ClipboardManager;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.ball.*;
 import com.woogleFX.engine.SelectionManager;
 import com.woogleFX.file.FileManager;
@@ -19,10 +19,8 @@ import com.woogleFX.gameData.level.levelSaving.LevelUpdater;
 import com.worldOfGoo.ball.Part;
 import com.worldOfGoo2.ball._2_Ball_Image;
 import com.worldOfGoo2.ball._2_Ball_Part;
-import com.worldOfGoo2.items._2_Item;
 import com.worldOfGoo2.level._2_Level_BallInstance;
 import com.worldOfGoo2.level._2_Level_Item;
-import com.worldOfGoo2.misc._2_Point;
 import com.worldOfGoo2.util.BallInstanceHelper;
 import com.worldOfGoo2.util.ItemHelper;
 import javafx.embed.swing.SwingFXUtils;
@@ -305,11 +303,11 @@ public class FXEditorButtons {
 
             String name = ball.getObjects().get(0).getAttribute("name").stringValue();
 
-            EditorObject ballInstance = ObjectCreator.create("BallInstance", ((WOG1Level)LevelManager.getLevel()).getLevelObject(), ball.getVersion());
+            EditorObject ballInstance = ObjectCreator.create("BallInstance", ((WOG1Level) AssetManager.getAsset()).getLevelObject(), ball.getVersion());
             assert ballInstance != null;
             ballInstance.setAttribute("type", name);
 
-            ((WOG1Level)LevelManager.getLevel()).getLevel().add(ballInstance);
+            ((WOG1Level) AssetManager.getAsset()).getLevel().add(ballInstance);
 
             ObjectAdder.addAnything(ballInstance);
 
@@ -366,14 +364,14 @@ public class FXEditorButtons {
             String name = ball.getObjects().get(0).getAttribute("name").stringValue();
 
             _2_Level_BallInstance ballInstance = (_2_Level_BallInstance)ObjectCreator.create2(
-                _2_Level_BallInstance.class, ((WOG2Level)LevelManager.getLevel()).getLevel(), ball.getVersion());
+                _2_Level_BallInstance.class, ((WOG2Level) AssetManager.getAsset()).getLevel(), ball.getVersion());
             
             ballInstance.createPosition();
             ballInstance.setAttribute("type", name);
             ballInstance.setTypeID("balls");
             ballInstance.onLoaded();
 
-            ((WOG2Level)LevelManager.getLevel()).getObjects().add(ballInstance);
+            ((WOG2Level) AssetManager.getAsset()).getObjects().add(ballInstance);
 
             ObjectAdder.addAnything(ballInstance);
 
@@ -479,7 +477,7 @@ public class FXEditorButtons {
         toolBar.getItems().add(buttonClone);
 
         setIcon(buttonSave, prefix + "save.png");
-        buttonSave.setOnAction(e -> LevelUpdater.saveLevel(LevelManager.getLevel()));
+        buttonSave.setOnAction(e -> LevelUpdater.saveLevel(AssetManager.getAsset()));
         buttonSave.setTooltip(new DelayedTooltip("Save Level"));
         toolBar.getItems().add(buttonSave);
 
@@ -489,19 +487,19 @@ public class FXEditorButtons {
         toolBar.getItems().add(buttonSaveAll);
 
         setIcon(buttonSaveAndPlay, prefix + "play.png");
-        buttonSaveAndPlay.setOnAction(e -> LevelUpdater.playLevel(LevelManager.getLevel()));
+        buttonSaveAndPlay.setOnAction(e -> AssetManager.getAsset().play());
         buttonSaveAndPlay.setTooltip(new DelayedTooltip("Save and Play Level on Level Version"));
         toolBar.getItems().add(buttonSaveAndPlay);
 
         toolBar.getItems().add(new Separator());
 
         setIcon(buttonExport, prefix + "make_goomod.png");
-        buttonExport.setOnAction(e -> LevelUpdater.exportLevel(LevelManager.getLevel(), true));
+        buttonExport.setOnAction(e -> AssetManager.getAsset().export(true));
         buttonExport.setTooltip(new DelayedTooltip("Export Level"));
         toolBar.getItems().add(buttonExport);
 
         setIcon(buttonDummyExport, prefix + "make_dummy_goomod.png");
-        buttonDummyExport.setOnAction(e -> LevelUpdater.exportLevel(LevelManager.getLevel(), false));
+        buttonDummyExport.setOnAction(e -> AssetManager.getAsset().export(false));
         buttonDummyExport.setTooltip(new DelayedTooltip("Export Level Without Addin Info"));
         toolBar.getItems().add(buttonDummyExport);
 
@@ -552,7 +550,7 @@ public class FXEditorButtons {
         toolBar.getItems().add(new Separator());
 
         setIcon(buttonDelete, prefix + "delete.png");
-        buttonDelete.setOnAction(e -> ObjectManager.delete(LevelManager.getLevel()));
+        buttonDelete.setOnAction(e -> ObjectManager.delete(AssetManager.getAsset()));
         buttonDelete.setTooltip(new DelayedTooltip("Delete"));
         toolBar.getItems().add(buttonDelete);
 
@@ -590,17 +588,17 @@ public class FXEditorButtons {
         String prefix = "ButtonIcons/Resources/";
 
         setIcon(buttonUpdateLevelResources, prefix + "update_level_resources.png");
-        buttonUpdateLevelResources.setOnAction(e -> LevelResourceManager.updateLevelResources(LevelManager.getLevel()));
+        buttonUpdateLevelResources.setOnAction(e -> LevelResourceManager.updateLevelResources((_Level) AssetManager.getAsset()));
         buttonUpdateLevelResources.setTooltip(new DelayedTooltip("Update Level Resources"));
         toolBar.getItems().add(buttonUpdateLevelResources);
 
         setIcon(buttonImportImages, prefix + "import_img.png");
-        buttonImportImages.setOnAction(e -> LevelResourceImporter.importImages(LevelManager.getLevel()));
+        buttonImportImages.setOnAction(e -> LevelResourceImporter.importImages((_Level) AssetManager.getAsset()));
         buttonImportImages.setTooltip(new DelayedTooltip("Import Images"));
         toolBar.getItems().add(buttonImportImages);
 
         setIcon(buttonAddTextResource, prefix + "add_text_resource.png");
-        buttonAddTextResource.setOnAction(e -> LevelResourceManager.newTextResource(LevelManager.getLevel()));
+        buttonAddTextResource.setOnAction(e -> LevelResourceManager.newTextResource((_Level) AssetManager.getAsset()));
         buttonAddTextResource.setTooltip(new DelayedTooltip("Add Text Resource"));
         toolBar.getItems().add(buttonAddTextResource);
 
@@ -612,19 +610,19 @@ public class FXEditorButtons {
         toolBar.getItems().add(new Separator());
 
         setIcon(buttonCleanResources, prefix + "clean_level_resources.png");
-        buttonCleanResources.setOnAction(e -> LevelResourceManager.cleanLevelResources(LevelManager.getLevel()));
+        buttonCleanResources.setOnAction(e -> LevelResourceManager.cleanLevelResources((_Level) AssetManager.getAsset()));
         buttonCleanResources.setTooltip(new DelayedTooltip("Clean Level Resources"));
         toolBar.getItems().add(buttonCleanResources);
 
         toolBar.getItems().add(new Separator());
 
         setIcon(buttonSetMusic, prefix + "import_music.png");
-        buttonSetMusic.setOnAction(e -> LevelResourceImporter.importMusic(LevelManager.getLevel()));
+        buttonSetMusic.setOnAction(e -> LevelResourceImporter.importMusic((_Level) AssetManager.getAsset()));
         buttonSetMusic.setTooltip(new DelayedTooltip("Set Music"));
         toolBar.getItems().add(buttonSetMusic);
 
         setIcon(buttonSetLoopsound, prefix + "import_soundloop.png");
-        buttonSetLoopsound.setOnAction(e -> LevelResourceImporter.importLoopsound(LevelManager.getLevel()));
+        buttonSetLoopsound.setOnAction(e -> LevelResourceImporter.importLoopsound((_Level) AssetManager.getAsset()));
         buttonSetLoopsound.setTooltip(new DelayedTooltip("Set Loop Sound"));
         toolBar.getItems().add(buttonSetLoopsound);
 
@@ -744,13 +742,7 @@ public class FXEditorButtons {
         toolBar.getItems().add(buttonViewTerrainGroup);
 
         setIcon(buttonResetCamera, prefix + "showhide_cam.png");
-        buttonResetCamera.setOnAction(e -> {
-            if (LevelManager.getLevel() instanceof WOG2Level wog2Level) {
-                wog2Level.setOffsetX(1000);
-                wog2Level.setOffsetY(500);
-                wog2Level.setZoom(300);
-            }
-        });
+        buttonResetCamera.setOnAction(e -> AssetManager.getAsset().resetCamera());
         buttonResetCamera.setTooltip(new DelayedTooltip("Reset Camera"));
         toolBar.getItems().add(buttonResetCamera);
 
@@ -940,7 +932,7 @@ public class FXEditorButtons {
 
     public static void updateAllButtons() {
 
-        boolean inLevel = LevelManager.getLevel() != null;
+        boolean inLevel = AssetManager.getAsset() != null;
 
         for (Node node : functionsToolbar.getItems()) node.setDisable(!inLevel);
         for (Node node : oldGooballsToolbar.getItems()) node.setDisable(!inLevel);
@@ -949,12 +941,12 @@ public class FXEditorButtons {
         for (Node node : nullGooballsToolbar.getItems()) node.setDisable(!inLevel);
         for (Node node : addObjectsToolbar.getItems()) node.setDisable(!inLevel);
 
-        buttonUndo.setDisable(!inLevel || LevelManager.getLevel().undoActions.isEmpty());
-        buttonRedo.setDisable(!inLevel || LevelManager.getLevel().redoActions.isEmpty());
-        buttonCut.setDisable(!inLevel || LevelManager.getLevel().getSelected().length == 0);
-        buttonCopy.setDisable(!inLevel || LevelManager.getLevel().getSelected().length == 0);
+        buttonUndo.setDisable(!inLevel || AssetManager.getAsset().undoActions.isEmpty());
+        buttonRedo.setDisable(!inLevel || AssetManager.getAsset().redoActions.isEmpty());
+        buttonCut.setDisable(!inLevel || AssetManager.getAsset().getSelected().length == 0);
+        buttonCopy.setDisable(!inLevel || AssetManager.getAsset().getSelected().length == 0);
         buttonPaste.setDisable(!inLevel);
-        buttonDelete.setDisable(!inLevel || LevelManager.getLevel().getSelected().length == 0);
+        buttonDelete.setDisable(!inLevel || AssetManager.getAsset().getSelected().length == 0);
 
         boolean hasOld = !FileManager.getGameDir(GameVersion.VERSION_WOG1_OLD).isEmpty();
         buttonNewOld.setDisable(!hasOld);
@@ -972,9 +964,9 @@ public class FXEditorButtons {
             FXContainers.getvBox().getChildren().remove(3);
         }
 
-        if (LevelManager.getLevel() == null) {
+        if (AssetManager.getAsset() == null) {
             FXContainers.getvBox().getChildren().add(3, addObjectsToolbar);
-        } else if (LevelManager.getLevel().getVersion() == GameVersion.VERSION_WOG2) {
+        } else if (AssetManager.getAsset().getVersion() == GameVersion.VERSION_WOG2) {
             newAddObjectsToolbar = new ToolBar();
             //addObjects(newAddObjectsToolbar);
             for (Node node : newAddObjectsToolbar.getItems()) node.setDisable(true);

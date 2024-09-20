@@ -9,7 +9,7 @@ public class _2_Ball_AttenuationFunction extends EditorObject {
     public _2_Ball_AttenuationFunction(EditorObject parent) {
         super(parent, "AttenuationFunction", GameVersion.VERSION_WOG2);
 
-        addAttribute("frames", InputField._2_NUMBER).assertRequired();
+        addAttribute("frames", InputField._2_LIST_NUMBER).assertRequired();
         addAttribute("totalLength", InputField._2_NUMBER).assertRequired();
 
     }

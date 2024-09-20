@@ -1,13 +1,13 @@
 package com.woogleFX.engine.inputEvents;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.engine.fx.FXCanvas;
 import com.woogleFX.engine.fx.FXScene;
 import com.woogleFX.engine.SelectionManager;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.DragSettings;
-import com.woogleFX.gameData.level._Level;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 
@@ -25,7 +25,7 @@ public class MouseMovedManager {
         SelectionManager.setMouseX(event.getX());
         SelectionManager.setMouseY(event.getY() - FXCanvas.getMouseYOffset());
 
-        _Level level = LevelManager.getLevel();
+        Asset level = AssetManager.getAsset();
         if (level == null) return;
 
         double x = (event.getX() - level.getOffsetX()) / level.getZoom();

@@ -106,6 +106,13 @@ public class EditorObject {
                     mine2.setOpenByDefault(child.getOpenByDefault());
                     mine2.setChildren(new ArrayList<>());
                     mine.getChildren().add(mine2);
+                    for (MetaEditorAttribute child2 : child.getChildren()) {
+                        MetaEditorAttribute mine3 = new MetaEditorAttribute();
+                        mine3.setName(child2.getName());
+                        mine3.setOpenByDefault(child2.getOpenByDefault());
+                        mine3.setChildren(new ArrayList<>());
+                        mine2.getChildren().add(mine3);
+                    }
                 }
                 metaAttributes.add(mine);
             }
@@ -153,6 +160,13 @@ public class EditorObject {
                     mine2.setOpenByDefault(child.getOpenByDefault());
                     mine2.setChildren(new ArrayList<>());
                     mine.getChildren().add(mine2);
+                    for (MetaEditorAttribute child2 : child.getChildren()) {
+                        MetaEditorAttribute mine3 = new MetaEditorAttribute();
+                        mine3.setName(child2.getName());
+                        mine3.setOpenByDefault(child2.getOpenByDefault());
+                        mine3.setChildren(new ArrayList<>());
+                        mine2.getChildren().add(mine3);
+                    }
                 }
                 metaAttributes.add(mine);
             }

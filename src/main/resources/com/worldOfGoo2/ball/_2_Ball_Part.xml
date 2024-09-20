@@ -1,0 +1,67 @@
+<AttributeManifest localName="Part">
+
+    <attributes>
+        <EditorAttribute name="name" type="_2_STRING" required="true"/>
+        <EditorAttribute name="images" type="_2_LIST_CHILD" childAlias="com.worldOfGoo2.ball._2_Ball_Image" required="true"/>
+        <EditorAttribute name="imageBackgroundIds" type="_2_LIST_CHILD" childAlias="com.worldOfGoo2.misc._2_ImageID" required="true"/>
+        <EditorAttribute name="layer" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="drawWhenAttached" type="_2_BOOLEAN"/>
+        <EditorAttribute name="drawWhenNotAttached" type="_2_BOOLEAN"/>
+        <EditorAttribute name="minX" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="maxX" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="minY" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="maxY" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="minRangeX" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="maxRangeX" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="minRangeY" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="maxRangeY" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="states" type="_2_LIST_CHILD" required="true" childAlias="com.worldOfGoo2.ball._2_Ball_State"/>
+        <EditorAttribute name="isActiveWhenUndiscovered" type="_2_BOOLEAN" required="true"/>
+        <EditorAttribute name="scale" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="scaleIsRelative" type="_2_BOOLEAN" required="true"/>
+        <EditorAttribute name="rotation" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="isEye" type="_2_BOOLEAN" required="true"/>
+        <EditorAttribute name="pupilImageIds" type="_2_LIST_CHILD" childAlias="com.worldOfGoo2.misc._2_ImageID" required="true"/>
+        <EditorAttribute name="pupilInset" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="pupilScale" type="_2_NUMBER"/>
+        <EditorAttribute name="isRotating" type="_2_BOOLEAN" required="true"/>
+        <EditorAttribute name="stretchMaxSpeed" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="stretchParallel" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="stretchPerpendicular" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="color" type="_2_STRING" childAlias="com.worldOfGoo2.misc._2_Color"/>
+        <EditorAttribute name="stretchFactorFromStrandForce" type="_2_NUMBER" required="true"/>
+    </attributes>
+
+    <metaAttributes>
+        <MetaEditorAttribute name="name"/>
+        <MetaEditorAttribute name="images"/>
+        <MetaEditorAttribute name="imageBackgroundIds"/>
+        <MetaEditorAttribute name="layer"/>
+        <MetaEditorAttribute name="drawWhenAttached"/>
+        <MetaEditorAttribute name="drawWhenNotAttached"/>
+        <MetaEditorAttribute name="minX"/>
+        <MetaEditorAttribute name="maxX"/>
+        <MetaEditorAttribute name="minY"/>
+        <MetaEditorAttribute name="maxY"/>
+        <MetaEditorAttribute name="minRangeX"/>
+        <MetaEditorAttribute name="maxRangeX"/>
+        <MetaEditorAttribute name="minRangeY"/>
+        <MetaEditorAttribute name="maxRangeY"/>
+        <MetaEditorAttribute name="states"/>
+        <MetaEditorAttribute name="isActiveWhenUndiscovered"/>
+        <MetaEditorAttribute name="scale"/>
+        <MetaEditorAttribute name="scaleIsRelative"/>
+        <MetaEditorAttribute name="rotation"/>
+        <MetaEditorAttribute name="isEye"/>
+        <MetaEditorAttribute name="pupilImageIds"/>
+        <MetaEditorAttribute name="pupilInset"/>
+        <MetaEditorAttribute name="pupilScale"/>
+        <MetaEditorAttribute name="isRotating"/>
+        <MetaEditorAttribute name="stretchMaxSpeed"/>
+        <MetaEditorAttribute name="stretchParallel"/>
+        <MetaEditorAttribute name="stretchPerpendicular"/>
+        <MetaEditorAttribute name="color"/>
+        <MetaEditorAttribute name="stretchFactorFromStrandForce"/>
+    </metaAttributes>
+
+</AttributeManifest>

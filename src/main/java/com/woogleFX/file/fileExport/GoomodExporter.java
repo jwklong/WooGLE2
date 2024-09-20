@@ -64,7 +64,7 @@ public class GoomodExporter {
             String ballName = ball.getObjects().get(0).getAttribute("name").stringValue();
             
             // Skip if in the base game
-            if (BaseGameResources.GOO_BALL_TYPES.contains(ballName)) continue;
+            if (BaseGameResources.GOO_BALL_TYPES.get(version).contains(ballName)) continue;
 
             // Skip if already exported
             if (exportedBalls.contains(ballName)) continue;
@@ -98,12 +98,12 @@ public class GoomodExporter {
             extension = ".png";
             path = resrcImage.getAdjustedPath();
             // Skip if base game image
-            if (BaseGameResources.containsImage(notSetDefaultedPath)) return;
+            if (BaseGameResources.containsImage(notSetDefaultedPath, resource.getVersion())) return;
         } else {
             path = ((Sound)resource).getAdjustedPath();
             extension = ".ogg";
             // Skip if base game sound
-            if (BaseGameResources.containsSound(notSetDefaultedPath)) return;
+            if (BaseGameResources.containsSound(notSetDefaultedPath, resource.getVersion())) return;
         }
 
         Path resourcePath = Path.of(levelDir + "/goomod/override/" + path);

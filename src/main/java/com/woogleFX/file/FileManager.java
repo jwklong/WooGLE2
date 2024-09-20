@@ -21,7 +21,7 @@ import com.woogleFX.file.fileImport.ObjectGOOParser;
 import com.woogleFX.gameData.ball.DefaultXmlOpener;
 import com.woogleFX.file.fileImport.LevelOpener;
 import com.woogleFX.file.fileImport.PropertiesOpener;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.ball.PaletteManager;
 import com.woogleFX.gameData.ball._2Ball;
 import com.woogleFX.gameData.level.GameVersion;
@@ -154,7 +154,7 @@ public class FileManager {
 
     public static _Level openLevel(String levelName, GameVersion version) throws ParserConfigurationException, SAXException, IOException {
 
-        LevelManager.setLevel(null);
+        AssetManager.setAsset(null);
 
         ArrayList<EditorObject> scene = new ArrayList<>();
         ArrayList<EditorObject> level = new ArrayList<>();

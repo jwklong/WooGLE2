@@ -6,58 +6,40 @@ import com.woogleFX.engine.fx.AssetTab;
 import com.woogleFX.engine.gui.alarms.AskForLevelNameAlarm;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.engine.gui.alarms.LevelIssuesAlarm;
-import com.woogleFX.file.fileExport.GOOWriter;
-import com.woogleFX.file.fileExport.Goo2modExporter;
-import com.woogleFX.file.fileExport.XMLUtility;
-import com.woogleFX.gameData.ball._Ball;
-import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
-import com.woogleFX.engine.fx.FXAssetSelectPane;
-import com.woogleFX.engine.fx.FXPropertiesView;
-import com.woogleFX.engine.fx.FXStage;
+import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
 import com.woogleFX.file.FileManager;
-import com.woogleFX.file.fileExport.GoomodExporter;
 import com.woogleFX.gameData.level.*;
 import com.woogleFX.gameData.level.levelOpening.LevelLoader;
-import com.worldOfGoo.level.BallInstance;
 import com.worldOfGoo.resrc.Resources;
 import com.worldOfGoo.resrc.ResrcImage;
 import com.worldOfGoo.resrc.Sound;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class LevelUpdater {
 
     private static final Logger logger = LoggerFactory.getLogger(LevelLoader.class);
 
 
-    public static void saveLevel(_Level level) {
-        GameVersion version = level.getVersion();
-        if (saveSpecificAsset(level, version)) {
-            level.setLastSavedUndoPosition(level.undoActions.size());
-            if (level.getEditingStatus() != AssetTab.NO_UNSAVED_CHANGES) {
-                level.setEditingStatus(AssetTab.NO_UNSAVED_CHANGES, true);
-            }
-        }
+    public static void saveLevel(Asset level) {
+        if (!saveSpecificAsset(level)) return;
+        level.setLastSavedUndoPosition(level.undoActions.size());
+        if (level.getEditingStatus() != AssetTab.NO_UNSAVED_CHANGES)
+            level.setEditingStatus(AssetTab.NO_UNSAVED_CHANGES, true);
     }
 
 
-    public static boolean saveSpecificAsset(Asset asset, GameVersion version) {
+    public static boolean saveSpecificAsset(Asset asset) {
 
         boolean okayToSave = true;
 
         // Check for errors in level objects
-        if (!AssetVerifier.verifyEntireAsset(asset)) {
+        if (!asset.verifyAll()) {
             // Fail to save
             ErrorAlarm.show("Level could not be verified");
             okayToSave = false;
@@ -76,36 +58,7 @@ public class LevelUpdater {
 
         if (!okayToSave) return false;
 
-        if (asset instanceof WOG1Level wog1Level) {
-
-            try {
-                LevelWriter.saveAsXML(wog1Level, FileManager.getGameDir(version) + "/res/levels/" + asset.getLevelName(),
-                        version, false, true);
-                return true;
-            } catch (IOException e) {
-                ErrorAlarm.show(e);
-                return false;
-            }
-
-        } else if (asset instanceof WOG2Level wog2Level) {
-
-            StringBuilder export = new StringBuilder();
-            GOOWriter.recursiveGOOExport(export, ((WOG2Level) asset).getLevel(), 0);
-            EditorObject addinObject = wog2Level.getAddinObject();
-            String addin = XMLUtility.fullAddinXMLExport("", addinObject, 0);
-
-            try {
-                Files.write(Path.of(FileManager.getGameDir(version) + "/res/levels/" + asset.getLevelName() + ".addin.xml"), Collections.singleton(addin), StandardCharsets.UTF_8);
-                Files.writeString(Path.of(FileManager.getGameDir(version) + "/res/levels/" + asset.getLevelName() + ".wog2"), export.toString());
-                return true;
-            } catch (IOException e) {
-                ErrorAlarm.show(e);
-                return false;
-            }
-
-        }
-
-        return false;
+        return asset.save();
 
     }
 
@@ -115,42 +68,12 @@ public class LevelUpdater {
         for (Tab tab : FXAssetSelectPane.getAssetSelectPane().getTabs().toArray(new Tab[0])) {
             AssetTab assetTab = (AssetTab) tab;
             if (assetTab.getAsset().getEditingStatus() == AssetTab.UNSAVED_CHANGES) {
-                if (saveSpecificAsset(assetTab.getAsset(), assetTab.getAsset().getVersion())) {
+                if (saveSpecificAsset(assetTab.getAsset())) {
                     assetTab.getAsset().setEditingStatus(AssetTab.NO_UNSAVED_CHANGES, false);
                 }
             }
         }
         FXAssetSelectPane.getAssetSelectPane().getSelectionModel().select(selectedIndex);
-    }
-
-    public static void playLevel(_Level level) {
-        if (level.getVersion() == GameVersion.VERSION_WOG1_OLD) {
-            try {
-                ProcessBuilder processBuilder = new ProcessBuilder(
-                        FileManager.getGameDir(GameVersion.VERSION_WOG1_OLD) + "/WorldOfGoo.exe", level.getLevelName());
-                processBuilder.directory(new File(FileManager.getGameDir(GameVersion.VERSION_WOG1_OLD)));
-                processBuilder.start();
-            } catch (Exception e) {
-                ErrorAlarm.show(e);
-            }
-        } else if (level.getVersion() == GameVersion.VERSION_WOG2) {
-
-            try {
-                ProcessBuilder processBuilder = new ProcessBuilder(
-                        new File(FileManager.getGameDir(GameVersion.VERSION_WOG2)).getParent().replaceAll("\\\\", "/") + "/" + FileManager.     get2ExtensionFilter().getExtensions().get(0));
-                processBuilder.directory(new File(FileManager.getGameDir(GameVersion.VERSION_WOG2)));
-                processBuilder.start();
-            } catch (Exception e) {
-                ErrorAlarm.show(e);
-            }
-
-        } else {
-
-            // TODO figure something out to play in 1.5
-            ErrorAlarm.show("Playing is only supported for 1.3. :(");
-
-        }
-
     }
 
     public static void renameLevel(_Level level) {
@@ -221,36 +144,6 @@ public class LevelUpdater {
         AskForLevelNameAlarm.show("delete", level.getVersion());
     }
 
-    public static void deleteLevelForReal(_Level level) {
-
-        if (level instanceof WOG1Level) {
-
-            try {
-                nuke(new File(FileManager.getGameDir(level.getVersion()) + "/res/levels/" + level.getLevelName()));
-                TabPane levelSelectPane = FXAssetSelectPane.getAssetSelectPane();
-                if (levelSelectPane.getTabs().size() == 1) {
-                    FXAssetSelectPane.getAssetSelectPane().setMinHeight(0);
-                    FXAssetSelectPane.getAssetSelectPane().setMaxHeight(0);
-                    // If all tabs are closed, clear the side pane
-                    FXHierarchy.getHierarchy().setRoot(null);
-                    // Clear the properties pane too
-                    FXPropertiesView.changeTableView(new EditorObject[]{});
-                }
-                levelSelectPane.getTabs().remove(levelSelectPane.getSelectionModel().getSelectedItem());
-            } catch (IOException e) {
-                ErrorAlarm.show(e);
-            }
-
-        } else if (level instanceof WOG2Level) {
-            try {
-                Files.delete(Path.of(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "/res/levels/" + level.getLevelName() + ".wog2"));
-            } catch (IOException e) {
-                ErrorAlarm.show(e);
-            }
-        }
-
-    }
-
     public static void nuke(File file) throws IOException {
         if (file.isDirectory()) {
             File[] children = file.listFiles();
@@ -259,55 +152,6 @@ public class LevelUpdater {
             }
         }
         Files.delete(file.toPath());
-    }
-
-    public static void exportLevel(_Level level, boolean includeAddinInfo) {
-
-        if (level instanceof WOG1Level) {
-
-            String dir = FileManager.getGameDir(level.getVersion());
-
-            FileChooser fileChooser = new FileChooser();
-            if (!Files.exists(Path.of((dir + "/res/levels/" + level.getLevelName() + "/goomod")))) {
-                try {
-                    Files.createDirectories(Path.of((dir + "/res/levels/" + level.getLevelName() + "/goomod")));
-                } catch (Exception e) {
-                    ErrorAlarm.show(e);
-                }
-            }
-            fileChooser.setInitialDirectory(new File((dir + "/res/levels/" + level.getLevelName() + "/goomod")));
-            fileChooser.setInitialFileName(level.getLevelName());
-
-            ExtensionFilter goomodFilter = new ExtensionFilter("World of Goo mod (*.goomod)", "*.goomod");
-            fileChooser.getExtensionFilters().add(goomodFilter);
-            File export = fileChooser.showSaveDialog(FXStage.getStage());
-
-            ArrayList<_Level> levels = new ArrayList<>();
-            levels.add(level);
-
-            ArrayList<_Ball> balls = new ArrayList<>();
-            for (EditorObject object : ((WOG1Level) level).getLevel())
-                if (object instanceof BallInstance ballInstance)
-                    if (!balls.contains(ballInstance.getBall())) balls.add(ballInstance.getBall());
-
-            if (export != null) {
-                try {
-                    GoomodExporter.exportGoomod(export, levels, balls, level.getVersion(), includeAddinInfo);
-                } catch (IOException e) {
-                    logger.error("", e);
-                }
-            }
-
-        } else if (level instanceof WOG2Level wog2Level) {
-
-            try {
-                Goo2modExporter.exportGoo2mod(wog2Level, includeAddinInfo);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-
     }
 
 }

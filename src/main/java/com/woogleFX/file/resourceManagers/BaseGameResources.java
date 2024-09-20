@@ -2,21 +2,20 @@ package com.woogleFX.file.resourceManagers;
 
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.file.FileManager;
+import com.woogleFX.gameData.level.GameVersion;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 public class BaseGameResources {
 
-    public static final Set<String> GOO_BALL_TYPES = new HashSet<>();
-    public static final Set<String> LEVELS = new HashSet<>();
-    public static final Set<String> IMAGES = new HashSet<>();
-    public static final Set<String> SOUNDS = new HashSet<>();
-    public static final Set<String> PARTICLE_FX = new HashSet<>();
+    public static final Map<GameVersion, Set<String>> GOO_BALL_TYPES = new HashMap<>();
+    public static final Map<GameVersion, Set<String>> LEVELS = new HashMap<>();
+    public static final Map<GameVersion, Set<String>> IMAGES = new HashMap<>();
+    public static final Map<GameVersion, Set<String>> SOUNDS = new HashMap<>();
+    public static final Map<GameVersion, Set<String>> PARTICLE_FX = new HashMap<>();
     public static final Set<String> TAGS = new HashSet<>(List.of(
             "ballbuster", "deadly", "detaching",
             "geomkiller", "mostlydeadly", "nodrag",
@@ -39,13 +38,23 @@ public class BaseGameResources {
 
     public static void init() {
 
-        String prefix = FileManager.getEditorLocation() + "/BaseGameResources/";
+        for (GameVersion gameVersion : GameVersion.values()) {
 
-        loadFileIntoSet(prefix + "GooBallTypes.txt", GOO_BALL_TYPES);
-        loadFileIntoSet(prefix + "Images.txt", IMAGES);
-        loadFileIntoSet(prefix + "Levels.txt", LEVELS);
-        loadFileIntoSet(prefix + "ParticleFX.txt", PARTICLE_FX);
-        loadFileIntoSet(prefix + "Sounds.txt", SOUNDS);
+            String prefix = FileManager.getEditorLocation() + "/BaseGameResources/";
+
+            GOO_BALL_TYPES.put(gameVersion, new HashSet<>());
+            IMAGES.put(gameVersion, new HashSet<>());
+            LEVELS.put(gameVersion, new HashSet<>());
+            PARTICLE_FX.put(gameVersion, new HashSet<>());
+            SOUNDS.put(gameVersion, new HashSet<>());
+
+            loadFileIntoSet(prefix + gameVersion + "/GooBallTypes.txt", GOO_BALL_TYPES.get(gameVersion));
+            loadFileIntoSet(prefix + gameVersion + "/Images.txt", IMAGES.get(gameVersion));
+            loadFileIntoSet(prefix + gameVersion + "/Levels.txt", LEVELS.get(gameVersion));
+            loadFileIntoSet(prefix + gameVersion + "/ParticleFX.txt", PARTICLE_FX.get(gameVersion));
+            loadFileIntoSet(prefix + gameVersion + "/Sounds.txt", SOUNDS.get(gameVersion));
+
+        }
 
     }
 
@@ -55,13 +64,13 @@ public class BaseGameResources {
         return path;
     }
 
-    public static boolean containsImage(String path) {
+    public static boolean containsImage(String path, GameVersion version) {
         String normalized = normalize(path);
-        return IMAGES.contains(normalized) || IMAGES.contains(normalized + "@2x");
+        return IMAGES.get(version).contains(normalized) || IMAGES.get(version).contains(normalized + "@2x");
     }
 
-    public static boolean containsSound(String path) {
-        return SOUNDS.contains(normalize(path));
+    public static boolean containsSound(String path, GameVersion version) {
+        return SOUNDS.get(version).contains(normalize(path));
     }
 
 }

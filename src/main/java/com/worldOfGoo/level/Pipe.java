@@ -2,7 +2,7 @@ package com.worldOfGoo.level;
 
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -91,7 +91,7 @@ public class Pipe extends EditorObject {
             }
 
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 0;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 0;
             }
             public boolean isDraggable() {
                 return false;

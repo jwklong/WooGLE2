@@ -1,19 +1,20 @@
 package com.woogleFX.editorObjects.objectCreators;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.engine.fx.FXPropertiesView;
 import com.woogleFX.engine.SelectionManager;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.ObjectManager;
 import com.woogleFX.editorObjects._2_Positionable;
+import com.woogleFX.engine.fx.hierarchy.FXHierarchySwitcherButtons;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.ObjectCreationAction;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.WOG2Level;
-import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.addin.Addin;
 import com.worldOfGoo.level.*;
 import com.worldOfGoo.resrc.ResourceManifest;
@@ -36,7 +37,7 @@ public class ObjectAdder {
     public static void autoPipe() {
         // TODO add undo events for the whole pipe
 
-        WOG1Level level = (WOG1Level)LevelManager.getLevel();
+        WOG1Level level = (WOG1Level) AssetManager.getAsset();
 
         /* Identify the level exit. If there is none, don't auto pipe. */
         for (EditorObject EditorObject : level.getLevel().toArray(new EditorObject[0])) {
@@ -78,13 +79,13 @@ public class ObjectAdder {
                 /*
                  * Create a pipe with a vertex at the level exit and at the scene intersection.
                  */
-                EditorObject pipe = (EditorObject)ObjectCreator.create("pipe", level.getLevelObject(), level.getVersion());
-                EditorObject vertex1 = (EditorObject)ObjectCreator.create("Vertex", pipe, level.getVersion());
+                EditorObject pipe = ObjectCreator.create("pipe", level.getLevelObject(), level.getVersion());
+                EditorObject vertex1 = ObjectCreator.create("Vertex", pipe, level.getVersion());
                 if (vertex1 == null) return;
                 vertex1.setAttribute("x", levelexit.getAttribute("pos").positionValue().getX());
                 vertex1.setAttribute("y", levelexit.getAttribute("pos").positionValue().getY());
 
-                EditorObject vertex2 = (EditorObject)ObjectCreator.create("Vertex", pipe, level.getVersion());
+                EditorObject vertex2 = ObjectCreator.create("Vertex", pipe, level.getVersion());
                 if (vertex2 == null) return;
                 vertex2.setAttribute("x", closestPoint.getX());
                 vertex2.setAttribute("y", closestPoint.getY());
@@ -109,9 +110,9 @@ public class ObjectAdder {
 
     public static EditorObject addObject(String name, EditorObject parent) {
 
-        if (LevelManager.getLevel().getVersion() == GameVersion.VERSION_WOG1_OLD || LevelManager.getLevel().getVersion() == GameVersion.VERSION_WOG1_NEW) {
+        if (AssetManager.getAsset().getVersion() == GameVersion.VERSION_WOG1_OLD || AssetManager.getAsset().getVersion() == GameVersion.VERSION_WOG1_NEW) {
 
-            WOG1Level level = (WOG1Level) LevelManager.getLevel();
+            WOG1Level level = (WOG1Level) AssetManager.getAsset();
             if (level == null) return null;
 
             if (parent == null) parent = switch (name) {
@@ -162,7 +163,7 @@ public class ObjectAdder {
 
     public static EditorObject addObject2(Class<? extends EditorObject> name, String typeID, EditorObject parent) {
 
-        WOG2Level level = (WOG2Level) LevelManager.getLevel();
+        WOG2Level level = (WOG2Level) AssetManager.getAsset();
         if (level == null) return null;
 
         EditorObject obj = ObjectCreator.create2(name, parent, level.getVersion());
@@ -203,8 +204,8 @@ public class ObjectAdder {
             case "Addin" -> 6;
             default -> -1;
         };
-        FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select((i + 1) % 7);
-        FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select(i);
+        FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select((i + 1) % 7);
+        FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(i);
 
         FXHierarchy.getHierarchy().getSelectionModel().clearSelection();
         FXHierarchy.getHierarchy().getSelectionModel().select(obj.getTreeItem());
@@ -221,7 +222,7 @@ public class ObjectAdder {
         obj.onLoaded();
         obj.update();
         EditorObject[] selected = new EditorObject[]{obj};
-        LevelManager.getLevel().setSelected(selected);
+        AssetManager.getAsset().setSelected(selected);
         FXPropertiesView.changeTableView(selected);
 
         if (obj instanceof _2_Level_BallInstance) {
@@ -239,7 +240,7 @@ public class ObjectAdder {
      */
     public static void fixGooBall(EditorObject obj) {
 
-        if (LevelManager.getLevel() instanceof WOG1Level level) {
+        if (AssetManager.getAsset() instanceof WOG1Level level) {
 
             // Create an array to store which id numbers are already taken by BallInstances.
             boolean[] taken = new boolean[level.getLevel().size()];
@@ -268,7 +269,7 @@ public class ObjectAdder {
             }
             obj.setAttribute("id", "goo" + count);
 
-        } else if (LevelManager.getLevel() instanceof WOG2Level level) {
+        } else if (AssetManager.getAsset() instanceof WOG2Level level) {
 
             // Create an array to store which id numbers are already taken by BallInstances.
             Set<String> taken = new HashSet<>();
@@ -306,7 +307,7 @@ public class ObjectAdder {
      */
     public static void fixString(EditorObject obj) {
 
-        WOG1Level level = (WOG1Level)LevelManager.getLevel();
+        WOG1Level level = (WOG1Level) AssetManager.getAsset();
 
         // Create an array to store which id numbers are already taken by strings.
         boolean[] taken = new boolean[level.getText().size()];
@@ -340,7 +341,7 @@ public class ObjectAdder {
 
     public static void adjustObjectLocation(EditorObject object) {
 
-        _Level level = LevelManager.getLevel();
+        Asset level = AssetManager.getAsset();
 
         // Create the object at the mouse position
         double objectX = (SelectionManager.getMouseX() - level.getOffsetX()) / level.getZoom();
@@ -359,9 +360,9 @@ public class ObjectAdder {
 
         adjustObjectLocation(object);
 
-        if (LevelManager.getLevel() instanceof WOG2Level) return;
+        if (AssetManager.getAsset() instanceof WOG2Level) return;
 
-        WOG1Level level = (WOG1Level)LevelManager.getLevel();
+        WOG1Level level = (WOG1Level) AssetManager.getAsset();
 
         if (object instanceof Rectangle rectangle) {
             rectangle.setAttribute("static", true);

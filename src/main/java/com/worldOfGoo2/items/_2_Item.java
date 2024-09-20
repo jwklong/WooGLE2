@@ -1,7 +1,6 @@
 package com.worldOfGoo2.items;
 
 import com.woogleFX.editorObjects.EditorObject;
-import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 
 public class _2_Item extends EditorObject {

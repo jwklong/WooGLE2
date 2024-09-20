@@ -7,7 +7,7 @@ import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.ObjectUtil;
 import com.woogleFX.engine.renderer.Depth;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.editorObjects.attributes.dataTypes.Position;
@@ -142,7 +142,7 @@ public class Circle extends EditorObject {
             }
             public double getEdgeSize() {
                 boolean contacts = getAttribute("contacts").booleanValue();
-                return (contacts || LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 2) ? 4 : 0;
+                return (contacts || AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 2) ? 4 : 0;
             }
             public boolean isEdgeOnly() {
                 return false;
@@ -158,7 +158,7 @@ public class Circle extends EditorObject {
                 return new Color(color.getRed(), color.getGreen(), color.getBlue(), 0.25);
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 0;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 0;
             }
         });
 
@@ -201,7 +201,7 @@ public class Circle extends EditorObject {
             }
             public Image getImage() {
                 try {
-                    return getAttribute("image").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
+                    return getAttribute("image").imageValue(((WOG1Level) AssetManager.getAsset()).getResrc(), getVersion());
                 } catch (FileNotFoundException e) {
                     return null;
                 }
@@ -213,7 +213,7 @@ public class Circle extends EditorObject {
                 return 0;
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowGraphics();
+                return AssetManager.getAsset().getVisibilitySettings().isShowGraphics();
             }
         });
 

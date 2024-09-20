@@ -12,9 +12,7 @@ import com.woogleFX.gameData.font.FontReader;
 import com.woogleFX.gameData.level.GameVersion;
 import com.worldOfGoo.resrc.*;
 import com.worldOfGoo.text.TextString;
-import com.worldOfGoo2.environments._2_Environment;
 import com.worldOfGoo2.items._2_Item;
-import com.worldOfGoo2.items._2_Item_Collection;
 import com.worldOfGoo2.terrain._2_Terrain_Collection;
 import com.worldOfGoo2.terrain._2_Terrain_TerrainType;
 import com.worldOfGoo2.util.ItemHelper;
@@ -30,7 +28,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Stack;
 
 public class ResourceManager {
 

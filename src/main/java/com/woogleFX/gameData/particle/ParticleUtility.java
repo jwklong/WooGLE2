@@ -1,11 +1,11 @@
 package com.woogleFX.gameData.particle;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.attributes.dataTypes.Position;
 import com.woogleFX.gameData.level.WOG1Level;
-import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.level.Fire;
 import com.worldOfGoo.particle.Ambientparticleeffect;
 import com.worldOfGoo.particle.Particleeffect;
@@ -24,7 +24,7 @@ public class ParticleUtility {
 
     public static void frameUpdate(EditorObject particleObject, ArrayList<Double> counts, ArrayList<ArrayList<ParticleGraphicsInstance>> drawing, double deltaTime) {
 
-        _Level level = LevelManager.getLevel();
+        Asset level = AssetManager.getAsset();
         if (level == null) return;
 
         String effect = "";
@@ -110,10 +110,10 @@ public class ParticleUtility {
             double dy = Math.sin(Math.toRadians(rotation));
             double dx = Math.cos(Math.toRadians(rotation));
 
-            double minX = ((WOG1Level)LevelManager.getLevel()).getSceneObject().getAttribute("minx").doubleValue();
-            double minY = -((WOG1Level)LevelManager.getLevel()).getSceneObject().getAttribute("miny").doubleValue();
-            double maxX = ((WOG1Level)LevelManager.getLevel()).getSceneObject().getAttribute("maxx").doubleValue();
-            double maxY = -((WOG1Level)LevelManager.getLevel()).getSceneObject().getAttribute("maxy").doubleValue();
+            double minX = ((WOG1Level) AssetManager.getAsset()).getSceneObject().getAttribute("minx").doubleValue();
+            double minY = -((WOG1Level) AssetManager.getAsset()).getSceneObject().getAttribute("miny").doubleValue();
+            double maxX = ((WOG1Level) AssetManager.getAsset()).getSceneObject().getAttribute("maxx").doubleValue();
+            double maxY = -((WOG1Level) AssetManager.getAsset()).getSceneObject().getAttribute("maxy").doubleValue();
 
             double horizontalWeight = Math.abs(dx);
 

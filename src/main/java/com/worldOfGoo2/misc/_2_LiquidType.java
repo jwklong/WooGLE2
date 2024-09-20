@@ -9,7 +9,7 @@ public class _2_LiquidType extends EditorObject {
     public _2_LiquidType(EditorObject parent) {
         super(parent, "LiquidType", GameVersion.VERSION_WOG2);
 
-        addAttribute("liquidType", InputField._2_STRING);
+        addAttribute("liquidType", InputField._2_NUMBER).assertRequired();
 
     }
 

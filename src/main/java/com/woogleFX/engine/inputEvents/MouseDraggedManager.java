@@ -1,5 +1,6 @@
 package com.woogleFX.engine.inputEvents;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.objectFunctions.ObjectDrag;
 import com.woogleFX.editorObjects.objectFunctions.ObjectResize;
 import com.woogleFX.editorObjects.objectFunctions.ObjectRotate;
@@ -9,9 +10,8 @@ import com.woogleFX.engine.fx.FXCanvas;
 import com.woogleFX.engine.fx.FXPropertiesView;
 import com.woogleFX.engine.renderer.Renderer;
 import com.woogleFX.engine.SelectionManager;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.DragSettings;
-import com.woogleFX.gameData.level._Level;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -22,7 +22,7 @@ public class MouseDraggedManager {
     /** Called whenever the mouse is dragged.*/
     public static void eventMouseDragged(MouseEvent event) {
 
-        _Level level = LevelManager.getLevel();
+        Asset level = AssetManager.getAsset();
         if (level == null) return;
 
         SelectionManager.setMouseX(event.getX());

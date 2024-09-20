@@ -1,8 +1,6 @@
 package com.worldOfGoo2.items;
 
 import com.woogleFX.editorObjects.EditorObject;
-import com.woogleFX.editorObjects.attributes.AttributeAdapter;
-import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.gameData.level.GameVersion;
@@ -10,7 +8,6 @@ import com.worldOfGoo2.misc._2_Point;
 import javafx.scene.image.Image;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class _2_Item_Object extends EditorObject {
 

@@ -1,6 +1,6 @@
 package com.woogleFX.gameData.level;
 
-import com.woogleFX.engine.fx.FXAssetSelectPane;
+import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
 import com.woogleFX.engine.fx.FXStage;
 import com.woogleFX.engine.fx.AssetTab;
 import com.woogleFX.engine.gui.alarms.CloseTabAlarm;

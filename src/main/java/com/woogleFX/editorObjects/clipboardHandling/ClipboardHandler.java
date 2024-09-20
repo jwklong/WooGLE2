@@ -1,19 +1,22 @@
 package com.woogleFX.editorObjects.clipboardHandling;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.file.fileExport.GOOWriter;
 import com.woogleFX.file.fileImport.ObjectGOOParser;
 import com.woogleFX.gameData.level.GameVersion;
-import com.woogleFX.gameData.level.WOG1Level;
-import com.woogleFX.gameData.level.WOG2Level;
-import com.woogleFX.gameData.level._Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class ClipboardHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(ClipboardHandler.class);
+
 
     public static EditorObject[] importFromClipboardString(String clipboard) {
 
@@ -26,13 +29,13 @@ public class ClipboardHandler {
         boolean settingAttribute = false;
 
         EditorObject selected;
-        EditorObject[] selectedList = LevelManager.getLevel().getSelected();
+        EditorObject[] selectedList = AssetManager.getAsset().getSelected();
         if (selectedList.length == 1) selected = selectedList[0];
         else selected = null;
 
         ArrayList<EditorObject> selectionBuilder = new ArrayList<>();
 
-        if (LevelManager.getLevel() instanceof WOG1Level) {
+        if (AssetManager.getAsset().getVersion() == GameVersion.VERSION_WOG1_OLD || AssetManager.getAsset().getVersion() == GameVersion.VERSION_WOG1_NEW) {
 
             for (int i = 0; i < clipboard.length(); i++) {
                 char part = clipboard.charAt(i);
@@ -60,7 +63,7 @@ public class ClipboardHandler {
                         currentWord = new StringBuilder();
                     } else if (part == '<') {
 
-                        _Level level = LevelManager.getLevel();
+                        Asset level = AssetManager.getAsset();
 
                         boolean okayToBeChild = selected != null && selected.getParent() != null;
 
@@ -84,7 +87,7 @@ public class ClipboardHandler {
                 }
             }
 
-        } else if (LevelManager.getLevel() instanceof WOG2Level) {
+        } else {
 
             String type = clipboard.substring(10, clipboard.indexOf(";"));
             String type2 = clipboard.substring(clipboard.indexOf(";") + 1, clipboard.indexOf("<"));
@@ -92,7 +95,7 @@ public class ClipboardHandler {
             try {
                 selectionBuilder.add(ObjectGOOParser.read((Class<? extends EditorObject>) Class.forName(type), content));
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                logger.error("", e);
             }
             selectionBuilder.get(0).setTypeID(type2);
             return selectionBuilder.toArray(new EditorObject[0]);

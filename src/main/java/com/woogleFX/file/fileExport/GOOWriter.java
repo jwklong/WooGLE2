@@ -19,7 +19,7 @@ public class GOOWriter {
 
             if ((editorAttribute.actualValue().isEmpty() && (editorAttribute.getChildAlias() == null || object.getChildren(editorAttribute.getName()).isEmpty())) && !editorAttribute.getRequired()) continue;
 
-            if (editorAttribute.getChildAlias() != null) {
+            if (editorAttribute.getChildAlias() != null || editorAttribute.getType() == InputField._2_LIST_CHILD || editorAttribute.getType() == InputField._2_LIST_CHILD_HIDDEN) {
 
                 exportBuilder.append("\"").append(editorAttribute.getName()).append("\":\t");
                 if (editorAttribute.getType() == InputField._2_LIST_CHILD || editorAttribute.getType() == InputField._2_LIST_CHILD_HIDDEN) exportBuilder.append("[");
@@ -59,7 +59,13 @@ public class GOOWriter {
                 if (editorAttribute.getType() == InputField._2_LIST_STRING || editorAttribute.getType() == InputField._2_LIST_NUMBER) {
                     exportBuilder.append("\"").append(editorAttribute.getName()).append("\":\t[");
                     if (editorAttribute.listValue().length != 0) {
-                        for (String v : editorAttribute.listValue()) exportBuilder.append("\"").append(v).append("\", ");
+                        for (String v : editorAttribute.listValue()) {
+                            if (editorAttribute.getType() == InputField._2_LIST_NUMBER) {
+                                exportBuilder.append(v).append(", ");
+                            } else {
+                                exportBuilder.append("\"").append(v).append("\", ");
+                            }
+                        }
                         exportBuilder.deleteCharAt(exportBuilder.length() - 1);
                         exportBuilder.deleteCharAt(exportBuilder.length() - 1);
                     }

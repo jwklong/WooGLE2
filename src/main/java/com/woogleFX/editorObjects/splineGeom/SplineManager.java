@@ -1,8 +1,8 @@
 package com.woogleFX.editorObjects.splineGeom;
 
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.editorObjects.Asset;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.SelectionManager;
-import com.woogleFX.gameData.level._Level;
 import javafx.geometry.Point2D;
 
 import java.awt.geom.QuadCurve2D;
@@ -202,7 +202,7 @@ public class SplineManager {
 
         selectedDistance = distance;
 
-        _Level level = LevelManager.getLevel();
+        Asset level = AssetManager.getAsset();
         double gameRelativeMouseX = (SelectionManager.getMouseX() - level.getOffsetX()) / level.getZoom();
         double gameRelativeMouseY = (SelectionManager.getMouseY() - level.getOffsetY()) / level.getZoom();
         offsetX = gameRelativeMouseX;

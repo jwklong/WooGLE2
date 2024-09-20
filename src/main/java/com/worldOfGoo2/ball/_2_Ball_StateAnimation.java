@@ -9,8 +9,8 @@ public class _2_Ball_StateAnimation extends EditorObject {
     public _2_Ball_StateAnimation(EditorObject parent) {
         super(parent, "StateAnimation", GameVersion.VERSION_WOG2);
 
-        addAttribute("partAnimations", InputField._2_CHILD).setChildAlias(_2_Ball_PartAnimation.class);
-        addAttribute("states", InputField._2_CHILD).setChildAlias(_2_Ball_State.class);
+        addAttribute("partAnimations", InputField._2_LIST_CHILD).setChildAlias(_2_Ball_PartAnimation.class);
+        addAttribute("states", InputField._2_LIST_CHILD).setChildAlias(_2_Ball_State.class);
         addAttribute("frequenceyVarianceMagnitude", InputField._2_NUMBER);
         addAttribute("amplitudeVarianceMagnitude", InputField._2_NUMBER);
         addAttribute("phaseShiftVarianceMagnitude", InputField._2_NUMBER);

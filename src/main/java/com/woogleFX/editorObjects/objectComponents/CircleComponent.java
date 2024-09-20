@@ -5,7 +5,7 @@ import com.woogleFX.editorObjects.objectComponents.generic.BorderProperty;
 import com.woogleFX.editorObjects.objectComponents.generic.ColoredProperty;
 import com.woogleFX.editorObjects.objectComponents.generic.RotatableProperty;
 import com.woogleFX.engine.renderer.Renderer;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.DragSettings;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -33,9 +33,9 @@ public abstract class CircleComponent extends ObjectComponent
         double radius = getRadius();
         double rotation = getRotation();
 
-        double offsetX = LevelManager.getLevel().getOffsetX();
-        double offsetY = LevelManager.getLevel().getOffsetY();
-        double zoom = LevelManager.getLevel().getZoom();
+        double offsetX = AssetManager.getAsset().getOffsetX();
+        double offsetY = AssetManager.getAsset().getOffsetY();
+        double zoom = AssetManager.getAsset().getZoom();
 
         double screenX = (x - radius) * zoom + offsetX;
         double screenY = (y - radius) * zoom + offsetY;
@@ -131,7 +131,7 @@ public abstract class CircleComponent extends ObjectComponent
         Point2D top = new Point2D(x, y - radius);
         Point2D right = new Point2D(x + radius, y);
         Point2D bottom = new Point2D(x, y + radius);
-        double distance = 4 / LevelManager.getLevel().getZoom();
+        double distance = 4 / AssetManager.getAsset().getZoom();
 
 
         Point2D rotateLeft = new Point2D(x - radius, y);

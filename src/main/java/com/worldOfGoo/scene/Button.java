@@ -3,7 +3,7 @@ package com.worldOfGoo.scene;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.ImageUtility;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
@@ -97,7 +97,7 @@ public class Button extends EditorObject {
                 return image;
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowGraphics();
+                return AssetManager.getAsset().getVisibilitySettings().isShowGraphics();
             }
         });
 
@@ -123,11 +123,11 @@ public class Button extends EditorObject {
 
     private void updateImage() {
 
-        if (LevelManager.getLevel() == null) return;
+        if (AssetManager.getAsset() == null) return;
 
         try {
             if (!getAttribute("up").stringValue().isEmpty()) {
-                image = getAttribute("up").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
+                image = getAttribute("up").imageValue(((WOG1Level) AssetManager.getAsset()).getResrc(), getVersion());
                 image = ImageUtility.colorize(image, getAttribute("colorize").colorValue());
             }
         } catch (FileNotFoundException ignored) {

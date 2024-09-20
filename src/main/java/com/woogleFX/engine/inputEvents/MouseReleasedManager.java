@@ -1,5 +1,6 @@
 package com.woogleFX.engine.inputEvents;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
@@ -10,7 +11,7 @@ import com.woogleFX.engine.fx.FXContainers;
 import com.woogleFX.engine.fx.FXScene;
 import com.woogleFX.engine.SelectionManager;
 import com.woogleFX.engine.fx.hierarchy.HierarchyManager;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.objectCreators.ObjectAdder;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.editorObjects.attributes.EditorAttribute;
@@ -21,7 +22,6 @@ import com.woogleFX.engine.undoHandling.userActions.MoveSplinePointAction;
 import com.woogleFX.engine.undoHandling.userActions.UserAction;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.WOG2Level;
-import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.level.BallInstance;
 import com.worldOfGoo2.level._2_Level_BallInstance;
 import com.worldOfGoo2.level._2_Level_Strand;
@@ -51,7 +51,7 @@ public class MouseReleasedManager {
 
     private static void primaryMouseButton(MouseEvent event) {
 
-        _Level level = LevelManager.getLevel();
+        Asset level = AssetManager.getAsset();
         if (level == null) return;
 
         // Record the changes made to the selected object.
@@ -132,8 +132,8 @@ public class MouseReleasedManager {
                                 if (objectComponent.mouseIntersection(mouseX, mouseY) != DragSettings.NULL) {
 
                                     EditorObject strand = ObjectCreator.create2(_2_Level_Strand.class, wog2Level.getLevel(), level.getVersion());
-                                    strand.setTypeID("strands");
                                     if (strand == null) continue;
+                                    strand.setTypeID("strands");
 
                                     strand.setAttribute("ball1UID", SelectionManager.getStrand1Gooball().getAttribute("uid").stringValue());
                                     strand.setAttribute("ball2UID", ball.getAttribute("uid").stringValue());

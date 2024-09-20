@@ -9,7 +9,7 @@ public class _2_SoundEvent extends EditorObject {
     public _2_SoundEvent(EditorObject parent) {
         super(parent, "SoundEvent", GameVersion.VERSION_WOG2);
 
-        addAttribute("soundEvent", InputField._2_STRING).assertRequired();
+        addAttribute("soundEvent", InputField._2_NUMBER).assertRequired();
 
     }
 

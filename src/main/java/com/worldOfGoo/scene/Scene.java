@@ -2,7 +2,7 @@ package com.worldOfGoo.scene;
 
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.renderer.Depth;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
@@ -128,7 +128,7 @@ public class Scene extends EditorObject {
                 return false;
             }
             public Paint getColor() {
-                if (LevelManager.getLevel().getVisibilitySettings().isShowSceneBGColor()) {
+                if (AssetManager.getAsset().getVisibilitySettings().isShowSceneBGColor()) {
                     com.woogleFX.editorObjects.attributes.dataTypes.Color backgroundColor = getAttribute("backgroundcolor").colorValue();
                     double r = backgroundColor.getR() / 255.0;
                     double g = backgroundColor.getG() / 255.0;
@@ -138,10 +138,10 @@ public class Scene extends EditorObject {
                 return new Color(0.0, 0.0, 0.0, 0.0);
             }
             public boolean isSelectable() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowSceneBGColor();
+                return AssetManager.getAsset().getVisibilitySettings().isShowSceneBGColor();
             }
             public boolean isDraggable() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowSceneBGColor();
+                return AssetManager.getAsset().getVisibilitySettings().isShowSceneBGColor();
             }
             public boolean isResizable() {
                 return false;

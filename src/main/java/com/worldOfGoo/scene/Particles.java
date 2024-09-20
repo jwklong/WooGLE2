@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.editorObjects.objectComponents.TextComponent;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
@@ -89,7 +89,7 @@ public class Particles extends EditorObject {
             }
 
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowParticles() && LevelManager.getLevel().getVisibilitySettings().isShowLabels();
+                return AssetManager.getAsset().getVisibilitySettings().isShowParticles() && AssetManager.getAsset().getVisibilitySettings().isShowLabels();
             }
 
         });
@@ -142,7 +142,7 @@ public class Particles extends EditorObject {
             }
 
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowParticles();
+                return AssetManager.getAsset().getVisibilitySettings().isShowParticles();
             }
 
             public boolean isResizable() {

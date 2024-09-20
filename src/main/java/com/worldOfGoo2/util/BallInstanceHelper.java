@@ -8,7 +8,7 @@ import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.fx.FXEditorButtons;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.gameData.ball.AtlasManager;
@@ -128,7 +128,7 @@ public class BallInstanceHelper {
         if (!ballInstance.getAttribute("discovered").booleanValue()) {
             if (!part.getAttribute("isActiveWhenUndiscovered").booleanValue()) return false;
         } else {
-            for (EditorObject obj : ((WOG2Level) LevelManager.getLevel()).getObjects()) {
+            for (EditorObject obj : ((WOG2Level) AssetManager.getAsset()).getObjects()) {
                 if (obj instanceof _2_Level_Strand strand) {
 
                     String id = ballInstance.getAttribute("uid").stringValue();
@@ -399,7 +399,7 @@ public class BallInstanceHelper {
                 }
                 @Override
                 public boolean isVisible() {
-                    return !ballInstance.getAttribute("type").stringValue().equals("Terrain") && LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 2;
+                    return !ballInstance.getAttribute("type").stringValue().equals("Terrain") && AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 2;
                 }
                 @Override
                 public boolean isResizable() {
@@ -461,8 +461,8 @@ public class BallInstanceHelper {
                     }
                     @Override
                     public boolean isVisible() {
-                        if (LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 0) return false;
-                        return (ball == null || ballInstance.getAttribute("type").stringValue().equals("Terrain") && ballInstance.visibilityFunction()) || LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 1 || (ballInstance.getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons.comboBoxSelected == ballInstance.getAttribute("terrainGroup").intValue());
+                        if (AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 0) return false;
+                        return (ball == null || ballInstance.getAttribute("type").stringValue().equals("Terrain") && ballInstance.visibilityFunction()) || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1 || (ballInstance.getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons.comboBoxSelected == ballInstance.getAttribute("terrainGroup").intValue());
                     }
                     @Override
                     public boolean isRotatable() {
@@ -549,8 +549,8 @@ public class BallInstanceHelper {
                 }
                 @Override
                 public boolean isVisible() {
-                    if (LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 0) return false;
-                    return (ball == null || ballInstance.getAttribute("type").stringValue().equals("Terrain") && ballInstance.visibilityFunction()) || LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 1 || (ballInstance.getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons.comboBoxSelected == ballInstance.getAttribute("terrainGroup").intValue());
+                    if (AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 0) return false;
+                    return (ball == null || ballInstance.getAttribute("type").stringValue().equals("Terrain") && ballInstance.visibilityFunction()) || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1 || (ballInstance.getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons.comboBoxSelected == ballInstance.getAttribute("terrainGroup").intValue());
                 }
                 @Override
                 public boolean isResizable() {
@@ -636,7 +636,7 @@ public class BallInstanceHelper {
 
             @Override
             public boolean isVisible() {
-                return (ball == null || ballInstance.getAttribute("type").stringValue().equals("Terrain") && ballInstance.visibilityFunction()) || LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 1;
+                return (ball == null || ballInstance.getAttribute("type").stringValue().equals("Terrain") && ballInstance.visibilityFunction()) || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1;
             }
 
             @Override

@@ -4,12 +4,13 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.editorObjects.objectCreators.ObjectAdder;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.HierarchyDragAction;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.gameData.level.WOG1Level;
+import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.addin.*;
 import com.worldOfGoo.level.*;
 import com.worldOfGoo.resrc.*;
@@ -236,7 +237,7 @@ public class HierarchyManager {
 
             while (absoluteParent.getParent() != null) absoluteParent = absoluteParent.getParent();
 
-            WOG1Level level = (WOG1Level)LevelManager.getLevel();
+            WOG1Level level = (WOG1Level) AssetManager.getAsset();
 
             ArrayList<EditorObject> list;
             if (absoluteParent instanceof Scene) list = level.getScene();
@@ -252,7 +253,7 @@ public class HierarchyManager {
             if (toItem.getChildren().contains(fromItem)) return false;
 
             // Or inside an object that doesn't have it as a possible child
-            if (Stream.of(toItem.getParent().getPossibleChildren()).noneMatch(e -> e.equals(fromItem.getType())))
+            if (Stream.of(toItem.getParent().getPossibleChildren()).noneMatch(e -> e.equals(fromItem.getClass())))
                 return false;
 
             // Or above every SetDefaults (meaning at position 2) if it's a resource
@@ -274,7 +275,7 @@ public class HierarchyManager {
             list.remove(fromItem);
             list.add(indexOfToItemInList, fromItem);
 
-            if (fromItem.getParent() instanceof Resources) LevelManager.getLevel().reAssignSetDefaultsToAllResources();
+            if (fromItem.getParent() instanceof Resources) ((_Level) AssetManager.getAsset()).reAssignSetDefaultsToAllResources();
             else if (fromItem instanceof Vertex) fromItem.getParent().update();
 
             hierarchy.getSelectionModel().select(toIndex);

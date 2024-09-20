@@ -2,12 +2,11 @@ package com.woogleFX.engine.gui.alarms;
 
 import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
-import com.woogleFX.engine.LevelManager;
-import com.woogleFX.engine.fx.FXAssetSelectPane;
+import com.woogleFX.engine.AssetManager;
+import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
 import com.woogleFX.engine.fx.FXPropertiesView;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.gameData.level.LevelCloser;
-import com.woogleFX.gameData.level._Level;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -15,7 +14,7 @@ import javafx.scene.control.Tab;
 
 public class CloseTabAlarm {
 
-    public static void show(Tab tab, _Level level) {
+    public static void show(Tab tab, Asset level) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Unsaved Changes");
         alert.setContentText("Ignore unsaved changes?");
@@ -30,7 +29,7 @@ public class CloseTabAlarm {
                 }
                 Platform.runLater(() -> tab.getTabPane().getTabs().remove(tab));
             } else if (buttonType.equals(ButtonType.CANCEL)) {
-                level.setEditingStatus(level.getEditingStatus(), level == LevelManager.getLevel());
+                level.setEditingStatus(level.getEditingStatus(), level == AssetManager.getAsset());
             }
         });
     }
@@ -54,7 +53,7 @@ public class CloseTabAlarm {
                     LevelCloser.resumeLevelClosing();
                 });
             } else if (buttonType.equals(ButtonType.CANCEL)) {
-                asset.setEditingStatus(asset.getEditingStatus(), asset == LevelManager.getLevel());
+                asset.setEditingStatus(asset.getEditingStatus(), asset == AssetManager.getAsset());
             }
         });
     }

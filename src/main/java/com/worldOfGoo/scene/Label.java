@@ -5,7 +5,7 @@ import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.font._Font;
 import com.woogleFX.editorObjects.objectComponents.TextComponent;
 import com.woogleFX.file.resourceManagers.ResourceManager;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.gameData.level.WOG1Level;
@@ -36,7 +36,7 @@ public class Label extends EditorObject {
             @Override
             public _Font getFont() {
                 try {
-                    return ResourceManager.getFont(((WOG1Level)LevelManager.getLevel()).getResrc(), getAttribute("font").stringValue(), LevelManager.getLevel().getVersion());
+                    return ResourceManager.getFont(((WOG1Level) AssetManager.getAsset()).getResrc(), getAttribute("font").stringValue(), AssetManager.getAsset().getVersion());
                 } catch (FileNotFoundException e) {
                     return null;
                 }
@@ -44,7 +44,7 @@ public class Label extends EditorObject {
 
             @Override
             public String getText() {
-                for (EditorObject EditorObject : ((WOG1Level)LevelManager.getLevel()).getText()) {
+                for (EditorObject EditorObject : ((WOG1Level) AssetManager.getAsset()).getText()) {
                     if (EditorObject instanceof TextString textString) {
                         if (textString.getAttribute("id").stringValue().equals(getAttribute("text").stringValue())) {
                             return textString.getAttribute("text").stringValue();
@@ -81,7 +81,7 @@ public class Label extends EditorObject {
 
             @Override
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowLabels();
+                return AssetManager.getAsset().getVisibilitySettings().isShowLabels();
             }
 
         });

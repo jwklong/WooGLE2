@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.woogleFX.editorObjects.attributes.dataTypes.Position;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.fx.FXEditorButtons;
 import com.woogleFX.gameData.level.WOG2Level;
 import com.woogleFX.gameData.terrainTypes.TerrainTypeManager;
@@ -199,9 +199,9 @@ public class TerrainMeshComponent extends MeshComponent {
     @Override
     public boolean isVisible() {
 
-        if (LevelManager.getLevel().getVisibilitySettings().getShowGoos() != 2) return false;
+        if (AssetManager.getAsset().getVisibilitySettings().getShowGoos() != 2) return false;
 
-        int terrainGroupId = ((WOG2Level)LevelManager.getLevel()).getLevel().getChildren("terrainGroups").indexOf(terrainGroup);
+        int terrainGroupId = ((WOG2Level) AssetManager.getAsset()).getLevel().getChildren("terrainGroups").indexOf(terrainGroup);
         if (terrainGroupId < 0 || terrainGroupId >= FXEditorButtons.comboBoxList.size()) return true;
         else return FXEditorButtons.comboBoxList.get(terrainGroupId);
 

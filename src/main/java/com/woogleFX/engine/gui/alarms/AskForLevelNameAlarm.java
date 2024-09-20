@@ -1,8 +1,9 @@
 package com.woogleFX.engine.gui.alarms;
 
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.gameData.level.GameVersion;
+import com.woogleFX.gameData.level._Level;
 import com.woogleFX.gameData.level.levelOpening.LevelLoader;
 import com.woogleFX.gameData.level.levelSaving.LevelUpdater;
 import javafx.geometry.Insets;
@@ -109,7 +110,7 @@ public class AskForLevelNameAlarm {
             case "clone" -> {
                 stage.setTitle("Clone Level");
                 okButton.setOnAction(event -> {
-                    LevelLoader.cloneLevel(enterNameHere.getText(), version);
+                    LevelLoader.cloneLevel(enterNameHere.getText());
                     stage.close();
                 });
             }
@@ -124,15 +125,15 @@ public class AskForLevelNameAlarm {
                             return;
                         }
                     }
-                    LevelUpdater.renameLevel(LevelManager.getLevel(), enterNameHere.getText());
+                    LevelUpdater.renameLevel((_Level) AssetManager.getAsset(), enterNameHere.getText());
                     stage.close();
                 });
             }
             case "delete" -> {
                 stage.setTitle("Delete Level");
                 okButton.setOnAction(event -> {
-                    if (enterNameHere.getText().equals(LevelManager.getLevel().getLevelName())) {
-                        LevelUpdater.deleteLevelForReal(LevelManager.getLevel());
+                    if (enterNameHere.getText().equals(AssetManager.getAsset().getLevelName())) {
+                        AssetManager.getAsset().delete();
                         stage.close();
                     }
                 });

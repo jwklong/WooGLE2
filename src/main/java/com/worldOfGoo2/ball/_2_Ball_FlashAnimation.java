@@ -9,7 +9,7 @@ public class _2_Ball_FlashAnimation extends EditorObject {
     public _2_Ball_FlashAnimation(EditorObject parent) {
         super(parent, "FlashAnimation", GameVersion.VERSION_WOG2);
 
-        addAttribute("flashAnimationId", InputField._2_STRING);
+        addAttribute("flashAnimationId", InputField._2_STRING).assertRequired();
 
     }
 

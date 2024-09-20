@@ -3,7 +3,7 @@ package com.worldOfGoo.level;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.renderer.Depth;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -78,7 +78,7 @@ public class Camera extends EditorObject {
                 return Depth.CAMERA;
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowCameras();
+                return AssetManager.getAsset().getVisibilitySettings().isShowCameras();
             }
             public boolean isRotatable() {
                 return false;

@@ -9,7 +9,7 @@ public class _2_Ball_ParticleEffectV2 extends EditorObject {
     public _2_Ball_ParticleEffectV2(EditorObject parent) {
         super(parent, "Ball_ParticleEffectV2", GameVersion.VERSION_WOG2);
 
-        addAttribute("uuid", InputField._2_STRING);
+        addAttribute("uuid", InputField._2_STRING).assertRequired();
 
     }
 

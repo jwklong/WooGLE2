@@ -12,7 +12,7 @@ import com.woogleFX.editorObjects.objectComponents.CircleComponent;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.objectComponents.TextComponent;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.fx.FXPropertiesView;
 import com.woogleFX.engine.renderer.Depth;
 import com.woogleFX.file.resourceManagers.ResourceManager;
@@ -84,8 +84,8 @@ public class _2_Level_Item extends _2_Positionable {
                 setAttribute2("type", item1.getAttribute("uuid").stringValue());
                 updateImage();
                 refreshUserVariables();
-                if (LevelManager.getLevel().getSelected().length > 0 && _2_Level_Item.this == LevelManager.getLevel().getSelected()[0]) {
-                    FXPropertiesView.changeTableView(LevelManager.getLevel().getSelected());
+                if (AssetManager.getAsset().getSelected().length > 0 && _2_Level_Item.this == AssetManager.getAsset().getSelected()[0]) {
+                    FXPropertiesView.changeTableView(AssetManager.getAsset().getSelected());
                 }
             }
 
@@ -116,6 +116,7 @@ public class _2_Level_Item extends _2_Positionable {
         randomizationIndices.replaceAll((k, v) -> (int) (Math.random() * randomizationIndices.get(k)));
 
         updateImage();
+
         refreshUserVariables();
 
     }
@@ -269,7 +270,7 @@ public class _2_Level_Item extends _2_Positionable {
 
     private void updateImage() {
 
-        if (LevelManager.getLevel() == null) return;
+        if (AssetManager.getAsset() == null) return;
 
         if (!getAttribute2("type").stringValue().isEmpty()) {
             item = ItemManager.getItem(getAttribute("type").stringValue());
@@ -350,7 +351,7 @@ public class _2_Level_Item extends _2_Positionable {
 
                 @Override
                 public boolean isVisible() {
-                    return shouldShow() && LevelManager.getLevel().getVisibilitySettings().isShowGraphics();
+                    return shouldShow() && AssetManager.getAsset().getVisibilitySettings().isShowGraphics();
                 }
 
                 @Override
@@ -416,7 +417,7 @@ public class _2_Level_Item extends _2_Positionable {
 
                 @Override
                 public boolean isVisible() {
-                    return shouldShow() && LevelManager.getLevel().getVisibilitySettings().isShowGraphics();
+                    return shouldShow() && AssetManager.getAsset().getVisibilitySettings().isShowGraphics();
                 }
 
                 @Override
@@ -482,7 +483,7 @@ public class _2_Level_Item extends _2_Positionable {
 
                 @Override
                 public boolean isVisible() {
-                    return shouldShow() && LevelManager.getLevel().getVisibilitySettings().isShowGraphics();
+                    return shouldShow() && AssetManager.getAsset().getVisibilitySettings().isShowGraphics();
                 }
 
                 @Override
@@ -559,8 +560,14 @@ public class _2_Level_Item extends _2_Positionable {
 
                     double x = getPosition().getX();
                     double scaleX = getAttribute("scale").positionValue().getX();
+                    double scaleY = getAttribute("scale").positionValue().getY();
 
-                    return x + (partX - partPivotX * partScaleX) * scaleX;
+                    double addX = (partX - partPivotX * partScaleX) * scaleX;
+                    double addY = (partY - partPivotY * partScaleY) * scaleY;
+
+                    double rotation = -getAttribute("rotation").doubleValue();
+
+                    return x + addX * Math.cos(rotation) + addY * -Math.sin(rotation);
 
                 }
                 @Override
@@ -571,11 +578,16 @@ public class _2_Level_Item extends _2_Positionable {
                 }
                 @Override
                 public double getY() {
-
                     double y = -getPosition().getY();
+                    double scaleX = getAttribute("scale").positionValue().getX();
                     double scaleY = getAttribute("scale").positionValue().getY();
 
-                    return y + (partY - partPivotY * partScaleY) * scaleY;
+                    double addX = (partX - partPivotX * partScaleX) * scaleX;
+                    double addY = (partY - partPivotY * partScaleY) * scaleY;
+
+                    double rotation = -getAttribute("rotation").doubleValue();
+
+                    return y + addX * Math.sin(rotation) + addY * Math.cos(rotation);
 
                 }
                 @Override
@@ -626,11 +638,9 @@ public class _2_Level_Item extends _2_Positionable {
                 }
                 @Override
                 public boolean isVisible() {
-                    if (!LevelManager.getLevel().getVisibilitySettings().isShowGraphics()) return false;
+                    if (!AssetManager.getAsset().getVisibilitySettings().isShowGraphics()) return false;
                     if (!shouldShow()) return false;
-                    if (getAttribute("forcedRandomizationIndex").intValue() == -1) {
-                        return randomizationIndices.get(-1) == null || item.getChildren("objects").indexOf(part) == randomizationIndices.get(-1);
-                    }
+                    if (getAttribute("forcedRandomizationIndex").intValue() == -1) return true;
                     if (true) return item.getChildren("objects").indexOf(part) == getAttribute("forcedRandomizationIndex").intValue();
                     if (randomizationIndices.get(part.getAttribute("randomizationGroup").intValue()) == null) return false;
                     if (part.getAttribute("randomizationGroup").intValue() == getAttribute("forcedRandomizationIndex").intValue()) {
@@ -669,7 +679,7 @@ public class _2_Level_Item extends _2_Positionable {
     public boolean shouldShow() {
 
         String type = getAttribute("type").stringValue();
-        if (type.equals("LinearForceField")) return LevelManager.getLevel().getVisibilitySettings().isShowForcefields();
+        if (type.equals("LinearForceField")) return AssetManager.getAsset().getVisibilitySettings().isShowForcefields();
 
         return true;
 

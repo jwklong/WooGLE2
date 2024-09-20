@@ -5,7 +5,7 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.levelOpening.LevelLoader;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.level.GameVersion;
 import javafx.scene.image.Image;
 
@@ -73,7 +73,7 @@ public class Signpost extends EditorObject {
                 return image;
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowGraphics();
+                return AssetManager.getAsset().getVisibilitySettings().isShowGraphics();
             }
         });
 
@@ -99,10 +99,10 @@ public class Signpost extends EditorObject {
 
     private void updateImage() {
 
-        if (LevelManager.getLevel() == null) return;
+        if (AssetManager.getAsset() == null) return;
 
         try {
-            image = getAttribute("image").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
+            image = getAttribute("image").imageValue(((WOG1Level) AssetManager.getAsset()).getResrc(), getVersion());
             if (image == null) return;
             Color color = getAttribute("colorize").colorValue();
             image = ImageUtility.colorize(image, color);

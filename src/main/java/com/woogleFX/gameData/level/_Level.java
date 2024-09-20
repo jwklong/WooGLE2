@@ -7,7 +7,7 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.engine.fx.FXContainers;
 import com.worldOfGoo.resrc.*;
 
-public class _Level extends Asset {
+public abstract class _Level extends Asset {
 
     public _Level(GameVersion version, ArrayList<EditorObject> addin) {
         super(version);
@@ -37,15 +37,6 @@ public class _Level extends Asset {
 
         }
 
-    }
-
-
-    private String currentlySelectedSection = "Scene";
-    public String getCurrentlySelectedSection() {
-        return currentlySelectedSection;
-    }
-    public void setCurrentlySelectedSection(String s) {
-        this.currentlySelectedSection = s;
     }
 
 

@@ -1,20 +1,22 @@
 package com.woogleFX.engine.undoHandling;
 
-import com.woogleFX.engine.fx.*;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.editorObjects.Asset;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.fx.AssetTab;
+import com.woogleFX.engine.fx.menu.FXMenu;
 import com.woogleFX.engine.undoHandling.userActions.*;
-import com.woogleFX.gameData.level._Level;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 
 import java.util.Stack;
 
+/** Handles all undo and redo logic. */
 public class UndoManager {
 
+    /** Registers any change to an asset.
+     * This should be called exactly once for any action the user performs
+     * (e.g. dragging or creating an object.) */
     public static void registerChange(UserAction... actions) {
 
-        _Level level = LevelManager.getLevel();
+        Asset level = AssetManager.getAsset();
 
         level.undoActions.add(actions);
         level.redoActions.clear();
@@ -22,64 +24,58 @@ public class UndoManager {
         if (level.getEditingStatus() == AssetTab.NO_UNSAVED_CHANGES)
             level.setEditingStatus(AssetTab.UNSAVED_CHANGES, true);
 
-        FXEditorButtons.buttonUndo.setDisable(false);
-        FXMenu.undoItem.setDisable(false);
-
-        FXEditorButtons.buttonRedo.setDisable(true);
-        FXMenu.redoItem.setDisable(true);
+        FXMenu.updateAllButtons();
 
     }
 
-
+    /** Undoes the last actions pushed to the undo stack. */
     public static void undo() {
-        eitherDo(true);
+        undoActions(
+                AssetManager.getAsset().undoActions,
+                AssetManager.getAsset().redoActions
+        );
     }
 
-
+    /** Undoes the last actions pushed to the redo stack, effectively redoing the last undid actions. */
     public static void redo() {
-        eitherDo(false);
+        undoActions(
+                AssetManager.getAsset().redoActions,
+                AssetManager.getAsset().undoActions
+        );
     }
 
 
-    private static void eitherDo(boolean isUndo) {
+    private static void undoActions(Stack<UserAction[]> forwardActions, Stack<UserAction[]> backwardActions) {
 
-        _Level level = LevelManager.getLevel();
-
-        Stack<UserAction[]> forwardActions = isUndo ? level.undoActions : level.redoActions;
-        Stack<UserAction[]> backwardActions = isUndo ? level.redoActions : level.undoActions;
-
-        Button forwardButton = isUndo ? FXEditorButtons.buttonUndo : FXEditorButtons.buttonRedo;
-        Button backwardButton = isUndo ? FXEditorButtons.buttonRedo : FXEditorButtons.buttonUndo;
-
-        MenuItem forwardMenuItem = isUndo ? FXMenu.undoItem : FXMenu.redoItem;
-        MenuItem backwardMenuItem = isUndo ? FXMenu.redoItem : FXMenu.undoItem;
-
+        // If there are no actions to add, don't do anything.
         if (forwardActions.isEmpty()) return;
 
+        // Get the most recent changes from the forward stack.
         UserAction[] changes = forwardActions.pop();
 
+        // Add all the forward changes to the backward stack in reverse order.
+        // This ensures that everything works correctly when the backward stack is executed.
         UserAction[] inverted = new UserAction[changes.length];
         for (int i = 0; i < changes.length; i++) inverted[i] = changes[changes.length - i - 1].getInverse();
         backwardActions.add(inverted);
 
+        // Undo each of the changes.
+        // This is done by calling each change's inverse action in inverse order.
         for (int i = changes.length - 1; i >= 0; i--) changes[i].getInverse().execute();
         
         // update all objects after all changes are done
         for (int i = changes.length - 1; i >= 0; i--) changes[i].getObject().update();
 
-        if (level.undoActions.size() == level.getLastSavedUndoPosition()) {
-            level.setEditingStatus(AssetTab.NO_UNSAVED_CHANGES, true);
+        // Update the current asset's editing status if all new changes have been un- or redone.
+        Asset asset = AssetManager.getAsset();
+        if (asset.undoActions.size() == asset.getLastSavedUndoPosition()) {
+            asset.setEditingStatus(AssetTab.NO_UNSAVED_CHANGES, true);
         } else {
-            level.setEditingStatus(AssetTab.UNSAVED_CHANGES, true);
+            asset.setEditingStatus(AssetTab.UNSAVED_CHANGES, true);
         }
 
-        backwardButton.setDisable(false);
-        backwardMenuItem.setDisable(false);
-
-        if (forwardActions.isEmpty()) {
-            forwardButton.setDisable(true);
-            forwardMenuItem.setDisable(true);
-        }
+        // Refresh the buttons in case the undo/redo buttons need to be updated.
+        FXMenu.updateAllButtons();
 
     }
 

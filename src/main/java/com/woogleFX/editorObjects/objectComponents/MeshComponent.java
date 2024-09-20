@@ -1,12 +1,10 @@
 package com.woogleFX.editorObjects.objectComponents;
 
 import com.woogleFX.editorObjects.DragSettings;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Affine;
 
 public abstract class MeshComponent extends ObjectComponent {
@@ -36,9 +34,9 @@ public abstract class MeshComponent extends ObjectComponent {
         
         Image image = getImage();
 
-        double offsetX = LevelManager.getLevel().getOffsetX();
-        double offsetY = LevelManager.getLevel().getOffsetY();
-        double zoom = LevelManager.getLevel().getZoom();
+        double offsetX = AssetManager.getAsset().getOffsetX();
+        double offsetY = AssetManager.getAsset().getOffsetY();
+        double zoom = AssetManager.getAsset().getZoom();
 
         graphicsContext.save();
 

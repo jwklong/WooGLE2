@@ -2,11 +2,10 @@ package com.worldOfGoo2.util;
 
 import com.woogleFX.editorObjects._2_Positionable;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.gameData.animation.AnimBinReader;
-import com.woogleFX.gameData.animation.AnimationManager;
 import com.woogleFX.gameData.animation.SimpleBinAnimation;
 import com.woogleFX.gameData.level.GameVersion;
 import com.worldOfGoo2.level._2_Level_BallInstance;
@@ -398,7 +397,7 @@ public class BinAnimationHelper {
 
                                 @Override
                                 public boolean isVisible() {
-                                    return (editorObject instanceof _2_Level_Item ? LevelManager.getLevel().getVisibilitySettings().isShowGraphics() : LevelManager.getLevel().getVisibilitySettings().getShowGoos() == 2);
+                                    return (editorObject instanceof _2_Level_Item ? AssetManager.getAsset().getVisibilitySettings().isShowGraphics() : AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 2);
                                 }
 
                             });

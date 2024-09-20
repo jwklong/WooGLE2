@@ -4,7 +4,6 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
 import com.woogleFX.gameData.level.GameVersion;
-import com.worldOfGoo2.misc._2_Point;
 
 import java.util.ArrayList;
 import java.util.Stack;

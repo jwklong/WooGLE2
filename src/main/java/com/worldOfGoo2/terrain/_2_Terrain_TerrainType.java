@@ -3,7 +3,6 @@ package com.worldOfGoo2.terrain;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
-import com.worldOfGoo2.misc._2_ImageID;
 
 public class _2_Terrain_TerrainType extends EditorObject {
 

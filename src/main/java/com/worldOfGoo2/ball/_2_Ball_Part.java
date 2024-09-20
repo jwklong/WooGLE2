@@ -1,62 +1,156 @@
 package com.worldOfGoo2.ball;
 
 import com.woogleFX.editorObjects.EditorObject;
-import com.woogleFX.editorObjects.attributes.InputField;
+import com.woogleFX.editorObjects.objectComponents.ImageComponent;
+import com.woogleFX.gameData.ball.AtlasManager;
 import com.woogleFX.gameData.level.GameVersion;
-import com.worldOfGoo2.misc._2_Color;
-import com.worldOfGoo2.misc._2_ImageID;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+
+import java.awt.image.BufferedImage;
 
 public class _2_Ball_Part extends EditorObject {
 
 
     public _2_Ball_Part(EditorObject parent) {
-        super(parent, "Ball_Part", GameVersion.VERSION_WOG2);
+        super(parent, "Part", GameVersion.VERSION_WOG2);
+    }
 
-        addAttribute("name", InputField._2_STRING).assertRequired();
+    @Override
+    public void onLoaded() {
 
-        addAttribute("images", InputField._2_LIST_CHILD).setChildAlias(_2_Ball_Image.class).assertRequired();
+        Image image = null;
+        for (EditorObject editorObject : getChildren("images"))
+            if (editorObject instanceof _2_Ball_Image image1) {
+                BufferedImage img = AtlasManager.atlas.get(image1.getChild("imageId").getAttribute("imageId").stringValue());
+                if (img == null) continue;
+                image = SwingFXUtils.toFXImage(img, null);
+        }
 
-        addAttribute("imageBackgroundIds", InputField._2_LIST_CHILD).setChildAlias(_2_ImageID.class).assertRequired();
+        Image finalImage = image;
+        addObjectComponent(new ImageComponent() {
+            @Override
+            public Image getImage() {
+                return finalImage;
+            }
 
-        addAttribute("layer", InputField._2_NUMBER).assertRequired();
-        addAttribute("drawWhenAttached", InputField._2_BOOLEAN);
-        addAttribute("drawWhenNotAttached", InputField._2_BOOLEAN);
-        addAttribute("minX", InputField._2_NUMBER).assertRequired();
-        addAttribute("maxX", InputField._2_NUMBER).assertRequired();
-        addAttribute("minY", InputField._2_NUMBER).assertRequired();
-        addAttribute("maxY", InputField._2_NUMBER).assertRequired();
-        addAttribute("minRangeX", InputField._2_NUMBER).assertRequired();
-        addAttribute("maxRangeX", InputField._2_NUMBER).assertRequired();
-        addAttribute("minRangeY", InputField._2_NUMBER).assertRequired();
-        addAttribute("maxRangeY", InputField._2_NUMBER).assertRequired();
+            @Override
+            public double getX() {
+                double minX = getAttribute("minX").doubleValue();
+                double maxX = getAttribute("maxX").doubleValue();
+                double minY = -getAttribute("minY").doubleValue();
+                double maxY = -getAttribute("maxY").doubleValue();
+                double x = (minX + maxX) / 2;
+                double y = (minY + maxY) / 2;
+                double theta = getAttribute("isRotating").booleanValue() ?
+                        getBodyPart().getAttribute("rotation").doubleValue() : 0;
+                return x * Math.cos(theta) - y * Math.sin(theta);
+            }
 
-        addAttribute("states", InputField._2_LIST_CHILD).assertRequired().setChildAlias(_2_Ball_State.class);
+            @Override
+            public void setX(double _x) {
+                double minX = getAttribute("minX").doubleValue();
+                double maxX = getAttribute("maxX").doubleValue();
+                double minY = -getAttribute("minY").doubleValue();
+                double maxY = -getAttribute("maxY").doubleValue();
+                double x = (minX + maxX) / 2;
+                double theta = getAttribute("isRotating").booleanValue() ?
+                        getBodyPart().getAttribute("rotation").doubleValue() : 0;
+                setAttribute("minX", minX + (_x - x) * Math.cos(-theta));
+                setAttribute("maxX", maxX + (_x - x) * Math.cos(-theta));
+                setAttribute("minY", -(minY + (_x - x) * Math.sin(-theta)));
+                setAttribute("maxY", -(maxY + (_x - x) * Math.sin(-theta)));
+            }
 
-        addAttribute("isActiveWhenUndiscovered", InputField._2_BOOLEAN).assertRequired();
-        addAttribute("scale", InputField._2_NUMBER).assertRequired();
-        addAttribute("scaleIsRelative", InputField._2_BOOLEAN).assertRequired();
-        addAttribute("rotation", InputField._2_NUMBER).assertRequired();
-        addAttribute("isEye", InputField._2_BOOLEAN).assertRequired();
+            @Override
+            public double getY() {
+                double minX = getAttribute("minX").doubleValue();
+                double maxX = getAttribute("maxX").doubleValue();
+                double minY = -getAttribute("minY").doubleValue();
+                double maxY = -getAttribute("maxY").doubleValue();
+                double x = (minX + maxX) / 2;
+                double y = (minY + maxY) / 2;
+                double theta = getAttribute("isRotating").booleanValue() ?
+                        getBodyPart().getAttribute("rotation").doubleValue() : 0;
+                return x * Math.sin(theta) + y * Math.cos(theta);
+            }
 
-        addAttribute("pupilImageIds", InputField._2_LIST_CHILD).setChildAlias(_2_ImageID.class).assertRequired();
+            @Override
+            public void setY(double _y) {
+                double minX = getAttribute("minX").doubleValue();
+                double maxX = getAttribute("maxX").doubleValue();
+                double minY = -getAttribute("minY").doubleValue();
+                double maxY = -getAttribute("maxY").doubleValue();
+                double y = (minY + maxY) / 2;
+                double theta = getAttribute("isRotating").booleanValue() ?
+                        getBodyPart().getAttribute("rotation").doubleValue() : 0;
+                setAttribute("minX", minX + (_y - y) * -Math.sin(-theta));
+                setAttribute("maxX", maxX + (_y - y) * -Math.sin(-theta));
+                setAttribute("minY", -(minY + (_y - y) * Math.cos(-theta)));
+                setAttribute("maxY", -(maxY + (_y - y) * Math.cos(-theta)));
+            }
 
-        addAttribute("pupilInset", InputField._2_NUMBER).assertRequired();
-        addAttribute("pupilScale", InputField._2_NUMBER);
-        addAttribute("isRotating", InputField._2_BOOLEAN).assertRequired();
-        addAttribute("stretchMaxSpeed", InputField._2_NUMBER).assertRequired();
-        addAttribute("stretchParallel", InputField._2_NUMBER).assertRequired();
-        addAttribute("stretchPerpendicular", InputField._2_NUMBER).assertRequired();
+            @Override
+            public double getScaleX() {
+                double width = getParent().getAttribute("width").doubleValue();
+                double scale = getAttribute("scale").doubleValue();
+                if (getAttribute("scaleIsRelative").booleanValue())
+                    scale *= width / ((ImageComponent)getBodyPart().getObjectComponents()[0]).getImage().getWidth();
+                return scale;
+            }
 
-        addAttribute("color", InputField._2_STRING).setChildAlias(_2_Color.class);
+            @Override
+            public void setScaleX(double scaleX) {
+                double width = getParent().getAttribute("width").doubleValue();
+                double scale = 1;
+                if (getAttribute("scaleIsRelative").booleanValue())
+                    scale *= width / ((ImageComponent)getBodyPart().getObjectComponents()[0]).getImage().getWidth();
+                setAttribute("scale", scaleX / scale);
+            }
 
-        addAttribute("stretchFactorFromStrandForce", InputField._2_NUMBER).assertRequired();
+            @Override
+            public double getScaleY() {
+                double height = getParent().getAttribute("height").doubleValue();
+                double scale = getAttribute("scale").doubleValue();
+                if (getAttribute("scaleIsRelative").booleanValue())
+                    scale *= height / ((ImageComponent)getBodyPart().getObjectComponents()[0]).getImage().getHeight();
+                return scale;
+            }
+
+            @Override
+            public void setScaleY(double scaleY) {
+                double height = getParent().getAttribute("height").doubleValue();
+                double scale = 1;
+                if (getAttribute("scaleIsRelative").booleanValue())
+                    scale *= height / ((ImageComponent)getBodyPart().getObjectComponents()[0]).getImage().getHeight();
+                setAttribute("scale", scaleY / scale);
+            }
+
+            @Override
+            public double getRotation() {
+                return -getAttribute("rotation").doubleValue();
+            }
+
+            @Override
+            public void setRotation(double rotation) {
+                setAttribute("rotation", -rotation);
+            }
+
+            @Override
+            public double getDepth() {
+                return 0;
+            }
+        });
 
     }
 
 
-    //@Override
-    //public Class<? extends EditorObject>[] getPossibleChildren() {
-     //   return new Class[]{ "images", "imageBackgroundIds", "states", "pupilImageIds", "color" };
-    //}
+    private EditorObject getBodyPart() {
+        String bodyPartName = getParent().getChild("bodyPart").getAttribute("partName").stringValue();
+        for (EditorObject editorObject : getParent().getChildren("ballParts")) {
+            if (editorObject.getAttribute("name").stringValue().equals(bodyPartName)) return editorObject;
+        }
+        return null;
+    }
 
 }

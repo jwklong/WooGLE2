@@ -4,14 +4,11 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.editorObjects.splineGeom.SplineManager;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.gameData.ball.AtlasManager;
 import com.woogleFX.gameData.level.GameVersion;
-import com.worldOfGoo2.ball._2_Ball_Image;
-import com.worldOfGoo2.level._2_Level_BallInstance;
-import com.worldOfGoo2.misc._2_ImageID;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,9 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 
 import java.awt.geom.QuadCurve2D;
-import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 public class EffectsManager {
 
@@ -106,9 +101,9 @@ public class EffectsManager {
 
         graphicsContext.save();
 
-        double offsetX = LevelManager.getLevel().getOffsetX();
-        double offsetY = LevelManager.getLevel().getOffsetY();
-        double zoom = LevelManager.getLevel().getZoom();
+        double offsetX = AssetManager.getAsset().getOffsetX();
+        double offsetY = AssetManager.getAsset().getOffsetY();
+        double zoom = AssetManager.getAsset().getZoom();
 
         Affine t = graphicsContext.getTransform();
         t.appendTranslation(offsetX, offsetY);

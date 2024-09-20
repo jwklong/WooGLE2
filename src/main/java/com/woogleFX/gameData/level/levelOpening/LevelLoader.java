@@ -1,18 +1,22 @@
 package com.woogleFX.gameData.level.levelOpening;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
 import com.woogleFX.editorObjects.ObjectUtil;
 import com.woogleFX.engine.fx.*;
+import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
+import com.woogleFX.engine.fx.hierarchy.FXHierarchySwitcherButtons;
+import com.woogleFX.engine.fx.menu.FXMenu;
+import com.woogleFX.engine.gui.LevelSelector;
 import com.woogleFX.engine.gui.LoadingScreen;
 import com.woogleFX.engine.gui.alarms.AskForLevelNameAlarm;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.engine.gui.alarms.LoadingResourcesAlarm;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.editorObjects.objectCreators.BlankObjectGenerator;
-import com.woogleFX.engine.gui.LevelSelector;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.file.fileExport.GOOWriter;
 import com.woogleFX.file.fileImport.ObjectGOOParser;
 import com.woogleFX.gameData.level.*;
@@ -277,7 +281,7 @@ public class LevelLoader {
 
         // Don't open a level if it's already open
         for (Tab tab : FXAssetSelectPane.getAssetSelectPane().getTabs()) {
-            if (tab.getText().equals(levelName) && ((AssetTab)tab).getAsset().getVersion() == version) {
+            if (tab.getText() != null && tab.getText().equals(levelName) && ((AssetTab)tab).getAsset().getVersion() == version) {
                 FXAssetSelectPane.getAssetSelectPane().getSelectionModel().select(tab);
                 return;
             }
@@ -302,81 +306,7 @@ public class LevelLoader {
         FXAssetSelectPane.getAssetSelectPane().setMinHeight(30);
         FXAssetSelectPane.getAssetSelectPane().setMaxHeight(30);
 
-        if (level instanceof WOG1Level wog1Level) {
-
-            for (EditorObject object : wog1Level.getScene()) {
-                object.update();
-                object.onLoaded();
-            }
-
-            for (EditorObject object : wog1Level.getLevel()) {
-                object.update();
-                object.onLoaded();
-            }
-
-            for (EditorObject object : wog1Level.getResrc()) {
-                object.update();
-                object.onLoaded();
-            }
-
-            // Put everything in the hierarchy
-            wog1Level.getSceneObject().getTreeItem().setExpanded(true);
-            FXHierarchy.getHierarchy().setRoot(wog1Level.getSceneObject().getTreeItem());
-
-            // Add items from the Scene to it
-            FXPropertiesView.getPropertiesView().setRoot(FXPropertiesView.makePropertiesViewTreeItem(new EditorObject[]{wog1Level.getSceneObject()}));
-
-        } else if (level instanceof WOG2Level wog2Level) {
-
-            LoadingScreen loadingScreen = new LoadingScreen();
-
-            Task<Void> task = new Task<>() {
-                @Override
-                protected Void call() {
-
-                    long count = wog2Level.getObjects().size();
-
-                    long i = 0;
-                    try {
-                        for (EditorObject object : wog2Level.getObjects().toArray(new EditorObject[0])) {
-                            object.onLoaded();
-                            object.update();
-                            i++;
-                            updateProgress(i, count);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    
-                    for (EditorObject object : wog2Level.getObjects()) {
-                        object.postInit();
-                    }
-
-                    return null;
-                }
-            };
-
-            loadingScreen.setTask(task);
-            Stage stage = new Stage();
-            loadingScreen.start(stage);
-            task.setOnSucceeded(event -> stage.close());
-            task.setOnCancelled(event -> stage.close());
-            task.setOnFailed(event -> stage.close());
-            new Thread(task).start();
-
-            stage.setOnCloseRequest(event -> {
-                task.cancel();
-                FXAssetSelectPane.getAssetSelectPane().getTabs().remove(level.getAssetTab());
-            });
-
-            wog2Level.getLevel().getTreeItem().setExpanded(true);
-            FXHierarchy.getHierarchy().setRoot(wog2Level.getLevel().getTreeItem());
-
-            FXPropertiesView.getPropertiesView().setRoot(FXPropertiesView.makePropertiesViewTreeItem(new EditorObject[]{wog2Level.getLevel()}));
-
-            FXHierarchy.getNewHierarchySwitcherButtons().getSelectionModel().select(0);
-
-        }
+        level.load();
 
         if (!failedResources.isEmpty()) {
             StringBuilder fullError = new StringBuilder();
@@ -391,129 +321,28 @@ public class LevelLoader {
     }
 
 
-    public static void cloneLevel(String name, GameVersion version) {
+    public static void cloneLevel(String name) {
         FXAssetSelectPane.getAssetSelectPane().setMinHeight(30);
         FXAssetSelectPane.getAssetSelectPane().setMaxHeight(30);
 
-        if (LevelManager.getLevel() instanceof WOG1Level before) {
+        Asset _level = AssetManager.getAsset().clone(name);
 
-            ArrayList<EditorObject> sceneList = new ArrayList<>();
-            ArrayList<EditorObject> levelList = new ArrayList<>();
-            ArrayList<EditorObject> resourcesList = new ArrayList<>();
-            ArrayList<EditorObject> addinList = new ArrayList<>();
-            ArrayList<EditorObject> textList = new ArrayList<>();
+        LevelUpdater.saveLevel(_level);
 
-            FileManager.supremeAddToList(resourcesList, ObjectUtil.deepClone(before.getResrcObject(), null));
-            FileManager.supremeAddToList(sceneList, ObjectUtil.deepClone(before.getSceneObject(), null));
-            FileManager.supremeAddToList(levelList, ObjectUtil.deepClone(before.getLevelObject(), null));
-            // Generate new addin object. idk why cloning it doesn't work, but this is arguably better anyway
-            FileManager.supremeAddToList(addinList, BlankObjectGenerator.generateBlankAddinObject(name, version));
-            FileManager.supremeAddToList(textList, ObjectUtil.deepClone(before.getTextObject(), null));
-
-            String oldLevelName = LevelManager.getLevel().getLevelName();
-            WOG1Level level = new WOG1Level(sceneList, levelList, resourcesList, addinList, textList, version);
-
-            level.setLevelName(name);
-            FXEditorButtons.updateAllButtons();
-            FXMenu.updateAllButtons();
-
-            for (EditorObject object : level.getResrc()) {
-                if (object instanceof Resources) {
-                    object.setAttribute("id", "scene_" + name);
-                } else if (object instanceof ResrcImage || object instanceof Sound) {
-                    object.setAttribute("id", object.getAttribute("id").stringValue().replaceAll(oldLevelName.toUpperCase(), name.toUpperCase()));
-                }
-                object.update();
-            }
-
-            for (EditorObject object : level.getScene()) {
-                if (object instanceof SceneLayer) {
-                    object.setAttribute("image", object.getAttribute("image").stringValue().replaceAll(oldLevelName, name));
-                }
-                object.update();
-            }
-
-            for (EditorObject object : level.getLevel()) {
-                if (object instanceof Signpost) {
-                    object.setAttribute("image", object.getAttribute("image").stringValue().replaceAll(oldLevelName, name));
-                }
-                object.update();
-            }
-
-            // Put everything in the hierarchy
-            level.getSceneObject().getTreeItem().setExpanded(true);
-            FXHierarchy.getHierarchy().setRoot(level.getSceneObject().getTreeItem());
-
-            // Add items from the Scene to it
-            FXPropertiesView.getPropertiesView().setRoot(FXPropertiesView.makePropertiesViewTreeItem(new EditorObject[]{level.getSceneObject()}));
-
-
-            LevelUpdater.saveLevel(level);
-
-            finishOpeningLevel(level);
-
-        } else if (LevelManager.getLevel() instanceof WOG2Level before) {
-
-            //ArrayList<EditorObject> objectsList = new ArrayList<>();
-
-            StringBuilder levelExport = new StringBuilder();
-            GOOWriter.recursiveGOOExport(levelExport, before.getLevel(), 0);
-            EditorObject levelObject = ObjectGOOParser.read(_2_Level.class, levelExport.toString());
-            ArrayList<EditorObject> objects = new ArrayList<>();
-            Stack<EditorObject> toAdd = new Stack<>();
-            toAdd.push(levelObject);
-            while (!toAdd.isEmpty()) {
-                EditorObject thisObject = toAdd.pop();
-                objects.add(thisObject);
-                for (EditorObject child : thisObject.getChildren()) {
-                    toAdd.push(child);
-                }
-
-            }
-
-            ArrayList<EditorObject> addinList = new ArrayList<>();
-            // Generate new addin object. IDK why cloning it doesn't work, but this is arguably better anyway
-            FileManager.supremeAddToList(addinList, BlankObjectGenerator.generateBlankAddinObject(name, version));
-
-            WOG2Level level = new WOG2Level(objects, addinList);
-
-            for (EditorObject object : level.getObjects()) {
-                object.update();
-                object.onLoaded();
-            }
-
-            //FileManager.supremeAddToList(objectsList, ObjectUtil.deepClone(before.getLevel(), null));
-
-
-            level.setLevelName(name);
-            FXEditorButtons.updateAllButtons();
-            FXMenu.updateAllButtons();
-
-            // Put everything in the hierarchy
-            level.getLevel().getTreeItem().setExpanded(true);
-            FXHierarchy.getHierarchy().setRoot(level.getLevel().getTreeItem());
-
-            // Add items from the Scene to it
-            FXPropertiesView.getPropertiesView().setRoot(FXPropertiesView.makePropertiesViewTreeItem(new EditorObject[]{level.getLevel()}));
-
-            LevelUpdater.saveLevel(level);
-
-            finishOpeningLevel(level);
-
-        }
+        finishOpeningLevel(_level);
 
     }
 
 
     public static void cloneLevel() {
-        GameVersion version = LevelManager.getLevel().getVersion();
+        GameVersion version = AssetManager.getAsset().getVersion();
         AskForLevelNameAlarm.show("clone", version);
     }
 
 
-    private static void finishOpeningLevel(_Level level) {
+    public static void finishOpeningLevel(Asset level) {
 
-        AssetTab levelSelectButton = FXAssetSelectPane.levelSelectButton(level);
+        AssetTab levelSelectButton = FXAssetSelectPane.createAssetTab(level);
         FXAssetSelectPane.getAssetSelectPane().getTabs().add(levelSelectButton);
 
         int numTabs = FXAssetSelectPane.getAssetSelectPane().getTabs().size();
@@ -524,7 +353,7 @@ public class LevelLoader {
         level.setAssetTab(levelSelectButton);
         level.setEditingStatus(AssetTab.NO_UNSAVED_CHANGES, true);
         FXAssetSelectPane.getAssetSelectPane().getSelectionModel().select(levelSelectButton);
-        LevelManager.onSetLevel(level);
+        AssetManager.onSetAsset(level);
 
     }
 

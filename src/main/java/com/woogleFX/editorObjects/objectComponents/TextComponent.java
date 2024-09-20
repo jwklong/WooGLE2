@@ -3,12 +3,10 @@ package com.woogleFX.editorObjects.objectComponents;
 import com.woogleFX.gameData.font.Layer;
 import com.woogleFX.gameData.font._Font;
 import com.woogleFX.editorObjects.objectComponents.generic.RotatableProperty;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.DragSettings;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
@@ -54,9 +52,9 @@ public abstract class TextComponent extends ObjectComponent implements Rotatable
         double labelScale = getScale();
 
 
-        double offsetX = LevelManager.getLevel().getOffsetX();
-        double offsetY = LevelManager.getLevel().getOffsetY();
-        double zoom = LevelManager.getLevel().getZoom();
+        double offsetX = AssetManager.getAsset().getOffsetX();
+        double offsetY = AssetManager.getAsset().getOffsetY();
+        double zoom = AssetManager.getAsset().getZoom();
 
         graphicsContext.save();
 

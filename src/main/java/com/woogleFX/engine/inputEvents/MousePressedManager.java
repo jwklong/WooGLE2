@@ -1,5 +1,6 @@
 package com.woogleFX.engine.inputEvents;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
@@ -9,7 +10,7 @@ import com.woogleFX.engine.fx.*;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.engine.renderer.Renderer;
 import com.woogleFX.engine.SelectionManager;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.DragSettings;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.CreateSplinePointAction;
@@ -27,41 +28,8 @@ import javafx.scene.input.MouseEvent;
 
 import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MousePressedManager {
-
-    private static EditorObject getEditorObjectThatHasThis(ObjectComponent objectComponent, _Level _level) {
-
-        if (_level instanceof WOG1Level level) {
-
-            for (EditorObject EditorObject : level.getLevel()) {
-                if (List.of(EditorObject.getObjectComponents()).contains(objectComponent)) return EditorObject;
-            }
-            for (EditorObject EditorObject : level.getScene()) {
-                if (List.of(EditorObject.getObjectComponents()).contains(objectComponent)) return EditorObject;
-            }
-            for (EditorObject EditorObject : level.getResrc()) {
-                if (List.of(EditorObject.getObjectComponents()).contains(objectComponent)) return EditorObject;
-            }
-            for (EditorObject EditorObject : level.getAddin()) {
-                if (List.of(EditorObject.getObjectComponents()).contains(objectComponent)) return EditorObject;
-            }
-            for (EditorObject EditorObject : level.getText()) {
-                if (List.of(EditorObject.getObjectComponents()).contains(objectComponent)) return EditorObject;
-            }
-
-        } else if (_level instanceof WOG2Level level) {
-
-            for (EditorObject editorObject : level.getObjects()) {
-                if (List.of(editorObject.getObjectComponents()).contains(objectComponent)) return editorObject;
-            }
-
-        }
-
-        return null;
-
-    }
 
 
     /** Called whenever the mouse is pressed. */
@@ -73,7 +41,7 @@ public class MousePressedManager {
 
     private static void primaryMouseButton(MouseEvent event) {
 
-        _Level level = LevelManager.getLevel();
+        Asset level = AssetManager.getAsset();
         if (level == null) return;
 
         if (level.getSelected().length != 0) ifSelectedAlreadyExists(level);
@@ -81,7 +49,9 @@ public class MousePressedManager {
         if (event.getY() < FXCanvas.getMouseYOffset()) return;
 
         if (SelectionManager.getMode() == SelectionManager.SELECTION) manageSelection(event, level);
-        else if (SelectionManager.getMode() == SelectionManager.STRAND) tryToPlaceStrand(event, level);
+        else if (SelectionManager.getMode() == SelectionManager.STRAND) {
+            if (level instanceof _Level _level) tryToPlaceStrand(event, _level);
+        }
         else if (SelectionManager.getMode() == SelectionManager.GEOMETRY) manageSplinePlacement(event, level);
 
     }
@@ -102,7 +72,7 @@ public class MousePressedManager {
     }
 
 
-    private static void ifSelectedAlreadyExists(_Level level) {
+    private static void ifSelectedAlreadyExists(Asset level) {
 
         TreeTableView<EditorAttribute> propertiesView = FXPropertiesView.getPropertiesView();
 
@@ -116,7 +86,7 @@ public class MousePressedManager {
     }
 
 
-    private static void manageSelection(MouseEvent event, _Level level) {
+    private static void manageSelection(MouseEvent event, Asset level) {
 
         SplitPane splitPane = FXContainers.getSplitPane();
         double editorViewWidth = splitPane.getDividerPositions()[0] * splitPane.getWidth() - 6;
@@ -140,7 +110,7 @@ public class MousePressedManager {
 
             }
 
-        EditorObject selectedObject = getEditorObjectThatHasThis(dragSettings.getObjectComponent(), level);
+        EditorObject selectedObject = level.getObjectWithComponent(dragSettings.getObjectComponent());
         if (selectedObject == null) return;
 
         EditorObject[] selectedList;
@@ -200,7 +170,7 @@ public class MousePressedManager {
     }
 
 
-    private static void updateOldAttributes(_Level level) {
+    private static void updateOldAttributes(Asset level) {
 
         EditorAttribute[][] oldAttributes = new EditorAttribute[level.getSelected().length][];
 
@@ -231,7 +201,7 @@ public class MousePressedManager {
     }
 
 
-    public static DragSettings tryToSelectSomething(MouseEvent event, _Level level) {
+    public static DragSettings tryToSelectSomething(MouseEvent event, Asset level) {
 
         double mouseX = (event.getX() - level.getOffsetX()) / level.getZoom();
         double mouseY = (event.getY() - FXCanvas.getMouseYOffset() - level.getOffsetY()) / level.getZoom();
@@ -246,10 +216,8 @@ public class MousePressedManager {
 
         ArrayList<ObjectComponent> byDepth = Renderer.orderObjectPositionsByDepth(level);
         byDepth.sort((o1, o2) -> (int)Math.signum(o2.getDepth() - o1.getDepth()));
-        for (int i = 0; i < byDepth.size(); i++) {
-            ObjectComponent object = byDepth.get(i);
-            if (!object.isVisible()) continue;
-            if (!object.isSelectable()) continue;
+        for (ObjectComponent object : byDepth) {
+            if (!object.isVisible() || !object.isSelectable()) continue;
             DragSettings dragSettings = object.mouseIntersection(mouseX, mouseY);
             if (dragSettings != DragSettings.NULL) return dragSettings;
         }
@@ -259,7 +227,7 @@ public class MousePressedManager {
     }
 
 
-    private static void manageSplinePlacement(MouseEvent event, _Level level) {
+    private static void manageSplinePlacement(MouseEvent event, Asset level) {
 
         double mouseX = (event.getX() - level.getOffsetX()) / level.getZoom();
         double mouseY = (event.getY() - FXCanvas.getMouseYOffset() - level.getOffsetY()) / level.getZoom();
@@ -310,7 +278,7 @@ public class MousePressedManager {
 
 
     private static boolean mouseIntersection(double mouseX, double mouseY, double x, double y) {
-        double width = 6 / LevelManager.getLevel().getZoom();
+        double width = 6 / AssetManager.getAsset().getZoom();
         return Math.hypot(mouseX - x, mouseY - y) < width;
     }
 

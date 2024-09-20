@@ -5,7 +5,7 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.renderer.Depth;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
@@ -180,7 +180,7 @@ public class Rectangle extends EditorObject {
             }
             public double getEdgeSize() {
                 boolean contacts = getAttribute("contacts").booleanValue();
-                return (contacts || LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 2) ? 4 : 0;
+                return (contacts || AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 2) ? 4 : 0;
             }
             public boolean isEdgeOnly() {
                 return false;
@@ -196,7 +196,7 @@ public class Rectangle extends EditorObject {
                 return new Color(color.getRed(), color.getGreen(), color.getBlue(), 0.25);
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 0;
+                return AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 0;
             }
         });
 
@@ -245,7 +245,7 @@ public class Rectangle extends EditorObject {
                 return 0;
             }
             public boolean isVisible() {
-                return LevelManager.getLevel().getVisibilitySettings().isShowGraphics();
+                return AssetManager.getAsset().getVisibilitySettings().isShowGraphics();
             }
         });
 
@@ -258,7 +258,7 @@ public class Rectangle extends EditorObject {
 
     public static Color geometryColor(String[] tags, EditorObject parent) {
 
-        if (LevelManager.getLevel().getVisibilitySettings().getShowGeometry() != 2) {
+        if (AssetManager.getAsset().getVisibilitySettings().getShowGeometry() != 2) {
             return new Color(0.0, 0.25, 1.0, 1.0);
         }
 
@@ -303,11 +303,11 @@ public class Rectangle extends EditorObject {
 
     private void updateImage() {
 
-        if (LevelManager.getLevel() == null) return;
+        if (AssetManager.getAsset() == null) return;
 
         try {
             if (!getAttribute("image").stringValue().isEmpty()) {
-                image = getAttribute("image").imageValue(((WOG1Level)LevelManager.getLevel()).getResrc(), getVersion());
+                image = getAttribute("image").imageValue(((WOG1Level) AssetManager.getAsset()).getResrc(), getVersion());
             }
         } catch (FileNotFoundException ignored) {
 

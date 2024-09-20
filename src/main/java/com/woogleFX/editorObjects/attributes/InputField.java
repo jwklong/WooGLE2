@@ -11,7 +11,7 @@ import com.woogleFX.file.resourceManagers.BaseGameResources;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.gameData.animation.AnimationManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.particle.ParticleManager;
 import com.worldOfGoo.level.BallInstance;
@@ -198,7 +198,7 @@ public enum InputField {
         switch (type) {
 
             case _1_GOOBALL_ID -> {
-                WOG1Level level = (WOG1Level)LevelManager.getLevel();
+                WOG1Level level = (WOG1Level) AssetManager.getAsset();
                 for (EditorObject ball : level.getLevel())
                     if (ball instanceof BallInstance &&
                             ball.getAttribute("id").stringValue().equals(potential)) return true;
@@ -206,7 +206,7 @@ public enum InputField {
             }
 
             case _1_UNIQUE_GOOBALL_ID -> {
-                WOG1Level level = (WOG1Level)LevelManager.getLevel();
+                WOG1Level level = (WOG1Level) AssetManager.getAsset();
                 for (EditorObject ball : level.getLevel())
                     if (ball instanceof BallInstance && ball != object &&
                             ball.getAttribute("id").stringValue().equals(potential)) return false;
@@ -214,7 +214,7 @@ public enum InputField {
             }
 
             case _1_IMAGE -> {
-                WOG1Level level = (WOG1Level)LevelManager.getLevel();
+                WOG1Level level = (WOG1Level) AssetManager.getAsset();
                 for (EditorObject resrc : level.getResrc())
                     if (resrc instanceof ResrcImage image &&
                             image.getAttribute("id").stringValue().equals(potential)) return true;
@@ -222,7 +222,7 @@ public enum InputField {
             }
 
             case _1_GEOMETRY -> {
-                WOG1Level level = (WOG1Level)LevelManager.getLevel();
+                WOG1Level level = (WOG1Level) AssetManager.getAsset();
                 for (EditorObject EditorObject : level.getScene()) {
                     if (EditorObject instanceof Rectangle ||
                         EditorObject instanceof Circle ||

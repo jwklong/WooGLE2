@@ -2,7 +2,7 @@ package com.woogleFX.editorObjects.splineGeom;
 
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
-import com.woogleFX.engine.LevelManager;
+import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.DeleteSplinePointAction;
 import com.woogleFX.engine.undoHandling.userActions.ObjectCreationAction;
@@ -607,9 +607,9 @@ public class SplineGeometryPlacer {
             undoBuilder.add(new DeleteSplinePointAction(p0.getX(), p0.getY(), p1.getX(), p1.getY(), p2.getX(), p2.getY(), i));
         }
 
-        WOG1Level level = (WOG1Level) LevelManager.getLevel();
+        WOG1Level level = (WOG1Level) AssetManager.getAsset();
 
-        EditorObject compositegeom = (EditorObject)ObjectCreator.create("compositegeom", level.getSceneObject(), LevelManager.getLevel().getVersion());
+        EditorObject compositegeom = ObjectCreator.create("compositegeom", level.getSceneObject(), AssetManager.getAsset().getVersion());
         compositegeom.setAttribute("x", splineBounds.minX + width / 2);
         compositegeom.setAttribute("y", -splineBounds.minY - height / 2);
         level.getScene().add(compositegeom);
@@ -622,14 +622,14 @@ public class SplineGeometryPlacer {
 
             if (geometry instanceof Circle circle) {
 
-                geometryObject = (EditorObject)ObjectCreator.create("circle", compositegeom, LevelManager.getLevel().getVersion());
+                geometryObject = ObjectCreator.create("circle", compositegeom, AssetManager.getAsset().getVersion());
                 geometryObject.setAttribute("x", circle.x * size + splineBounds.minX - compositegeom.getAttribute("x").doubleValue());
                 geometryObject.setAttribute("y", -circle.y * size - splineBounds.minY - compositegeom.getAttribute("y").doubleValue());
                 geometryObject.setAttribute("radius", circle.radius * size);
 
             } else if (geometry instanceof Rectangle rectangle) {
 
-                geometryObject = (EditorObject)ObjectCreator.create("rectangle", compositegeom, LevelManager.getLevel().getVersion());
+                geometryObject = ObjectCreator.create("rectangle", compositegeom, AssetManager.getAsset().getVersion());
                 geometryObject.setAttribute("x", rectangle.x * size + splineBounds.minX - compositegeom.getAttribute("x").doubleValue());
                 geometryObject.setAttribute("y", -rectangle.y * size - splineBounds.minY - compositegeom.getAttribute("y").doubleValue());
                 geometryObject.setAttribute("width", rectangle.width * size);
