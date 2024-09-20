@@ -138,8 +138,7 @@ public class MousePressedManager {
                 SelectionManager.setDragSettings(dragSettings);
                 return;
 
-
-        }
+            }
 
         EditorObject selectedObject = getEditorObjectThatHasThis(dragSettings.getObjectComponent(), level);
         if (selectedObject == null) return;

@@ -115,6 +115,7 @@ public class _2_Level_Item extends _2_Positionable {
         }
         randomizationIndices.replaceAll((k, v) -> (int) (Math.random() * randomizationIndices.get(k)));
 
+        updateImage();
         refreshUserVariables();
 
     }
