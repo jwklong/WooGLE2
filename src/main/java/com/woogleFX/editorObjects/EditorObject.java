@@ -79,7 +79,9 @@ public class EditorObject {
             } else {
                 String attributeManifestPath = "/" + getClass().getName().replace('.', '/') + ".xml";
                 InputStream inputStream = getClass().getResourceAsStream(attributeManifestPath);
+                if (inputStream == null) return;
                 attributeManifest = new XmlMapper().readValue(inputStream, AttributeManifest.class);
+                if (attributeManifest == null) return;
                 attributeManifestMap.put(getClass(), attributeManifest);
             }
             ArrayList<EditorAttribute> attributes1 = new ArrayList<>();
@@ -94,7 +96,9 @@ public class EditorObject {
                 realAttribute.setRequired(editorAttribute.getRequired());
                 attributes1.add(realAttribute);
             }
+            long time = System.nanoTime();
             setAttributes(attributes1.toArray(new EditorAttribute[0]));
+            if (attributeManifest.getMetaAttributes() == null) return;
             for (MetaEditorAttribute metaEditorAttribute : attributeManifest.getMetaAttributes()) {
                 MetaEditorAttribute mine = new MetaEditorAttribute();
                 mine.setName(metaEditorAttribute.getName());
@@ -115,8 +119,10 @@ public class EditorObject {
                     }
                 }
                 metaAttributes.add(mine);
+                // System.out.println(System.nanoTime() - time);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             if (this instanceof _2_Level_BallInstance)
                 e.printStackTrace();
         }
@@ -307,9 +313,9 @@ public class EditorObject {
         return null;
     }
     
-    public final ArrayList<EditorObject> getChildren(String attributeName) {
+    public synchronized final ArrayList<EditorObject> getChildren(String attributeName) {
         ArrayList<EditorObject> children2 = new ArrayList<>();
-        for (EditorObject child : children) if (child.getTypeID().equals(attributeName)) children2.add(child);
+        for (EditorObject child : children.toArray(new EditorObject[0])) if (child != null && child.getTypeID().equals(attributeName)) children2.add(child);
         return children2;
     }
 

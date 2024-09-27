@@ -9,7 +9,9 @@ import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.DragSettings;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.transform.Affine;
 
 /** Represents a rectangle component in any object. */
 public abstract class RectangleComponent extends ObjectComponent
@@ -66,19 +68,19 @@ public abstract class RectangleComponent extends ObjectComponent
         double zoom = AssetManager.getAsset().getZoom();
 
         Point2D topLeft = new Point2D(x - width / 2 + woag2, y - height / 2 + woag1);
-        topLeft = ObjectUtil.rotate(topLeft, rotation, center);
+        topLeft = ObjectUtil.rotate(topLeft, -rotation, center);
         topLeft = topLeft.multiply(zoom).add(offsetX, offsetY);
 
         Point2D topRight = new Point2D(x + width / 2 - woag2, y - height / 2 + woag1);
-        topRight = ObjectUtil.rotate(topRight, rotation, center);
+        topRight = ObjectUtil.rotate(topRight, -rotation, center);
         topRight = topRight.multiply(zoom).add(offsetX, offsetY);
 
         Point2D bottomLeft = new Point2D(x - width / 2 + woag2, y + height / 2 - woag1);
-        bottomLeft = ObjectUtil.rotate(bottomLeft, rotation, center);
+        bottomLeft = ObjectUtil.rotate(bottomLeft, -rotation, center);
         bottomLeft = bottomLeft.multiply(zoom).add(offsetX, offsetY);
 
         Point2D bottomRight = new Point2D(x + width / 2 - woag2, y + height / 2 - woag1);
-        bottomRight = ObjectUtil.rotate(bottomRight, rotation, center);
+        bottomRight = ObjectUtil.rotate(bottomRight, -rotation, center);
         bottomRight = bottomRight.multiply(zoom).add(offsetX, offsetY);
 
         Point2D topLeft2 = new Point2D(x - width / 2, y - height / 2);
@@ -99,10 +101,12 @@ public abstract class RectangleComponent extends ObjectComponent
 
         graphicsContext.setFill(getColor());
 
-        graphicsContext.fillPolygon(
-                new double[]{ topRight.getX(), topLeft.getX(), bottomLeft.getX(), bottomRight.getX() },
-                new double[]{ topRight.getY(), topLeft.getY(), bottomLeft.getY(), bottomRight.getY() },
-                4);
+        graphicsContext.save();
+        Affine t = graphicsContext.getTransform();
+        t.appendRotation(Math.toDegrees(rotation), topLeft2.getX(), topLeft2.getY());
+        graphicsContext.setTransform(t);
+        graphicsContext.fillRect(topLeft2.getX(), topLeft2.getY(), width * zoom, height * zoom);
+        graphicsContext.restore();
 
         graphicsContext.setStroke(getBorderColor());
 

@@ -259,6 +259,7 @@ public class FXPropertiesView {
 
                     @Override
                     public void commitEdit(String s) {
+                        if (getTableRow().getItem() == null) return;
                         InputField type = getTableRow().getItem().getType();
                         EditorObject object = getTableRow().getItem().getObject();
                         super.commitEdit(InputField.verify(object, type, s, getTableRow().getItem().getRequired()) ? s : before);

@@ -3,7 +3,9 @@ package com.woogleFX.engine;
 import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.engine.fx.*;
-import com.woogleFX.engine.fx.hierarchy.FXHierarchySwitcherButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons_Resources;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons_ShowHide;
 import com.woogleFX.engine.fx.menu.FXMenu;
 import com.woogleFX.engine.renderer.Renderer;
 import com.woogleFX.gameData.level.GameVersion;
@@ -59,8 +61,8 @@ public class AssetManager {
         }
 
         if (asset instanceof WOG2Level wog2Level) {
-            FXEditorButtons.updateTerrainGroupSelector(wog2Level);
-            FXEditorButtons.updateItemsSelector(wog2Level);
+            FXEditorButtons_ShowHide.updateTerrainGroupSelector(wog2Level);
+            FXEditorButtons_Resources.updateItemsSelector(wog2Level);
         }
 
         asset.setUpTabs();

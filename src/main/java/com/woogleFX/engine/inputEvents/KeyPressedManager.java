@@ -9,7 +9,7 @@ import com.woogleFX.engine.SelectionManager;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.DeleteSplinePointAction;
 import com.woogleFX.engine.undoHandling.userActions.UserAction;
-import com.woogleFX.gameData.level.levelSaving.LevelUpdater;
+import com.woogleFX.gameData.level.levelSaving.AssetUpdater;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -83,7 +83,7 @@ public class KeyPressedManager {
         }
         if (event.isControlDown()) {
             if (event.getCode() == KeyCode.S) {
-                LevelUpdater.saveLevel(AssetManager.getAsset());
+                AssetUpdater.saveAsset(AssetManager.getAsset());
             }
             if (event.getCode() == KeyCode.Z) {
                 if (event.isShiftDown()) UndoManager.redo();

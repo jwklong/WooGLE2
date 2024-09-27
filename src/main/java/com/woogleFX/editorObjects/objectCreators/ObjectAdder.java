@@ -276,7 +276,7 @@ public class ObjectAdder {
 
             // Loop over all BallInstances in the level.
             for (EditorObject ball : level.getObjects()) {
-                if (ball instanceof _2_Level_BallInstance) {
+                if (ball instanceof _2_Level_BallInstance && ball != obj) {
 
                     // Check if the ball's ID is "goo[number]".
                     // If it is, flag that number as already taken.

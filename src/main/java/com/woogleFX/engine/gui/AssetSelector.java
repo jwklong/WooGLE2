@@ -1,12 +1,16 @@
 package com.woogleFX.engine.gui;
 
+import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.gameData.level.GameVersion;
+import com.woogleFX.gameData.level.levelOpening.AssetLoader;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -31,11 +35,22 @@ public abstract class AssetSelector extends Application {
 
         assetSelectBox.getChildren().clear();
 
+        int i = 0;
         for (Label label : labels) {
             if (label.getText().toLowerCase().contains(searchField.toLowerCase()) || searchField.isEmpty()) {
                 if (filterState == 0 && !isOriginal(label.getText())) continue;
                 if (filterState == 1 && isOriginal(label.getText())) continue;
                 assetSelectBox.getChildren().add(label);
+                if (i % 2 == 0) {
+                    label.setStyle("-fx-background-color: #f0f0f0");
+                    label.setId("-fx-background-color: #f0f0f0");
+                }
+                else {
+                    label.setStyle("-fx-background-color: #e4e4e4");
+                    label.setId("-fx-background-color: #e4e4e4");
+                }
+                label.setPrefWidth(400);
+                i++;
             }
         }
 
@@ -49,6 +64,7 @@ public abstract class AssetSelector extends Application {
         ArrayList<Label> labels = new ArrayList<>();
 
         TextField searchField = new TextField();
+        searchField.setPrefWidth(200);
 
 
         ComboBox<String> filter = new ComboBox<>();
@@ -57,6 +73,7 @@ public abstract class AssetSelector extends Application {
 
         filter.getSelectionModel().selectedIndexProperty().addListener((observableValue, s, t1) ->
                 rebuildAssetSelectBox(assetSelectBox, labels, searchField.getText(), t1.intValue()));
+        filter.getSelectionModel().select(2);
 
         List<String> items = getItems();
         for (String item : items) {
@@ -64,10 +81,10 @@ public abstract class AssetSelector extends Application {
 
             label.setOnMouseClicked(event -> {
                 if (label == selectedLabel) {
-                    onItemSelected(label.getText());
+                    AssetLoader.openAsset(this, label.getText());
                     stage.close();
                 } else {
-                    if (selectedLabel != null) selectedLabel.setStyle("");
+                    if (selectedLabel != null) selectedLabel.setStyle(selectedLabel.getId());
                     selectedLabel = label;
                     label.setStyle("-fx-background-color: #C0E0FFFF");
                 }
@@ -80,15 +97,21 @@ public abstract class AssetSelector extends Application {
         rebuildAssetSelectBox(assetSelectBox, labels, "", filter.getSelectionModel().getSelectedIndex());
 
         ScrollPane scrollPane = new ScrollPane(assetSelectBox);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        VBox allEncompassingBox = new VBox(filter, searchField, scrollPane);
+        HBox hBox = new HBox(searchField, filter);
+
+        VBox allEncompassingBox = new VBox(hBox, scrollPane);
 
         stage.setScene(new Scene(allEncompassingBox, 400, 375));
 
-        stage.setTitle("Select level...");
+        stage.setTitle("Select " + getTitle() + "...");
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
+
+        searchField.prefWidthProperty().bind(hBox.widthProperty().subtract(filter.widthProperty()));
+        System.out.println(hBox.getWidth() - filter.getWidth());
 
     }
 
@@ -98,10 +121,14 @@ public abstract class AssetSelector extends Application {
     }
 
 
+    public abstract String getTitle();
+
     public abstract List<String> getItems();
 
-    public abstract void onItemSelected(String item);
-
     public abstract boolean isOriginal(String item);
+
+    public abstract Asset newInstance(String name);
+
+    public abstract Asset openInstance(String name);
 
 }

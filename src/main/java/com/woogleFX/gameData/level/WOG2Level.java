@@ -6,7 +6,7 @@ import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.editorObjects.objectCreators.BlankObjectGenerator;
 import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.fx.FXContainers;
-import com.woogleFX.engine.fx.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons;
 import com.woogleFX.engine.fx.FXPropertiesView;
 import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
@@ -19,8 +19,10 @@ import com.woogleFX.file.fileExport.GOOWriter;
 import com.woogleFX.file.fileExport.Goo2modExporter;
 import com.woogleFX.file.fileExport.XMLUtility;
 import com.woogleFX.file.fileImport.ObjectGOOParser;
+import com.woogleFX.file.resourceManagers.BaseGameResources;
 import com.woogleFX.gameData.level.levelSaving.AssetVerifier;
 import com.worldOfGoo2.level._2_Level;
+import com.worldOfGoo2.level._2_Level_BallInstance;
 import com.worldOfGoo2.level._2_Level_TerrainGroup;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
@@ -68,17 +70,9 @@ public class WOG2Level extends _Level {
 
         AssetManager.setAsset(this);
 
-        for (EditorObject ball : getLevel().getChildren("balls")) {
-            EditorObject terrainBall = getLevel().getChildren("terrainBalls").remove(0);
-            getObjects().remove(terrainBall);
-            getLevel().getChildren().remove(terrainBall);
-            ball.setAttribute("terrainGroup", terrainBall.getAttribute("group").stringValue());
-        }
-
         resetCamera();
 
     }
-
 
     @Override
     public void resetCamera() {
@@ -87,7 +81,7 @@ public class WOG2Level extends _Level {
 
         double sceneWidth = boundsTopRight.getAttribute("x").doubleValue() - boundsBottomLeft.getAttribute("x").doubleValue();
         double sceneHeight = boundsTopRight.getAttribute("y").doubleValue() - boundsBottomLeft.getAttribute("y").doubleValue();
-        double middleX = -(boundsBottomLeft.getAttribute("x").doubleValue() + boundsTopRight.getAttribute("x").doubleValue()) / 2;
+        double middleX = (boundsBottomLeft.getAttribute("x").doubleValue() + boundsTopRight.getAttribute("x").doubleValue()) / 2;
         double middleY = (boundsBottomLeft.getAttribute("y").doubleValue() + boundsTopRight.getAttribute("y").doubleValue()) / 2;
 
         double canvasWidth = FXContainers.getSplitPane().getDividers().get(0).getPosition() * FXContainers.getSplitPane().getWidth();
@@ -189,8 +183,6 @@ public class WOG2Level extends _Level {
             root.getChildren().clear();
 
             for (EditorObject child : level.getChildren()) {
-
-                System.out.println(child);
 
                 if ((child.getType().equals("BallInstance") && child.getAttribute("type").stringValue().equals("Terrain")) && t1 == terrain) root.getChildren().add(child.getTreeItem());
                 else if (child instanceof _2_Level_TerrainGroup && t1 == terrainGroups) root.getChildren().add(child.getTreeItem());
@@ -317,6 +309,7 @@ public class WOG2Level extends _Level {
 
     @Override
     public void load() {
+        System.out.println("I STARTED LOADING!!");
         LoadingScreen loadingScreen = new LoadingScreen();
 
         Task<Void> task = new Task<>() {
@@ -341,16 +334,40 @@ public class WOG2Level extends _Level {
                     object.postInit();
                 }
 
+                System.out.println("Performance 1:");
+
+                for (EditorObject ball : getLevel().getChildren("balls")) {
+                    EditorObject terrainBall = getLevel().getChildren("terrainBalls").remove(0);
+                    getObjects().remove(terrainBall);
+                    getLevel().getChildren().remove(terrainBall);
+                    ball.setAttribute("terrainGroup", terrainBall.getAttribute("group").stringValue());
+                }
+
+                System.out.println("Finished.");
+
                 return null;
             }
         };
 
+        loadingScreen.setAssetName("Level");
         loadingScreen.setTask(task);
         Stage stage = new Stage();
         loadingScreen.start(stage);
-        task.setOnSucceeded(event -> stage.close());
-        task.setOnCancelled(event -> stage.close());
-        task.setOnFailed(event -> stage.close());
+        task.setOnSucceeded(event -> {
+            FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(1);
+            FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(0);
+            stage.close();
+        });
+        task.setOnCancelled(event -> {
+            FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(1);
+            FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(0);
+            stage.close();
+        });
+        task.setOnFailed(event -> {
+            FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(1);
+            FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(0);
+            stage.close();
+        });
         new Thread(task).start();
 
         stage.setOnCloseRequest(event -> {
@@ -364,7 +381,13 @@ public class WOG2Level extends _Level {
         FXPropertiesView.getPropertiesView().setRoot(FXPropertiesView.makePropertiesViewTreeItem(new EditorObject[]{level}));
 
         FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(0);
+        System.out.println("I FINISHED LOADING!!");
 
+    }
+
+    @Override
+    public boolean isBaseGame() {
+        return BaseGameResources.LEVELS.get(getVersion()).contains(getLevelName());
     }
 
 }

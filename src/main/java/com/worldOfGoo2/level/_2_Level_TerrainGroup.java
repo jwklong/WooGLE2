@@ -81,6 +81,15 @@ public class _2_Level_TerrainGroup extends EditorObject {
 
         getAttribute("type").addChangeListener((observable, oldValue, newValue) -> update());
 
+        int thisIndex = ((WOG2Level)AssetManager.getAsset()).getLevel().getChildren("terrainGroups").indexOf(this);
+        for (EditorObject ball : ((WOG2Level)AssetManager.getAsset()).getLevel().getChildren("balls")) {
+            if (ball.getAttribute("terrainGroup").intValue() == thisIndex) {
+                addBall((_2_Level_BallInstance) ball);
+                ((_2_Level_BallInstance) ball).setCurrentGroup(this);
+            }
+        }
+        update();
+
     }
     
     @Override

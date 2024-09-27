@@ -466,7 +466,7 @@ public class BinAnimationHelper {
 
                         }
 
-                        if (external.property12Offset != -1) {
+                        if (external.property12Offset != -1 && binAnimation.property12s.length != 0) {
 
                             SimpleBinAnimation.SimpleBinAnimationProperty12 property12 = binAnimation.property12s[external.property12Offset];
                             if (property12.type == 1) {

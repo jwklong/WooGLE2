@@ -9,7 +9,8 @@ import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.AssetManager;
-import com.woogleFX.engine.fx.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons_ShowHide;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.gameData.ball.AtlasManager;
 import com.woogleFX.gameData.ball._2Ball;
@@ -127,21 +128,8 @@ public class BallInstanceHelper {
 
         if (!ballInstance.getAttribute("discovered").booleanValue()) {
             if (!part.getAttribute("isActiveWhenUndiscovered").booleanValue()) return false;
-        } else {
-            for (EditorObject obj : ((WOG2Level) AssetManager.getAsset()).getObjects()) {
-                if (obj instanceof _2_Level_Strand strand) {
-
-                    String id = ballInstance.getAttribute("uid").stringValue();
-                    String gb1 = strand.getAttribute("ball1UID").stringValue();
-                    String gb2 = strand.getAttribute("ball2UID").stringValue();
-
-                    if (id.equals(gb1) || id.equals(gb2)) {
-                        state = "4";
-                        break;
-                    }
-
-                }
-            }
+        } else if (ballInstance.hasStrands()) {
+            state = "4";
         }
 
         ArrayList<EditorObject> states = part.getChildren("states");
@@ -462,7 +450,7 @@ public class BallInstanceHelper {
                     @Override
                     public boolean isVisible() {
                         if (AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 0) return false;
-                        return (ball == null || ballInstance.getAttribute("type").stringValue().equals("Terrain") && ballInstance.visibilityFunction()) || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1 || (ballInstance.getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons.comboBoxSelected == ballInstance.getAttribute("terrainGroup").intValue());
+                        return (ball == null || ballInstance.getAttribute("type").stringValue().equals("Terrain") && ballInstance.visibilityFunction()) || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1 || (ballInstance.getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons_ShowHide.comboBoxSelected == ballInstance.getAttribute("terrainGroup").intValue());
                     }
                     @Override
                     public boolean isRotatable() {
@@ -520,8 +508,8 @@ public class BallInstanceHelper {
                     if (ball == null) {
                         return new javafx.scene.paint.Color(0.5, 0.25, 0.25, 1.0);
                     } else {
-                        if (ballInstance.getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons.comboBoxSelected == ballInstance.getAttribute("terrainGroup").intValue() && FXEditorButtons.comboBoxSelected != -1) {
-                            if (FXEditorButtons.comboBoxList.get(FXEditorButtons.comboBoxSelected)) {
+                        if (ballInstance.getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons_ShowHide.comboBoxSelected == ballInstance.getAttribute("terrainGroup").intValue() && FXEditorButtons_ShowHide.comboBoxSelected != -1) {
+                            if (FXEditorButtons_ShowHide.comboBoxList.get(FXEditorButtons_ShowHide.comboBoxSelected)) {
                                 return new javafx.scene.paint.Color(1.0 ,0.0, 1.0, 1);
                             } else {
                                 return new javafx.scene.paint.Color(0.0 ,1.0, 1.0, 1);
@@ -551,7 +539,7 @@ public class BallInstanceHelper {
                 @Override
                 public boolean isVisible() {
                     if (AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 0) return false;
-                    return (ball == null || ballInstance.getAttribute("type").stringValue().equals("Terrain") && ballInstance.visibilityFunction()) || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1 || (ballInstance.getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons.comboBoxSelected == ballInstance.getAttribute("terrainGroup").intValue());
+                    return (ball == null || ballInstance.getAttribute("type").stringValue().equals("Terrain") && ballInstance.visibilityFunction()) || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1 || (ballInstance.getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons_ShowHide.comboBoxSelected == ballInstance.getAttribute("terrainGroup").intValue());
                 }
                 @Override
                 public boolean isResizable() {

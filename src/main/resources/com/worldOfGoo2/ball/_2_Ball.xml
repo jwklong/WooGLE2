@@ -272,16 +272,16 @@
         <MetaEditorAttribute name="stableFluidsDensityRange"/>
         <MetaEditorAttribute name="isLauncher"/>
         <MetaEditorAttribute name="canBeSuckedByLauncher"/>
-        <MetaEditorAttribute name="whenAttachedRenderOnTop"/>
-        <MetaEditorAttribute name="lighting"/>
         <MetaEditorAttribute name="unwalkableTime"/>
-        <MetaEditorAttribute name="renderInPlayMode"/>
-        <MetaEditorAttribute name="canActOnBalls"/>
         <MetaEditorAttribute name="despawnTriggersFullDeath"/>
         <MetaEditorAttribute name="deathParticleEffect"/>
         <MetaEditorAttribute name="flashAnimationPreLiquidLayerTextureIndices"/>
         <MetaEditorAttribute name="inputPipeForceVariation"/>
         <MetaEditorAttribute name="countMoveOnUnatachedRelease"/>
+
+        <MetaEditorAttribute name="Behavior" openByDefault="false">
+            <MetaEditorAttribute name="canActOnBalls"/>
+        </MetaEditorAttribute>
 
         <MetaEditorAttribute name="Cosmetic" openByDefault="false">
             <MetaEditorAttribute name="blinkColor"/>
@@ -325,6 +325,9 @@
                 <MetaEditorAttribute name="dragAttenuationFunc"/>
                 <MetaEditorAttribute name="spawnAttenuationFunc"/>
             </MetaEditorAttribute>
+            <MetaEditorAttribute name="whenAttachedRenderOnTop"/>
+            <MetaEditorAttribute name="lighting"/>
+            <MetaEditorAttribute name="renderInPlayMode"/>
         </MetaEditorAttribute>
 
         <MetaEditorAttribute name="Player Interaction" openByDefault="false">

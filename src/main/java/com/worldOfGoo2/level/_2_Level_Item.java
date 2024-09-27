@@ -28,6 +28,7 @@ import com.worldOfGoo2.items._2_Item_Object;
 import com.worldOfGoo2.util.BallInstanceHelper;
 import com.worldOfGoo2.util.BinAnimationHelper;
 import com.worldOfGoo2.util.ItemHelper;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -634,7 +635,7 @@ public class _2_Level_Item extends _2_Positionable {
                 }
                 @Override
                 public double getAlpha() {
-                    return part.getAttribute("imageAlpha").doubleValue() * (part.getAttribute("invisible").booleanValue() ? 0.5 : 1);
+                    return  (Long.parseLong(part.getAttribute("color").stringValue()) >> 24) / 255.0 * part.getAttribute("imageAlpha").doubleValue() * (part.getAttribute("invisible").booleanValue() ? 0.5 : 1);
                 }
                 @Override
                 public Image getImage() {

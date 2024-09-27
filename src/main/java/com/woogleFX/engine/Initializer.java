@@ -2,6 +2,7 @@ package com.woogleFX.engine;
 
 import com.woogleFX.engine.fx.*;
 import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.engine.fx.menu.FXMenu;
 import com.woogleFX.engine.gui.EditorWindow;
@@ -12,7 +13,7 @@ import com.woogleFX.file.resourceManagers.BaseGameResources;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.resourceManagers.GlobalResourceManager;
 import com.woogleFX.engine.inputEvents.*;
-import com.woogleFX.gameData.level.levelOpening.LevelLoader;
+import com.woogleFX.gameData.level.levelOpening.AssetLoader;
 import com.woogleFX.gameData.level.GameVersion;
 import javafx.concurrent.Task;
 import javafx.scene.input.KeyEvent;
@@ -117,9 +118,9 @@ public class Initializer {
                 if (launchArguments.length > 0) {
                     logger.info("Opening level " + launchArguments[0]);
                     if (!FileManager.getGameDir(GameVersion.VERSION_WOG1_NEW).isEmpty()) {
-                        LevelLoader.openLevel(launchArguments[0], GameVersion.VERSION_WOG1_NEW);
+                        // AssetLoader.openAsset(launchArguments[0], GameVersion.VERSION_WOG1_NEW);
                     } else {
-                        LevelLoader.openLevel(launchArguments[0], GameVersion.VERSION_WOG1_OLD);
+                        // AssetLoader.openAsset(launchArguments[0], GameVersion.VERSION_WOG1_OLD);
                     }
                 }
                 updateMessage("Finished");
@@ -131,6 +132,7 @@ public class Initializer {
 
         Stage stage = new Stage();
         LoadingScreen loadingScreen = new LoadingScreen();
+        loadingScreen.setAssetName("Everything");
         loadingScreen.setTask(task);
         task.setOnFailed(event -> stage.close());
         //loadingScreen.start(stage);

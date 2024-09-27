@@ -150,4 +150,6 @@ public abstract class Asset {
 
     public abstract void load();
 
+    public abstract boolean isBaseGame();
+
 }

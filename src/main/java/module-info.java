@@ -54,5 +54,6 @@ module com.example.WOGAnniversaryEditor {
   exports com.woogleFX.engine.fx.hierarchy;
     exports com.woogleFX.engine.fx.menu;
     exports com.woogleFX.engine.fx.assetSelectPane;
+    exports com.woogleFX.engine.fx.editorButtons;
 
 }

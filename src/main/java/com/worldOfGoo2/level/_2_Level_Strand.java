@@ -12,7 +12,8 @@ import com.woogleFX.editorObjects.attributes.MetaEditorAttribute;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.AssetManager;
-import com.woogleFX.engine.fx.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons_ShowHide;
 import com.woogleFX.engine.renderer.Renderer;
 import com.woogleFX.engine.undoHandling.userActions.ObjectDestructionAction;
 import com.woogleFX.file.resourceManagers.ResourceManager;
@@ -150,12 +151,16 @@ public class _2_Level_Strand extends EditorObject {
             }
 
         if (goo1 != null) {
-            if (!goo1.containsStrand(this)) goo1.addStrand(this);
-            goo1.updateTerrainGroup();
+            if (!goo1.containsStrand(this)) {
+                goo1.addStrand(this);
+                goo1.updateTerrainGroup();
+            }
         }
         if (goo2 != null) {
-            if (!goo2.containsStrand(this)) goo2.addStrand(this);
-            goo2.updateTerrainGroup();
+            if (!goo2.containsStrand(this)) {
+                goo2.addStrand(this);
+                goo2.updateTerrainGroup();
+            }
         }
         
         try {
@@ -334,8 +339,8 @@ public class _2_Level_Strand extends EditorObject {
 
                 if (length > maxSize) return new Color(1.0, 0.0, 0.0, 1.0);
                 if (length < minSize) return new Color(0.0, 0.0, 1.0, 1.0);
-                if (goo1 != null && getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons.comboBoxSelected == goo1.getAttribute("terrainGroup").intValue() && FXEditorButtons.comboBoxSelected != -1) {
-                    if (FXEditorButtons.comboBoxList.get(FXEditorButtons.comboBoxSelected)) {
+                if (goo1 != null && getAttribute("type").stringValue().equals("Terrain") && FXEditorButtons_ShowHide.comboBoxSelected == goo1.getAttribute("terrainGroup").intValue() && FXEditorButtons_ShowHide.comboBoxSelected != -1) {
+                    if (FXEditorButtons_ShowHide.comboBoxList.get(FXEditorButtons_ShowHide.comboBoxSelected)) {
                         return new Color(1.0 ,0.0, 1.0, 1);
                     } else {
                         return new Color(0.0 ,0.0, 1.0, 1);
@@ -351,7 +356,7 @@ public class _2_Level_Strand extends EditorObject {
 
             public boolean isVisible() {
                 if (getAttribute("type").stringValue().equals("Terrain")) {
-                    return (AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1 || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 2 && goo1.visibilityFunction() && goo2.visibilityFunction()) || FXEditorButtons.comboBoxSelected == goo1.getAttribute("terrainGroup").intValue();
+                    return (AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1 || AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 2 && goo1.visibilityFunction() && goo2.visibilityFunction()) || FXEditorButtons_ShowHide.comboBoxSelected == goo1.getAttribute("terrainGroup").intValue();
                 }
                 return AssetManager.getAsset().getVisibilitySettings().getShowGoos() == 1 && goo1.visibilityFunction() && goo2.visibilityFunction();
             }

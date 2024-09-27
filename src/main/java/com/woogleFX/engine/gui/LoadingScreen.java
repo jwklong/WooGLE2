@@ -19,6 +19,12 @@ public class LoadingScreen extends Application {
     }
 
 
+    private String assetName;
+    public void setAssetName(String assetName) {
+        this.assetName = assetName;
+    }
+
+
     @Override
     public void start(Stage primaryStage) {
 
@@ -40,7 +46,7 @@ public class LoadingScreen extends Application {
 
         Scene scene = new Scene(vBox);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Loading Level");
+        primaryStage.setTitle("Loading " + assetName);
         primaryStage.setWidth(480);
         primaryStage.setHeight(270);
         primaryStage.setAlwaysOnTop(true);

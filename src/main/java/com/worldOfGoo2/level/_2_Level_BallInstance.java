@@ -6,7 +6,7 @@ import com.woogleFX.editorObjects.attributes.AttributeAdapter;
 import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.engine.AssetManager;
-import com.woogleFX.engine.fx.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons_ShowHide;
 import com.woogleFX.engine.undoHandling.userActions.ObjectDestructionAction;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.gameData.animation.SimpleBinAnimation;
@@ -14,7 +14,7 @@ import com.woogleFX.gameData.ball.BallManager;
 import com.woogleFX.gameData.ball._2Ball;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.gameData.level.WOG2Level;
-import com.woogleFX.gameData.level.levelOpening.LevelLoader;
+import com.woogleFX.gameData.level.levelOpening.AssetLoader;
 import com.worldOfGoo2.util.BallInstanceHelper;
 import com.worldOfGoo2.util.BinAnimationHelper;
 
@@ -28,7 +28,9 @@ public class _2_Level_BallInstance extends _2_Positionable {
     public _2_Level_TerrainGroup getCurrentGroup() {
         return currentGroup;
     }
-
+    public void setCurrentGroup(_2_Level_TerrainGroup currentGroup) {
+        this.currentGroup = currentGroup;
+    }
 
     private _2Ball ball = null;
     public _2Ball getBall() {
@@ -39,8 +41,8 @@ public class _2_Level_BallInstance extends _2_Positionable {
         ball = BallManager.get2Ball(type, getVersion());
         if (ball == null) {
             String invalidBallDescription = "Ball: " + type + " (version " + getVersion() + ")";
-            if (!LevelLoader.failedResources.contains(invalidBallDescription))
-                LevelLoader.failedResources.add(invalidBallDescription);
+            if (!AssetLoader.failedResources.contains(invalidBallDescription))
+                AssetLoader.failedResources.add(invalidBallDescription);
         }
     }
 
@@ -54,6 +56,9 @@ public class _2_Level_BallInstance extends _2_Positionable {
     }
     public boolean containsStrand(_2_Level_Strand strand) {
         return strands.contains(strand);
+    }
+    public boolean hasStrands() {
+        return !strands.isEmpty();
     }
 
 
@@ -150,6 +155,7 @@ public class _2_Level_BallInstance extends _2_Positionable {
 
         addObjectComponents(BallInstanceHelper.generateBallObjectComponents(this));
 
+
         if (getBall() != null) {
 
             String animation = getBall().getObjects().get(0).getChildren("flashAnimation").get(0).getAttribute("flashAnimationId").stringValue();
@@ -184,8 +190,8 @@ public class _2_Level_BallInstance extends _2_Positionable {
         if (!getAttribute("type").stringValue().equals("Terrain")) return true;
 
         int terrainGroup = getAttribute("terrainGroup").intValue();
-        if (terrainGroup < 0 || terrainGroup >= FXEditorButtons.comboBoxList.size()) return true;
-        else return FXEditorButtons.comboBoxList.get(terrainGroup);
+        if (terrainGroup < 0 || terrainGroup >= FXEditorButtons_ShowHide.comboBoxList.size()) return true;
+        else return FXEditorButtons_ShowHide.comboBoxList.get(terrainGroup);
 
     }
 

@@ -1,11 +1,12 @@
 package com.woogleFX.engine.gui.alarms;
 
 import com.woogleFX.engine.AssetManager;
+import com.woogleFX.engine.gui.LevelSelector;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.gameData.level._Level;
-import com.woogleFX.gameData.level.levelOpening.LevelLoader;
-import com.woogleFX.gameData.level.levelSaving.LevelUpdater;
+import com.woogleFX.gameData.level.levelOpening.AssetLoader;
+import com.woogleFX.gameData.level.levelSaving.AssetUpdater;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -103,14 +104,14 @@ public class AskForLevelNameAlarm {
             case "new" -> {
                 stage.setTitle("Create New Level");
                 okButton.setOnAction(event -> {
-                    LevelLoader.newLevel(enterNameHere.getText(), version);
+                    AssetLoader.newAsset(new LevelSelector(version), enterNameHere.getText());
                     stage.close();
                 });
             }
             case "clone" -> {
                 stage.setTitle("Clone Level");
                 okButton.setOnAction(event -> {
-                    LevelLoader.cloneLevel(enterNameHere.getText());
+                    AssetLoader.cloneLevel(enterNameHere.getText());
                     stage.close();
                 });
             }
@@ -125,7 +126,7 @@ public class AskForLevelNameAlarm {
                             return;
                         }
                     }
-                    LevelUpdater.renameLevel((_Level) AssetManager.getAsset(), enterNameHere.getText());
+                    AssetUpdater.renameLevel((_Level) AssetManager.getAsset(), enterNameHere.getText());
                     stage.close();
                 });
             }

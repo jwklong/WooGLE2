@@ -8,7 +8,8 @@ import java.util.Set;
 
 import com.woogleFX.editorObjects.attributes.dataTypes.Position;
 import com.woogleFX.engine.AssetManager;
-import com.woogleFX.engine.fx.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons_ShowHide;
 import com.woogleFX.gameData.level.WOG2Level;
 import com.woogleFX.gameData.terrainTypes.TerrainTypeManager;
 import com.worldOfGoo2.level._2_Level_BallInstance;
@@ -193,7 +194,8 @@ public class TerrainMeshComponent extends MeshComponent {
 
     @Override
     public double getDepth() {
-        return ((WOG2Level)AssetManager.getAsset()).getLevel().getChildren("terrainGroups").indexOf(terrainGroup) * -0.0001 + (!terrainGroup.getAttribute("foreground").booleanValue() || !terrainGroup.getAttribute("collision").booleanValue() ? -1 : 1) * 10000;
+        // TODO: fix this
+        return ((WOG2Level)AssetManager.getAsset()).getLevel().getChildren("terrainGroups").indexOf(terrainGroup) * -0.0001 + (!terrainGroup.getAttribute("foreground").booleanValue() || !terrainGroup.getAttribute("collision").booleanValue() ? -1 : 0) * 10000;
     }
 
     @Override
@@ -202,8 +204,8 @@ public class TerrainMeshComponent extends MeshComponent {
         if (AssetManager.getAsset().getVisibilitySettings().getShowGoos() != 2) return false;
 
         int terrainGroupId = ((WOG2Level) AssetManager.getAsset()).getLevel().getChildren("terrainGroups").indexOf(terrainGroup);
-        if (terrainGroupId < 0 || terrainGroupId >= FXEditorButtons.comboBoxList.size()) return true;
-        else return FXEditorButtons.comboBoxList.get(terrainGroupId);
+        if (terrainGroupId < 0 || terrainGroupId >= FXEditorButtons_ShowHide.comboBoxList.size()) return true;
+        else return FXEditorButtons_ShowHide.comboBoxList.get(terrainGroupId);
 
     }
 }

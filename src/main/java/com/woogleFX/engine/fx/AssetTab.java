@@ -45,11 +45,27 @@ public class AssetTab extends Tab {
         StackPane graphicContainer = new StackPane();
         graphicContainer.prefWidthProperty().bind(getTabPane().tabMaxWidthProperty());
         StackPane.setAlignment(pane, Pos.CENTER_LEFT);
-        graphicContainer.getChildren().addAll(pane, new Label(asset.getLevelName()));
+        Label label = new Label(asset.getLevelName());
+        graphicContainer.getChildren().addAll(pane, label);
         setGraphic(graphicContainer);
         if (shouldSelect) {
             getTabPane().getSelectionModel().select(this);
             FXHierarchy.getHierarchy().setRoot(root);
+        }
+
+        switch (editingStatus) {
+            case NO_UNSAVED_CHANGES -> {
+                label.setText(asset.getLevelName());
+                label.setStyle("-fx-text-fill: #000000;");
+            }
+            case UNSAVED_CHANGES -> {
+                label.setText(asset.getLevelName() + "*");
+                label.setStyle("-fx-text-fill: #808080;");
+            }
+            case UNSAVED_CHANGES_UNMODIFIABLE -> {
+                label.setText(asset.getLevelName() + "*");
+                label.setStyle("-fx-text-fill: #ff4040;");
+            }
         }
     }
 

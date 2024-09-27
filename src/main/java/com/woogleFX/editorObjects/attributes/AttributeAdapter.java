@@ -37,4 +37,27 @@ public abstract class AttributeAdapter {
 
     }
 
+
+    public static AttributeAdapter childAttributeAdapter(EditorObject object, String realName, String displayName, InputField type) {
+
+        return new AttributeAdapter(displayName) {
+
+            private final EditorAttribute editorAttribute = new EditorAttribute(displayName, type, object);
+
+            @Override
+            public EditorAttribute getValue() {
+                editorAttribute.setValue(object.getChildren(realName).get(0).getAttributes()[0].stringValue());
+                return editorAttribute;
+            }
+
+            @Override
+            public void setValue(String value) {
+                object.getChildren(realName).get(0).getAttributes()[0].setValue(value);
+                editorAttribute.setValue(value);
+            }
+
+        };
+
+    }
+
 }

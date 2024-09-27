@@ -3,7 +3,8 @@ package com.woogleFX.engine;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.attributes.EditorAttribute;
 import com.woogleFX.engine.fx.FXContainers;
-import com.woogleFX.engine.fx.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons_Edit;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.editorObjects.DragSettings;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchySwitcherButtons;
@@ -87,31 +88,31 @@ public class SelectionManager {
     public static void selectionMode() {
         mode = SELECTION;
         // Highlight selection button blue
-        FXEditorButtons.buttonSelectMoveAndResize.setStyle("-fx-background-color: #9999ff;");
+        FXEditorButtons_Edit.buttonSelectMoveAndResize.setStyle("-fx-background-color: #9999ff;");
         // Un-highlight strand button
-        FXEditorButtons.buttonStrandMode.setStyle("");
+        FXEditorButtons_Edit.buttonStrandMode.setStyle("");
         // Un-highlight geometry button
-        FXEditorButtons.buttonGeometryMode.setStyle("");
+        FXEditorButtons_Edit.buttonGeometryMode.setStyle("");
     }
 
     public static void strandMode() {
         mode = STRAND;
         // Highlight strand button blue
-        FXEditorButtons.buttonStrandMode.setStyle("-fx-background-color: #9999ff;");
+        FXEditorButtons_Edit.buttonStrandMode.setStyle("-fx-background-color: #9999ff;");
         // Un-highlight selection button
-        FXEditorButtons.buttonSelectMoveAndResize.setStyle("");
+        FXEditorButtons_Edit.buttonSelectMoveAndResize.setStyle("");
         // Un-highlight geometry button
-        FXEditorButtons.buttonGeometryMode.setStyle("");
+        FXEditorButtons_Edit.buttonGeometryMode.setStyle("");
     }
 
     public static void geometryMode() {
         mode = GEOMETRY;
         // Highlight geometry button blue
-        FXEditorButtons.buttonGeometryMode.setStyle("-fx-background-color: #9999ff;");
+        FXEditorButtons_Edit.buttonGeometryMode.setStyle("-fx-background-color: #9999ff;");
         // Un-highlight selection button
-        FXEditorButtons.buttonSelectMoveAndResize.setStyle("");
+        FXEditorButtons_Edit.buttonSelectMoveAndResize.setStyle("");
         // Un-highlight strand button
-        FXEditorButtons.buttonStrandMode.setStyle("");
+        FXEditorButtons_Edit.buttonStrandMode.setStyle("");
     }
 
 

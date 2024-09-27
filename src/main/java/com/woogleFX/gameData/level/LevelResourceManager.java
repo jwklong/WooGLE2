@@ -11,7 +11,7 @@ import com.woogleFX.editorObjects.ObjectManager;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.ObjectDestructionAction;
 import com.woogleFX.engine.undoHandling.userActions.ObjectCreationAction;
-import com.woogleFX.gameData.level.levelOpening.LevelLoader;
+import com.woogleFX.gameData.level.levelOpening.AssetLoader;
 import com.worldOfGoo.resrc.Font;
 import com.worldOfGoo.resrc.ResrcImage;
 import com.worldOfGoo.resrc.Sound;
@@ -23,7 +23,7 @@ import java.util.*;
 
 public class LevelResourceManager {
 
-    private static final Logger logger = LoggerFactory.getLogger(LevelLoader.class);
+    private static final Logger logger = LoggerFactory.getLogger(AssetLoader.class);
 
 
     public static void deleteResource(_Level level, String file) {

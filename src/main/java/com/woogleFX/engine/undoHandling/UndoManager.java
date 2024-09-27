@@ -21,8 +21,10 @@ public class UndoManager {
         level.undoActions.add(actions);
         level.redoActions.clear();
 
-        if (level.getEditingStatus() == AssetTab.NO_UNSAVED_CHANGES)
-            level.setEditingStatus(AssetTab.UNSAVED_CHANGES, true);
+        if (level.getEditingStatus() == AssetTab.NO_UNSAVED_CHANGES) {
+            if (level.isBaseGame()) level.setEditingStatus(AssetTab.UNSAVED_CHANGES_UNMODIFIABLE, true);
+            else level.setEditingStatus(AssetTab.UNSAVED_CHANGES, true);
+        }
 
         FXMenu.updateAllButtons();
 
@@ -64,14 +66,16 @@ public class UndoManager {
         for (int i = changes.length - 1; i >= 0; i--) changes[i].getInverse().execute();
         
         // update all objects after all changes are done
-        for (int i = changes.length - 1; i >= 0; i--) changes[i].getObject().update();
+        for (int i = changes.length - 1; i >= 0; i--)
+            if (changes[i].getObject() != null) changes[i].getObject().update();
 
         // Update the current asset's editing status if all new changes have been un- or redone.
         Asset asset = AssetManager.getAsset();
         if (asset.undoActions.size() == asset.getLastSavedUndoPosition()) {
             asset.setEditingStatus(AssetTab.NO_UNSAVED_CHANGES, true);
         } else {
-            asset.setEditingStatus(AssetTab.UNSAVED_CHANGES, true);
+            if (asset.isBaseGame()) asset.setEditingStatus(AssetTab.UNSAVED_CHANGES_UNMODIFIABLE, true);
+            else asset.setEditingStatus(AssetTab.UNSAVED_CHANGES, true);
         }
 
         // Refresh the buttons in case the undo/redo buttons need to be updated.

@@ -3,18 +3,24 @@ package com.woogleFX.gameData.ball;
 import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
+import com.woogleFX.engine.fx.FXPropertiesView;
+import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchySwitcherButtons;
+import com.woogleFX.engine.gui.LoadingScreen;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.fileExport.GOOWriter;
 import com.woogleFX.file.fileExport.XMLUtility;
+import com.woogleFX.file.resourceManagers.BaseGameResources;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.gameData.level.levelSaving.AssetVerifier;
 import com.worldOfGoo.resrc.*;
+import javafx.concurrent.Task;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -93,6 +99,8 @@ public class _2Ball extends Asset {
         width = _objects.get(0).getAttribute("width").doubleValue();
         height = _objects.get(0).getAttribute("height").doubleValue();
         sizeVariance = _objects.get(0).getAttribute("sizeVariance").doubleValue();
+
+        resetCamera();
 
         SetDefaults currentSetDefaults = null;
 
@@ -223,7 +231,61 @@ public class _2Ball extends Asset {
 
     @Override
     public void load() {
+        LoadingScreen loadingScreen = new LoadingScreen();
 
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+
+                long count = objects.size();
+
+                long i = 0;
+                try {
+                    for (EditorObject object : objects.toArray(new EditorObject[0])) {
+                        object.onLoaded();
+                        object.update();
+                        i++;
+                        updateProgress(i, count);
+                    }
+                } catch (Exception e) {
+                    // logger.error("", e);
+                }
+
+                for (EditorObject object : objects) {
+                    object.postInit();
+                }
+
+                return null;
+            }
+        };
+
+        loadingScreen.setAssetName("Ball");
+        loadingScreen.setTask(task);
+        Stage stage = new Stage();
+        loadingScreen.start(stage);
+        task.setOnSucceeded(event -> stage.close());
+        task.setOnCancelled(event -> stage.close());
+        task.setOnFailed(event -> stage.close());
+        new Thread(task).start();
+
+        stage.setOnCloseRequest(event -> {
+            task.cancel();
+            FXAssetSelectPane.getAssetSelectPane().getTabs().remove(getAssetTab());
+        });
+
+        objects.get(0).getTreeItem().setExpanded(true);
+        FXHierarchy.getHierarchy().setRoot(objects.get(0).getTreeItem());
+
+        FXPropertiesView.getPropertiesView().setRoot(FXPropertiesView.makePropertiesViewTreeItem(new EditorObject[]{objects.get(0)}));
+
+        FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(0);
+
+    }
+
+    @Override
+    public boolean isBaseGame() {
+        // TODO: Wait for custom Goo Balls to be possible
+        return false; // BaseGameResources.GOO_BALL_TYPES.get(getVersion()).contains(getLevelName());
     }
 
 }

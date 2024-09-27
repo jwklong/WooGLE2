@@ -4,7 +4,7 @@ import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.engine.gui.BallSelector;
 import com.woogleFX.gameData.level.GameVersion;
-import com.woogleFX.gameData.level.levelOpening.LevelLoader;
+import com.woogleFX.gameData.level.levelOpening.AssetLoader;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 
@@ -62,8 +62,8 @@ public class BallManager {
             imported2Balls.add(ball);
             return ball;
         } catch (ParserConfigurationException | SAXException | IOException ignored) {
-            if (!LevelLoader.failedResources.contains("Ball: " + ballName))
-                LevelLoader.failedResources.add("Ball: " + ballName);
+            if (!AssetLoader.failedResources.contains("Ball: " + ballName))
+                AssetLoader.failedResources.add("Ball: " + ballName);
             return null;
         }
     }

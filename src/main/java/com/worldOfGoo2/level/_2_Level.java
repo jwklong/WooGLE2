@@ -6,10 +6,13 @@ import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.renderer.Depth;
+import com.woogleFX.file.resourceManagers.ResourceManager;
+import com.woogleFX.gameData.animation.AnimationManager;
 import com.woogleFX.gameData.environments.EnvironmentManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.worldOfGoo2.environments._2_Environment;
 import com.worldOfGoo2.environments._2_Environment_Layer;
+import com.worldOfGoo2.util.BinAnimationHelper;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -176,7 +179,57 @@ public class _2_Level extends EditorObject {
 
             _2_Environment environment = EnvironmentManager.getEnvironment(getAttribute("backgroundId").stringValue());
 
-            for (EditorObject part : environment.getChildren()) if (part instanceof _2_Environment_Layer) {
+            if (!environment.getAttribute("clearColor").stringValue().isEmpty())
+                    addObjectComponent(new RectangleComponent() {
+                public double getX() {
+                    return (boundsTopRight.getAttribute("x").doubleValue() + boundsBottomLeft.getAttribute("x").doubleValue()) / 2;
+                }
+                public double getY() {
+                    return (-boundsTopRight.getAttribute("y").doubleValue() - boundsBottomLeft.getAttribute("y").doubleValue()) / 2;
+                }
+                public double getWidth() {
+                    return boundsTopRight.getAttribute("x").doubleValue() - boundsBottomLeft.getAttribute("x").doubleValue();
+                }
+                public double getHeight() {
+                    return -boundsTopRight.getAttribute("y").doubleValue() + boundsBottomLeft.getAttribute("y").doubleValue();
+                }
+                public double getDepth() {
+                    return -1000000;
+                }
+                public double getAlpha() {
+                    return 1.0; // part.getAttribute("imageAlpha").doubleValue();
+                }
+                public double getEdgeSize() {
+                    return 0;
+                }
+                public boolean isEdgeOnly() {
+                    return false;
+                }
+                public Color getBorderColor() {
+                    return Color.BLACK;
+                }
+                public Color getColor() {
+                    long color = Long.parseLong(environment.getAttribute("clearColor").stringValue());
+                    return new Color(((color & 0xFF000000L) >> 24) / 255.0, ((color & 0x00FF0000) >> 16) / 255.0, ((color & 0x0000FF00) >> 8) / 255.0, (color & 0x000000FF) / 255.0);
+                }
+                public boolean isVisible() {
+                    return AssetManager.getAsset().getVisibilitySettings().isShowSceneBGColor();
+                }
+                public boolean isResizable() {
+                    return false;
+                }
+                public boolean isDraggable() {
+                    return false;
+                }
+                public boolean isRotatable() {
+                    return false;
+                }
+                public boolean isSelectable() {
+                    return false;
+                }
+            });
+
+            for (EditorObject part : environment.getChildren()) if (part instanceof _2_Environment_Layer layer) {
 
                 Image image = part.getAttribute("imageName").imageValue(null, GameVersion.VERSION_WOG2);
 
@@ -184,29 +237,33 @@ public class _2_Level extends EditorObject {
 
                 addObjectComponent(new ImageComponent() {
                     public double getX() {
-                        return (boundsTopRight.getAttribute("x").doubleValue() + boundsBottomLeft.getAttribute("x").doubleValue()) / 2;
+                        return (boundsTopRight.getAttribute("x").doubleValue() + boundsBottomLeft.getAttribute("x").doubleValue()) / 2
+                                + part.getChild("anchors").getAttribute("x").doubleValue();
                     }
                     public double getY() {
-                        return (-boundsTopRight.getAttribute("y").doubleValue() - boundsBottomLeft.getAttribute("y").doubleValue()) / 2;
+                        return (-boundsTopRight.getAttribute("y").doubleValue() - boundsBottomLeft.getAttribute("y").doubleValue()) / 2
+                                - part.getChild("anchors").getAttribute("y").doubleValue();
                     }
                     public double getRotation() {
                         return partRotation;
                     }
                     public double getScaleX() {
-                        double dx = boundsTopRight.getAttribute("x").doubleValue() - boundsBottomLeft.getAttribute("x").doubleValue();
-                        return dx / image.getWidth();
+                        return part.getAttribute("scale").doubleValue() / 100;
                     }
                     public double getScaleY() {
-                        double dy = boundsTopRight.getAttribute("y").doubleValue() - boundsBottomLeft.getAttribute("y").doubleValue();
-                        return dy / image.getHeight();
+                        return part.getAttribute("scale").doubleValue() / 100;
                     }
                     public double getDepth() {
                         //System.out.println(part.getAttribute("depth").doubleValue());
-                        return part.getAttribute("depth").doubleValue() + -100000;
+                        return part.getAttribute("depth").doubleValue() + 100000 * (part.getAttribute("foreground").booleanValue() ? 1 : -1);
                         //return -100000;
                     }
+                    public boolean isAdditive() {
+                        int blendingType = part.getAttribute("blendingType").intValue();
+                        return blendingType == 3;
+                    }
                     public double getAlpha() {
-                        return 1.0; // part.getAttribute("imageAlpha").doubleValue();
+                        return (Long.parseLong(part.getAttribute("color").stringValue()) >> 24) / 255.0;
                     }
                     public Image getImage() {
                         return image;
@@ -227,6 +284,10 @@ public class _2_Level extends EditorObject {
                         return false;
                     }
                 });
+
+                if (!part.getAttribute("flashAnimationName").stringValue().isEmpty()) {
+                    BinAnimationHelper.addBinAnimationAsObjectPositions(layer, ResourceManager.getFlashAnim(null, part.getAttribute("flashAnimationName").stringValue(), GameVersion.VERSION_WOG2), "");
+                }
 
             }
 

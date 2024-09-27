@@ -1,6 +1,7 @@
 package com.woogleFX.gameData.level;
 
-import com.woogleFX.engine.fx.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons_ShowHide;
 import com.woogleFX.file.FileManager;
 import javafx.scene.image.Image;
 
@@ -14,7 +15,7 @@ public class VisibilitySettings {
     }
     public void setShowAnimations(boolean showAnimations) {
         this.showAnimations = showAnimations;
-        FXEditorButtons.animGraphic(showAnimations ? showHideAnim : showHideAnim0);
+        FXEditorButtons_ShowHide.animGraphic(showAnimations ? showHideAnim : showHideAnim0);
     }
 
 
@@ -26,7 +27,7 @@ public class VisibilitySettings {
     }
     public void setShowCameras(boolean showCameras) {
         this.showCameras = showCameras;
-        FXEditorButtons.cameraGraphic(showCameras ? showHideCam1 : showHideCam0);
+        FXEditorButtons_ShowHide.cameraGraphic(showCameras ? showHideCam1 : showHideCam0);
     }
 
 
@@ -38,7 +39,7 @@ public class VisibilitySettings {
     }
     public void setShowForcefields(boolean showForcefields) {
         this.showForcefields = showForcefields;
-        FXEditorButtons.forcefieldsGraphic(showForcefields ? showHideForcefields1 : showHideForcefields0);
+        FXEditorButtons_ShowHide.forcefieldsGraphic(showForcefields ? showHideForcefields1 : showHideForcefields0);
     }
 
 
@@ -51,9 +52,9 @@ public class VisibilitySettings {
     public void setShowGeometry(int showGeometry) {
         this.showGeometry = showGeometry;
         switch (showGeometry) {
-            case 0 -> FXEditorButtons.geometryGraphic(showHideGeometry0);
-            case 1 -> FXEditorButtons.geometryGraphic(showHideGeometry1);
-            case 2 -> FXEditorButtons.geometryGraphic(showHideImages1);
+            case 0 -> FXEditorButtons_ShowHide.geometryGraphic(showHideGeometry0);
+            case 1 -> FXEditorButtons_ShowHide.geometryGraphic(showHideGeometry1);
+            case 2 -> FXEditorButtons_ShowHide.geometryGraphic(showHideImages1);
         }
     }
 
@@ -66,7 +67,7 @@ public class VisibilitySettings {
     }
     public void setShowGraphics(boolean showGraphics) {
         this.showGraphics = showGraphics;
-        FXEditorButtons.graphicsGraphic(showGraphics ? showHideImages1 : showHideImages0);
+        FXEditorButtons_ShowHide.graphicsGraphic(showGraphics ? showHideImages1 : showHideImages0);
     }
 
 
@@ -80,9 +81,9 @@ public class VisibilitySettings {
     public void setShowGoos(int showGoos) {
         this.showGoos = showGoos;
         switch (showGoos) {
-            case 0 -> FXEditorButtons.goosGraphic(showHideGoobs0);
-            case 1 -> FXEditorButtons.goosGraphic(showHideGoobs1);
-            case 2 -> FXEditorButtons.goosGraphic(showHideGoobs2);
+            case 0 -> FXEditorButtons_ShowHide.goosGraphic(showHideGoobs0);
+            case 1 -> FXEditorButtons_ShowHide.goosGraphic(showHideGoobs1);
+            case 2 -> FXEditorButtons_ShowHide.goosGraphic(showHideGoobs2);
         }
     }
 
@@ -95,7 +96,7 @@ public class VisibilitySettings {
     }
     public void setShowParticles(boolean showParticles) {
         this.showParticles = showParticles;
-        FXEditorButtons.particlesGraphic(showParticles ? showHideParticles1 : showHideParticles0);
+        FXEditorButtons_ShowHide.particlesGraphic(showParticles ? showHideParticles1 : showHideParticles0);
     }
 
 
@@ -107,7 +108,7 @@ public class VisibilitySettings {
     }
     public void setShowLabels(boolean showLabels) {
         this.showLabels = showLabels;
-        FXEditorButtons.labelsGraphic(showLabels ? showHideLabels1 : showHideLabels0);
+        FXEditorButtons_ShowHide.labelsGraphic(showLabels ? showHideLabels1 : showHideLabels0);
     }
 
 
@@ -119,28 +120,28 @@ public class VisibilitySettings {
     }
     public void setShowSceneBGColor(boolean showSceneBGColor) {
         this.showSceneBGColor = showSceneBGColor;
-        FXEditorButtons.sceneBGGraphic(showSceneBGColor ? showHideBGColor1 : showHideBGColor0);
+        FXEditorButtons_ShowHide.sceneBGGraphic(showSceneBGColor ? showHideBGColor1 : showHideBGColor0);
     }
 
 
     public void updateButtons() {
-        FXEditorButtons.cameraGraphic(showCameras ? showHideCam1 : showHideCam0);
-        FXEditorButtons.forcefieldsGraphic(showForcefields ? showHideForcefields1 : showHideForcefields0);
+        FXEditorButtons_ShowHide.cameraGraphic(showCameras ? showHideCam1 : showHideCam0);
+        FXEditorButtons_ShowHide.forcefieldsGraphic(showForcefields ? showHideForcefields1 : showHideForcefields0);
         switch (showGeometry) {
-            case 0 -> FXEditorButtons.geometryGraphic(showHideGeometry0);
-            case 1 -> FXEditorButtons.geometryGraphic(showHideGeometry1);
-            case 2 -> FXEditorButtons.geometryGraphic(showHideImages1);
+            case 0 -> FXEditorButtons_ShowHide.geometryGraphic(showHideGeometry0);
+            case 1 -> FXEditorButtons_ShowHide.geometryGraphic(showHideGeometry1);
+            case 2 -> FXEditorButtons_ShowHide.geometryGraphic(showHideImages1);
         }
-        FXEditorButtons.graphicsGraphic(showGraphics ? showHideImages1 : showHideImages0);
+        FXEditorButtons_ShowHide.graphicsGraphic(showGraphics ? showHideImages1 : showHideImages0);
         switch (showGoos) {
-            case 0 -> FXEditorButtons.goosGraphic(showHideGoobs0);
-            case 1 -> FXEditorButtons.goosGraphic(showHideGoobs1);
-            case 2 -> FXEditorButtons.goosGraphic(showHideGoobs2);
+            case 0 -> FXEditorButtons_ShowHide.goosGraphic(showHideGoobs0);
+            case 1 -> FXEditorButtons_ShowHide.goosGraphic(showHideGoobs1);
+            case 2 -> FXEditorButtons_ShowHide.goosGraphic(showHideGoobs2);
         }
-        FXEditorButtons.particlesGraphic(showParticles ? showHideParticles1 : showHideParticles0);
-        FXEditorButtons.labelsGraphic(showLabels ? showHideLabels1 : showHideLabels0);
-        FXEditorButtons.animGraphic(showAnimations ? showHideAnim : showHideAnim0);
-        FXEditorButtons.sceneBGGraphic(showSceneBGColor ? showHideBGColor1 : showHideBGColor0);
+        FXEditorButtons_ShowHide.particlesGraphic(showParticles ? showHideParticles1 : showHideParticles0);
+        FXEditorButtons_ShowHide.labelsGraphic(showLabels ? showHideLabels1 : showHideLabels0);
+        FXEditorButtons_ShowHide.animGraphic(showAnimations ? showHideAnim : showHideAnim0);
+        FXEditorButtons_ShowHide.sceneBGGraphic(showSceneBGColor ? showHideBGColor1 : showHideBGColor0);
     }
 
 }

@@ -9,7 +9,7 @@ import com.woogleFX.gameData.ball._Ball;
 import com.woogleFX.gameData.ball.BallManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.gameData.level.WOG1Level;
-import com.woogleFX.gameData.level.levelOpening.LevelLoader;
+import com.woogleFX.gameData.level.levelOpening.AssetLoader;
 import com.woogleFX.engine.AssetManager;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.editorObjects.attributes.InputField;
@@ -91,8 +91,8 @@ public class BallInstance extends EditorObject {
 
         this.ball = BallManager.getBall(type, getVersion());
         if (ball == null) {
-            if (!LevelLoader.failedResources.contains("Ball: " + getAttribute("type").stringValue() + " (version " + getVersion() + ")")) {
-                LevelLoader.failedResources.add("Ball: " + getAttribute("type").stringValue() + " (version " + getVersion() + ")");
+            if (!AssetLoader.failedResources.contains("Ball: " + getAttribute("type").stringValue() + " (version " + getVersion() + ")")) {
+                AssetLoader.failedResources.add("Ball: " + getAttribute("type").stringValue() + " (version " + getVersion() + ")");
             }
         }
 
@@ -425,6 +425,8 @@ public class BallInstance extends EditorObject {
 
 
         String[] pupilImageStrings = part.getAttribute("pupil").listValue();
+
+        if (pupilImageStrings.length == 0) return;
 
         String pupilImageString = pupilImageStrings[(int)(pupilImageStrings.length * machine.nextDouble())];
 

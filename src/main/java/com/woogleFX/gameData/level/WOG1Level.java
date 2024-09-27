@@ -7,7 +7,7 @@ import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.editorObjects.objectCreators.BlankObjectGenerator;
 import com.woogleFX.editorObjects.objectCreators.ObjectCreator;
 import com.woogleFX.engine.AssetManager;
-import com.woogleFX.engine.fx.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons;
 import com.woogleFX.engine.fx.FXPropertiesView;
 import com.woogleFX.engine.fx.FXStage;
 import com.woogleFX.engine.fx.assetSelectPane.FXAssetSelectPane;
@@ -17,10 +17,11 @@ import com.woogleFX.engine.fx.menu.FXMenu;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.fileExport.GoomodExporter;
+import com.woogleFX.file.resourceManagers.BaseGameResources;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.gameData.ball._Ball;
 import com.woogleFX.gameData.level.levelSaving.AssetVerifier;
-import com.woogleFX.gameData.level.levelSaving.LevelUpdater;
+import com.woogleFX.gameData.level.levelSaving.AssetUpdater;
 import com.worldOfGoo.level.*;
 import com.worldOfGoo.resrc.Resources;
 import com.worldOfGoo.resrc.ResrcImage;
@@ -213,7 +214,7 @@ public class WOG1Level extends _Level {
     @Override
     public void delete() {
         try {
-            LevelUpdater.nuke(new File(FileManager.getGameDir(getVersion()) + "/res/levels/" + getLevelName()));
+            AssetUpdater.nuke(new File(FileManager.getGameDir(getVersion()) + "/res/levels/" + getLevelName()));
             TabPane levelSelectPane = FXAssetSelectPane.getAssetSelectPane();
             if (levelSelectPane.getTabs().size() == 1) {
                 FXAssetSelectPane.getAssetSelectPane().setMinHeight(0);
@@ -472,6 +473,11 @@ public class WOG1Level extends _Level {
         // Add items from the Scene to it
         FXPropertiesView.getPropertiesView().setRoot(FXPropertiesView.makePropertiesViewTreeItem(new EditorObject[]{getSceneObject()}));
 
+    }
+
+    @Override
+    public boolean isBaseGame() {
+        return BaseGameResources.LEVELS.get(getVersion()).contains(getLevelName());
     }
 
 }

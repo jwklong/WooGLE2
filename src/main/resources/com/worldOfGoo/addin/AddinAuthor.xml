@@ -1,4 +1,4 @@
-<AttributeManifest localname="Author">
+<AttributeManifest localName="Author">
 
     <attributes>
         <EditorAttribute name="value" type="_1_STRING" required="true"/>

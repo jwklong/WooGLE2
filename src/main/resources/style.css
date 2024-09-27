@@ -37,6 +37,14 @@
     -fx-padding: 0 0 0 0;
 }
 
+.menu-button > .arrow-button {
+    -fx-padding: 0;
+}
+
+.menu-button > .arrow-button > .arrow {
+    -fx-padding: 0;
+}
+
 .tooltip {
     -fx-border-color: #767676;
     -fx-background-color: #FFFFFF;

@@ -219,14 +219,20 @@ public class FileManager {
 
             case VERSION_WOG2 -> {
 
+                System.out.println("Hi!");
+
                 String contents = Files.readString(Path.of(wog2dir + "/res/levels/" + levelName + ".wog2"));
                 EditorObject levelObject;
+
+                System.out.println("Around the middle...");
 
                 try {
                     levelObject = ObjectGOOParser.read(_2_Level.class, contents);
                 } catch (Exception e) {
                     throw new IOException("Failed to deserialize level " + levelName);
                 }
+
+                System.out.println("Around the middle...");
 
                 ArrayList<EditorObject> objects = new ArrayList<>();
                 Stack<EditorObject> toAdd = new Stack<>();
@@ -244,6 +250,7 @@ public class FileManager {
                 if (addinF.exists()) saxParser.parse(addinF, defaultHandler);
                 else supremeAddToList(addin, BlankObjectGenerator.generateBlankAddinObject(levelName, version));
 
+                System.out.println("Okay done.");
                 return new WOG2Level(objects, addin);
 
             }

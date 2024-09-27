@@ -4,14 +4,11 @@ import com.woogleFX.editorObjects.Asset;
 import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.engine.AssetManager;
 import com.woogleFX.engine.fx.AssetTab;
-import com.woogleFX.engine.fx.FXEditorButtons;
+import com.woogleFX.engine.fx.editorButtons.FXEditorButtons;
 import com.woogleFX.engine.fx.FXPropertiesView;
 import com.woogleFX.engine.fx.hierarchy.FXHierarchy;
-import com.woogleFX.engine.fx.hierarchy.FXHierarchySwitcherButtons;
 import com.woogleFX.engine.fx.menu.FXMenu;
 import com.woogleFX.engine.gui.alarms.CloseTabAlarm;
-import com.woogleFX.gameData.level.WOG1Level;
-import com.woogleFX.gameData.level.WOG2Level;
 import javafx.scene.control.TabPane;
 
 public class FXAssetSelectPane {

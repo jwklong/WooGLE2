@@ -8,7 +8,7 @@ import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.renderer.Renderer;
 import com.woogleFX.gameData.ball.BallManager;
 import com.woogleFX.gameData.level.WOG1Level;
-import com.woogleFX.gameData.level.levelOpening.LevelLoader;
+import com.woogleFX.gameData.level.levelOpening.AssetLoader;
 import com.woogleFX.engine.AssetManager;
 import com.woogleFX.editorObjects.attributes.InputField;
 import com.woogleFX.gameData.level.GameVersion;
@@ -129,8 +129,8 @@ public class Strand extends EditorObject {
                 strandImage = strand.getAttribute("image").imageValue(ball.getResources(), getVersion());
             } catch (Exception e) {
                 // TODO make this cleaner
-                if (!LevelLoader.failedResources.contains("From Strand: \"" + strand.getAttribute("image").stringValue() + "\" (version " + getVersion() + ")")) {
-                    LevelLoader.failedResources.add("From Strand: \"" + strand.getAttribute("image").stringValue() + "\" (version " + getVersion() + ")");
+                if (!AssetLoader.failedResources.contains("From Strand: \"" + strand.getAttribute("image").stringValue() + "\" (version " + getVersion() + ")")) {
+                    AssetLoader.failedResources.add("From Strand: \"" + strand.getAttribute("image").stringValue() + "\" (version " + getVersion() + ")");
                 }
             }
         }

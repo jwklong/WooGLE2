@@ -10,6 +10,7 @@ import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.HierarchyDragAction;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.gameData.level.WOG1Level;
+import com.woogleFX.gameData.level.WOG2Level;
 import com.woogleFX.gameData.level._Level;
 import com.worldOfGoo.addin.*;
 import com.worldOfGoo.level.*;
@@ -17,6 +18,7 @@ import com.worldOfGoo.resrc.*;
 import com.worldOfGoo.scene.*;
 import com.worldOfGoo.text.TextStrings;
 import com.worldOfGoo2.level._2_Level_BallInstance;
+import com.worldOfGoo2.level._2_Level_TerrainGroup;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -229,17 +231,15 @@ public class HierarchyManager {
 
         EditorObject toItem = hierarchy.getTreeItem(toIndex).getValue();
 
-        if (toItem.getVersion() != GameVersion.VERSION_WOG2) {
+        EditorObject fromItem = hierarchy.getTreeItem(oldDropIndex).getValue();
 
-            EditorObject fromItem = hierarchy.getTreeItem(oldDropIndex).getValue();
+        EditorObject absoluteParent = fromItem;
+        ArrayList<EditorObject> list;
 
-            EditorObject absoluteParent = fromItem;
+        if (AssetManager.getAsset() instanceof WOG1Level level) {
 
             while (absoluteParent.getParent() != null) absoluteParent = absoluteParent.getParent();
 
-            WOG1Level level = (WOG1Level) AssetManager.getAsset();
-
-            ArrayList<EditorObject> list;
             if (absoluteParent instanceof Scene) list = level.getScene();
             else if (absoluteParent instanceof Level) list = level.getLevel();
             else if (absoluteParent instanceof ResourceManifest) list = level.getResrc();
@@ -247,49 +247,55 @@ public class HierarchyManager {
             else if (absoluteParent instanceof TextStrings) list = level.getText();
             else return false;
 
-            int indexOfToItemInList = list.indexOf(toItem);
-
-            // YOU CAN'T PUT AN OBJECT INSIDE ITSELF
-            if (toItem.getChildren().contains(fromItem)) return false;
-
-            // Or inside an object that doesn't have it as a possible child
-            if (Stream.of(toItem.getParent().getPossibleChildren()).noneMatch(e -> e.equals(fromItem.getClass())))
-                return false;
-
-            // Or above every SetDefaults (meaning at position 2) if it's a resource
-            if ((fromItem instanceof ResrcImage || fromItem instanceof Sound || fromItem instanceof Font) && toIndex == 2)
-                return false;
-
-            // Or anywhere that would put a resource at position 2 if it's a SetDefaults
-            if (fromItem instanceof SetDefaults && (oldDropIndex == 2 && !(hierarchy.getTreeItem(3).getValue() instanceof SetDefaults)))
-                return false;
-
-            // Add the dragged item just above the item that it gets dragged to
-            int indexOfToItem = toItem.getParent().getChildren().indexOf(toItem);
-
-            fromItem.getParent().getChildren().remove(fromItem);
-            fromItem.getParent().getTreeItem().getChildren().remove(fromItem.getTreeItem());
-
-            fromItem.setParent(toItem.getParent(), indexOfToItem);
-
-            list.remove(fromItem);
-            list.add(indexOfToItemInList, fromItem);
-
-            if (fromItem.getParent() instanceof Resources) ((_Level) AssetManager.getAsset()).reAssignSetDefaultsToAllResources();
-            else if (fromItem instanceof Vertex) fromItem.getParent().update();
-
-            hierarchy.getSelectionModel().select(toIndex);
-            hierarchy.refresh();
-
-            return true;
-
         } else {
-
-            // TODO
-
-            return true;
-
+            list = ((WOG2Level)AssetManager.getAsset()).getLevel().getChildren(fromItem.getTypeID());
         }
+
+        int indexOfToItemInList = list.indexOf(toItem);
+
+        // YOU CAN'T PUT AN OBJECT INSIDE ITSELF
+        if (toItem.getChildren().contains(fromItem)) return false;
+
+        // Or inside an object that doesn't have it as a possible child
+        if (Stream.of(toItem.getParent().getPossibleChildren()).noneMatch(e -> e.equals(fromItem.getClass())))
+            return false;
+
+        // Or above every SetDefaults (meaning at position 2) if it's a resource
+        if ((fromItem instanceof ResrcImage || fromItem instanceof Sound || fromItem instanceof Font) && toIndex == 2)
+            return false;
+
+        // Or anywhere that would put a resource at position 2 if it's a SetDefaults
+        if (fromItem instanceof SetDefaults && (oldDropIndex == 2 && !(hierarchy.getTreeItem(3).getValue() instanceof SetDefaults)))
+            return false;
+
+        // Add the dragged item just above the item that it gets dragged to
+        int indexOfToItem = toItem.getParent().getChildren().indexOf(toItem);
+
+        fromItem.getParent().getChildren().remove(fromItem);
+        fromItem.getParent().getTreeItem().getChildren().remove(fromItem.getTreeItem());
+
+        fromItem.setParent(toItem.getParent(), indexOfToItem);
+
+        list.remove(fromItem);
+        list.add(indexOfToItemInList, fromItem);
+
+        if (fromItem.getParent() instanceof Resources) ((_Level) AssetManager.getAsset()).reAssignSetDefaultsToAllResources();
+        else if (fromItem instanceof Vertex) fromItem.getParent().update();
+
+        hierarchy.getSelectionModel().select(toIndex);
+        hierarchy.refresh();
+
+        int i = FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().getSelectedIndex();
+        int total = FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getTabs().size();
+        FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select((i + 1) % total);
+        FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(i);
+
+        if (fromItem instanceof _2_Level_TerrainGroup terrainGroup1 && toItem instanceof _2_Level_TerrainGroup terrainGroup2) {
+            for (EditorObject ball : ((WOG2Level)AssetManager.getAsset()).getLevel().getChildren("balls"))
+                ball.setAttribute("terrainGroup", ball.getAttribute("terrainGroup").stringValue());
+        }
+
+        return true;
 
     }
 
