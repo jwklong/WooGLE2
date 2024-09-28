@@ -193,7 +193,7 @@ public class TerrainMeshComponent extends MeshComponent {
 
     @Override
     public double getDepth() {
-        return terrainGroup.getAttribute("sortOffset").doubleValue() * 0.00001 + (terrainGroup.getAttribute("foreground").booleanValue() ? 0.01 : 0) - 0.02;
+        return ((WOG2Level)AssetManager.getAsset()).getLevel().getChildren("terrainGroups").indexOf(terrainGroup) * -0.0001 + (!terrainGroup.getAttribute("foreground").booleanValue() || !terrainGroup.getAttribute("collision").booleanValue() ? -1 : 1) * 10000;
     }
 
     @Override

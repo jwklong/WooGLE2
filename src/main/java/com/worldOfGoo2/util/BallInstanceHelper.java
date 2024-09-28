@@ -457,7 +457,7 @@ public class BallInstanceHelper {
                     }
                     @Override
                     public double getDepth() {
-                        return 0.000001;
+                        return 1000000;
                     }
                     @Override
                     public boolean isVisible() {
@@ -545,6 +545,7 @@ public class BallInstanceHelper {
                 }
                 @Override
                 public double getDepth() {
+                    if (ballInstance.getAttribute("type").stringValue().equals("Terrain")) return 1000000;
                     return 0.000001;
                 }
                 @Override

@@ -323,12 +323,6 @@ public class FileManager {
                 e.printStackTrace();
                 logger.error("", e);
             }
-            ballFile = new File(dir + "/res/items/images/_resources.xml");
-            saxParser.parse(ballFile, defaultHandler);
-            ballFile = new File(dir + "/res/environments/images/_resources.xml");
-            saxParser.parse(ballFile, defaultHandler);
-            ballFile = new File(dir + "/res/terrain/images/_resources.xml");
-            saxParser.parse(ballFile, defaultHandler);
         }
         
         return resources;
@@ -347,7 +341,7 @@ public class FileManager {
         
         File file = new File(wog2dir + path);
         saxParser.parse(file, defaultHandler);
-        
+
         return resources;
     }
 

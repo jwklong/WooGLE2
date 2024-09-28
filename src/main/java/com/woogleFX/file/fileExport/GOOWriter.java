@@ -72,7 +72,7 @@ public class GOOWriter {
                     exportBuilder.append("],\n").append("\t".repeat(spaces + 1));
                 } else {
                     String value = editorAttribute.stringValue();
-                    if (editorAttribute.getType() == InputField._2_STRING || editorAttribute.getType() == InputField._2_UUID || editorAttribute.getType() == InputField._2_ENVIRONMENT_ID || editorAttribute.getType() == InputField._2_MUSIC_ID || editorAttribute.getType() == InputField._2_SOUND_ID || editorAttribute.getType() == InputField._2_ITEM_TYPE || editorAttribute.getType() == InputField._2_BACKGROUND_ID) {
+                    if (editorAttribute.getType() == InputField._2_STRING || editorAttribute.getType() == InputField._2_UUID || editorAttribute.getType() == InputField._2_ENVIRONMENT_ID || editorAttribute.getType() == InputField._2_MUSIC_ID || editorAttribute.getType() == InputField._2_SOUND_ID || editorAttribute.getType() == InputField._2_ITEM_TYPE || editorAttribute.getType() == InputField._2_BACKGROUND_ID || editorAttribute.getType() == InputField._2_AMBIENCE_ID) {
                         value = "\"" + value + "\"";
                     }
                     exportBuilder.append("\"").append(editorAttribute.getName()).append("\":\t").append(value).append(",\n").append("\t".repeat(spaces + 1));

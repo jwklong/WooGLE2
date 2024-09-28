@@ -1,0 +1,16 @@
+res/images/balls_add/_resources.xml
+res/images/non_atlas_balls/Iceball/_resources.xml
+res/images/non_atlas_balls/Grow/_resources.xml
+res/music/_resources.xml
+res/adventureGame/dialogs/_resources.xml
+res/images/non_atlas_balls/Shrink/_resources.xml
+res/environments/luts/_resources.xml
+res/environments/images/_resources.xml
+res/terrain/sounds/_resources.xml
+res/terrain/images/_resources.xml
+res/loading/_resources.xml
+res/ui/_resources.xml
+res/ambience/_resources.xml
+res/sounds/_resources.xml
+res/images/levelImages/pipe/_resources.xml
+res/items/images/_resources.xml

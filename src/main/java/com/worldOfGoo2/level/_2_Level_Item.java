@@ -499,36 +499,40 @@ public class _2_Level_Item extends _2_Positionable {
 
         }
 
-        String animation = getItem().getAttribute("animationName").stringValue();
-        if (!animation.isEmpty()) {
-            try {
-                SimpleBinAnimation flashAnim = ResourceManager.getFlashAnim(null, animation, GameVersion.VERSION_WOG2);
-                BinAnimationHelper.addBinAnimationAsObjectPositions(this, flashAnim, getItem().getAttribute("animationAlias").stringValue());
-            } catch (FileNotFoundException e) {
-                logger.error("", e);
-            }
-        } else {
-            String animationAlias = getItem().getAttribute("animationAlias").stringValue();
-            if (!animationAlias.isEmpty()) {
-                System.out.println(animationAlias);
-                for (SimpleBinAnimation binAnimation : AnimationManager.getBinAnimations()) {
-                    int i1 = 0;
-                    for (SimpleBinAnimation.SimpleBinAnimationState ignored : binAnimation.states) {
-                        if (binAnimation.stateAliasStringTableIndices.length <= i1) break;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        int byteIndex = binAnimation.stringDefinitions[binAnimation.stateAliasStringTableIndices[i1]].stringTableIndex;
-                        while (binAnimation.stringTable[byteIndex] != 0x00) {
-                            stringBuilder.append((char)binAnimation.stringTable[byteIndex]);
-                            byteIndex++;
+        if (getItem() != null) {
+
+            String animation = getItem().getAttribute("animationName").stringValue();
+            if (!animation.isEmpty()) {
+                try {
+                    SimpleBinAnimation flashAnim = ResourceManager.getFlashAnim(null, animation, GameVersion.VERSION_WOG2);
+                    BinAnimationHelper.addBinAnimationAsObjectPositions(this, flashAnim, getItem().getAttribute("animationAlias").stringValue());
+                } catch (FileNotFoundException e) {
+                    logger.error("", e);
+                }
+            } else {
+                String animationAlias = getItem().getAttribute("animationAlias").stringValue();
+                if (!animationAlias.isEmpty()) {
+                    System.out.println(animationAlias);
+                    for (SimpleBinAnimation binAnimation : AnimationManager.getBinAnimations()) {
+                        int i1 = 0;
+                        for (SimpleBinAnimation.SimpleBinAnimationState ignored : binAnimation.states) {
+                            if (binAnimation.stateAliasStringTableIndices.length <= i1) break;
+                            StringBuilder stringBuilder = new StringBuilder();
+                            int byteIndex = binAnimation.stringDefinitions[binAnimation.stateAliasStringTableIndices[i1]].stringTableIndex;
+                            while (binAnimation.stringTable[byteIndex] != 0x00) {
+                                stringBuilder.append((char) binAnimation.stringTable[byteIndex]);
+                                byteIndex++;
+                            }
+                            if (stringBuilder.toString().equals(animationAlias)) {
+                                BinAnimationHelper.addBinAnimationAsObjectPositions(this, binAnimation, animationAlias);
+                                break;
+                            }
+                            i1++;
                         }
-                        if (stringBuilder.toString().equals(animationAlias)) {
-                            BinAnimationHelper.addBinAnimationAsObjectPositions(this, binAnimation, animationAlias);
-                            break;
-                        }
-                        i1++;
                     }
                 }
             }
+
         }
 
     }

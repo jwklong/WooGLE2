@@ -314,6 +314,7 @@ public class _2_Level_Strand extends EditorObject {
             }
 
             public double getDepth(){
+                if (goo1 != null && getAttribute("type").stringValue().equals("Terrain")) return 999990;
                 return -0.00000001;
             }
 

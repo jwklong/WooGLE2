@@ -190,6 +190,8 @@ public class WOG2Level extends _Level {
 
             for (EditorObject child : level.getChildren()) {
 
+                System.out.println(child);
+
                 if ((child.getType().equals("BallInstance") && child.getAttribute("type").stringValue().equals("Terrain")) && t1 == terrain) root.getChildren().add(child.getTreeItem());
                 else if (child instanceof _2_Level_TerrainGroup && t1 == terrainGroups) root.getChildren().add(child.getTreeItem());
                 else if (((child.getType().equals("BallInstance") && !child.getAttribute("type").stringValue().equals("Terrain")) || child.getType().equals("Strand")) && t1 == balls) root.getChildren().add(child.getTreeItem());

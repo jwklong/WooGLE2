@@ -23,7 +23,7 @@ public class BaseGameResources {
     ));
 
 
-    private static void loadFileIntoSet(String file, Set<String> set) {
+    public static void loadFileIntoSet(String file, Set<String> set) {
         try {
             String contents = Files.readString(Path.of(file));
             String[] each = contents.split("\n");

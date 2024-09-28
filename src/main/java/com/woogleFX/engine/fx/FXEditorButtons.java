@@ -19,6 +19,7 @@ import com.woogleFX.gameData.level.levelSaving.LevelUpdater;
 import com.worldOfGoo.ball.Part;
 import com.worldOfGoo2.ball._2_Ball_Image;
 import com.worldOfGoo2.ball._2_Ball_Part;
+import com.worldOfGoo2.items._2_Item;
 import com.worldOfGoo2.level._2_Level_BallInstance;
 import com.worldOfGoo2.level._2_Level_Item;
 import com.worldOfGoo2.util.BallInstanceHelper;
@@ -41,6 +42,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
 public class FXEditorButtons {
@@ -631,13 +633,13 @@ public class FXEditorButtons {
     public static void updateItemsSelector(WOG2Level wog2Level) {
         MenuButton content = (MenuButton) buttonAddItem.getGraphic();
         content.getItems().clear();
-        for (var entry : ItemHelper.itemTypeMap.entrySet()) {
+        for (Map.Entry<Integer, String> entry : ItemHelper.itemTypeMap.entrySet()) {
             Menu item = new Menu(entry.getValue());
-            for (var loadedItemEntry : ItemManager.itemMap.entrySet()) {
+            for (Map.Entry<String, _2_Item> loadedItemEntry : ItemManager.itemMap.entrySet()) {
                 if (loadedItemEntry.getValue().getAttribute("type").intValue() == entry.getKey()) {
                     MenuItem sub = new MenuItem(loadedItemEntry.getKey());
                     sub.setOnAction(e -> {
-                        var object = ObjectAdder.addObject2(_2_Level_Item.class, wog2Level.getLevel().getPossibleChildrenTypeIDs()[3], wog2Level.getLevel());
+                        EditorObject object = ObjectAdder.addObject2(_2_Level_Item.class, wog2Level.getLevel().getPossibleChildrenTypeIDs()[3], wog2Level.getLevel());
                         object.setAttribute("type", loadedItemEntry.getKey());
                     });
                     item.getItems().add(sub);

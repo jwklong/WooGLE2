@@ -232,29 +232,33 @@ public class GlobalResourceManager {
         
         if (version == GameVersion.VERSION_WOG2) {
             try {
-                currentSetDefaults = null;
-                ArrayList<EditorObject> music = FileManager.openWog2ResourceFile("/res/music/_resources.xml");
-                
-                for (EditorObject editorObject : music) {
-                    if (editorObject instanceof SetDefaults setDefaults) {
-                        currentSetDefaults = setDefaults;
-                    } else if (editorObject instanceof Sound sound) {
-                        sound.setSetDefaults(currentSetDefaults);
-                        sequelMusic.put(sound.getAdjustedID(), sound);
+
+                Set<String> globalResourceDirs = new HashSet<>();
+                BaseGameResources.loadFileIntoSet(FileManager.getEditorLocation() + "/BaseGameResources/2/GlobalResourceDirs.txt", globalResourceDirs);
+
+                for (String dir : globalResourceDirs) {
+                    currentSetDefaults = null;
+                    ArrayList<EditorObject> ambience = FileManager.openWog2ResourceFile("/" + dir);
+
+                    for (EditorObject editorObject : ambience) {
+                        if (editorObject instanceof SetDefaults setDefaults) {
+                            currentSetDefaults = setDefaults;
+                        } else if (editorObject instanceof FlashAnim flashAnim) {
+                            flashAnim.setSetDefaults(currentSetDefaults);
+                            sequelResources.put(flashAnim.getAdjustedID(), editorObject);
+                        } else if (editorObject instanceof ResrcImage resrcImage) {
+                            resrcImage.setSetDefaults(currentSetDefaults);
+                            sequelResources.put(resrcImage.getAdjustedID(), editorObject);
+                        } else if (editorObject instanceof Sound sound) {
+                            sound.setSetDefaults(currentSetDefaults);
+                            sequelResources.put(sound.getAdjustedID(), editorObject);
+                        } else if (editorObject instanceof Font font) {
+                            font.setSetDefaults(currentSetDefaults);
+                            sequelResources.put(font.getAdjustedID(), editorObject);
+                        }
                     }
                 }
-                
-                currentSetDefaults = null;
-                ArrayList<EditorObject> ambience = FileManager.openWog2ResourceFile("/res/ambience/_resources.xml");
-                
-                for (EditorObject editorObject : ambience) {
-                    if (editorObject instanceof SetDefaults setDefaults) {
-                        currentSetDefaults = setDefaults;
-                    } else if (editorObject instanceof Sound sound) {
-                        sound.setSetDefaults(currentSetDefaults);
-                        sequelAmbience.put(sound.getAdjustedID(), sound);
-                    }
-                }
+
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
                 ErrorAlarm.show(e);
