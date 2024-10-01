@@ -2,8 +2,8 @@
 
     <attributes>
         <EditorAttribute name="enabled" type="_2_STRING"/>
-        <EditorAttribute name="particleEffect" type="_2_STRING" childAlias="com.worldOfGoo2.misc._2_UUID"/>
-        <EditorAttribute name="spawnItem" type="_2_STRING" childAlias="com.worldOfGoo2.misc._2_UUID"/>
+        <EditorAttribute name="particleEffect" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.misc._2_UUID"/>
+        <EditorAttribute name="spawnItem" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.misc._2_UUID"/>
         <EditorAttribute name="cameraShakeTime" type="_2_STRING" childAlias="com.worldOfGoo2.misc._2_Point"/>
         <EditorAttribute name="cameraShakeFrequency" type="_2_STRING" childAlias="com.worldOfGoo2.misc._2_Point"/>
         <EditorAttribute name="cameraShakeStrength" type="_2_STRING" childAlias="com.worldOfGoo2.misc._2_Point"/>

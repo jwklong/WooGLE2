@@ -28,10 +28,9 @@ public abstract class _2_Positionable extends EditorObject {
     }
     
     public void createPosition() {
-        EditorObject pos = ObjectCreator.create2(_2_Point.class, this, GameVersion.VERSION_WOG2);
+        EditorObject pos = ObjectCreator.create2(_2_Point.class, this, "pos", GameVersion.VERSION_WOG2);
         pos.setAttribute("x", 0);
         pos.setAttribute("y", 0);
-        pos.setTypeID("pos");
     }
 
     public Position getPosition() {

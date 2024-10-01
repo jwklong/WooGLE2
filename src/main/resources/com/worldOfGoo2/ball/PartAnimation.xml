@@ -1,0 +1,25 @@
+<AttributeManifest>
+
+    <attributes>
+        <EditorAttribute name="parts" type="_2_LIST_CHILD_HIDDEN" childAlias="com.worldOfGoo2.ball.PartName" required="true"/>
+        <EditorAttribute name="axis" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.ball.Axis"/>
+        <EditorAttribute name="type" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.ball.BallType" required="true"/>
+        <EditorAttribute name="frequency" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="amplitude" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="phaseShift" type="_2_NUMBER" required="true"/>
+        <EditorAttribute name="localSpace" type="_2_NUMBER"/>
+        <EditorAttribute name="pivotX" type="_2_NUMBER"/>
+    </attributes>
+
+    <metaAttributes>
+        <MetaEditorAttribute name="parts"/>
+        <MetaEditorAttribute name="axis"/>
+        <MetaEditorAttribute name="type"/>
+        <MetaEditorAttribute name="frequency"/>
+        <MetaEditorAttribute name="amplitude"/>
+        <MetaEditorAttribute name="phaseShift"/>
+        <MetaEditorAttribute name="localSpace"/>
+        <MetaEditorAttribute name="pivotX"/>
+    </metaAttributes>
+
+</AttributeManifest>

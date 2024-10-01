@@ -27,7 +27,7 @@ import com.woogleFX.gameData.ball._2Ball;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.WOG2Level;
-import com.worldOfGoo2.ball._2_Ball;
+import com.worldOfGoo2.ball.Ball;
 import com.worldOfGoo2.items._2_Item_Collection;
 import com.worldOfGoo2.level._2_Level;
 import javafx.stage.FileChooser;
@@ -227,7 +227,7 @@ public class FileManager {
                 System.out.println("Around the middle...");
 
                 try {
-                    levelObject = ObjectGOOParser.read(_2_Level.class, contents);
+                    levelObject = ObjectGOOParser.read(_2_Level.class, contents, "level");
                 } catch (Exception e) {
                     throw new IOException("Failed to deserialize level " + levelName);
                 }
@@ -433,7 +433,7 @@ public class FileManager {
         for (File itemFile : new File(wog2dir + "/res/items").listFiles()) {
 
             if (itemFile.getName().endsWith(".wog2")) {
-                items.addAll(ObjectGOOParser.read(_2_Item_Collection.class, Files.readString(itemFile.toPath())).getChildren());
+                items.addAll(ObjectGOOParser.read(_2_Item_Collection.class, Files.readString(itemFile.toPath()), "items").getChildren());
             }
 
         }
@@ -462,7 +462,7 @@ public class FileManager {
 
         String contents = Files.readString(Path.of(wog2dir + "/res/balls/" + ballName + "/ball.wog2"));
 
-        EditorObject levelObject = ObjectGOOParser.read(_2_Ball.class, contents);
+        EditorObject levelObject = ObjectGOOParser.read(Ball.class, contents, "ball");
         ArrayList<EditorObject> objects = new ArrayList<>();
         Stack<EditorObject> toAdd = new Stack<>();
         toAdd.push(levelObject);

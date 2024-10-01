@@ -10,11 +10,11 @@
         <EditorAttribute name="collisionEdgeOffset" type="_2_STRING"/>
         <EditorAttribute name="collisionHeightOffset" type="_2_STRING"/>
         <EditorAttribute name="collisionHeightScale" type="_2_STRING"/>
-        <EditorAttribute name="image" type="_2_STRING" childAlias="com.worldOfGoo2.misc._2_ImageID"/>
-        <EditorAttribute name="shadowImage" type="_2_STRING" childAlias="com.worldOfGoo2.misc._2_ImageID"/>
-        <EditorAttribute name="material" type="_2_STRING" childAlias="com.worldOfGoo2.ball._2_Ball_Material"/>
-        <EditorAttribute name="shaderType" type="_2_STRING" childAlias="com.worldOfGoo2.level._2_Level_UserVariable"/>
-        <EditorAttribute name="topShaderUniforms" type="_2_STRING" childAlias="com.worldOfGoo2.terrain.BaseShaderUniform"/>
+        <EditorAttribute name="image" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.misc._2_ImageID"/>
+        <EditorAttribute name="shadowImage" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.misc._2_ImageID"/>
+        <EditorAttribute name="material" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.ball.Material"/>
+        <EditorAttribute name="shaderType" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.level._2_Level_UserVariable"/>
+        <EditorAttribute name="topShaderUniforms" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.terrain.BaseShaderUniform"/>
     </attributes>
 
 </AttributeManifest>

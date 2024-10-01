@@ -1,0 +1,33 @@
+<AttributeManifest>
+
+    <attributes>
+        <EditorAttribute name="renderLayer" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.ball.Layer"/>
+        <EditorAttribute name="textureId" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.misc._2_ImageID"/>
+        <EditorAttribute name="alpha" type="_2_STRING"/>
+        <EditorAttribute name="textureScale" type="_2_STRING"/>
+        <EditorAttribute name="animationTextureId" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.misc._2_ImageID"/>
+        <EditorAttribute name="animationDirectionUp" type="_2_STRING"/>
+        <EditorAttribute name="radialUvs" type="_2_STRING"/>
+        <EditorAttribute name="delay" type="_2_STRING"/>
+        <EditorAttribute name="speed" type="_2_STRING"/>
+        <EditorAttribute name="scaleAdjustOffset" type="_2_STRING"/>
+        <EditorAttribute name="borderAlphaBlendOffset" type="_2_STRING"/>
+        <EditorAttribute name="borderAlphaBlendWidth" type="_2_STRING"/>
+    </attributes>
+
+    <metaAttributes>
+        <MetaEditorAttribute name="renderLayer"/>
+        <MetaEditorAttribute name="textureId"/>
+        <MetaEditorAttribute name="alpha"/>
+        <MetaEditorAttribute name="textureScale"/>
+        <MetaEditorAttribute name="animationTextureId"/>
+        <MetaEditorAttribute name="animationDirectionUp"/>
+        <MetaEditorAttribute name="radialUvs"/>
+        <MetaEditorAttribute name="delay"/>
+        <MetaEditorAttribute name="speed"/>
+        <MetaEditorAttribute name="scaleAdjustOffset"/>
+        <MetaEditorAttribute name="borderAlphaBlendOffset"/>
+        <MetaEditorAttribute name="borderAlphaBlendWidth"/>
+    </metaAttributes>
+
+</AttributeManifest>

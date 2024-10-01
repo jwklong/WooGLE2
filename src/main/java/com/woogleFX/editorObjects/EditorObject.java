@@ -326,9 +326,6 @@ public class EditorObject {
     }
     public final void setTypeID(String typeID) {
         this.typeID = typeID;
-        if (parent != null && parent.attributeExists(typeID) &&
-                (parent.getAttribute(typeID).getType() == InputField._2_CHILD_HIDDEN
-                        || parent.getAttribute(typeID).getType() == InputField._2_LIST_CHILD_HIDDEN)) parent.getTreeItem().getChildren().remove(getTreeItem());
     }
 
 

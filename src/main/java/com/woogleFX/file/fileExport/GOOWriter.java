@@ -27,8 +27,7 @@ public class GOOWriter {
                 ArrayList<EditorObject> children = object.getChildren(editorAttribute.getName());
                 if (editorAttribute.getName().equals("terrainBalls")) {
                     for (EditorObject ball : object.getChildren("balls")) {
-                        EditorObject terrainBall = ObjectCreator.create2(_2_Level_TerrainBall.class, null, GameVersion.VERSION_WOG2);
-                        terrainBall.setTypeID("terrainBalls");
+                        EditorObject terrainBall = ObjectCreator.create2(_2_Level_TerrainBall.class, null, "terrainBalls", GameVersion.VERSION_WOG2);
                         terrainBall.setAttribute("group", ball.getAttribute("terrainGroup").stringValue());
                         children.add(terrainBall);
                     }

@@ -25,7 +25,7 @@ public class TerrainTypeManager {
 
         try {
             File itemFile = new File(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "/res/terrain/terrain.wog2");
-            _2_Terrain_Collection terrainType2 = ObjectGOOParser.read(_2_Terrain_Collection.class, Files.readString(itemFile.toPath()));
+            _2_Terrain_Collection terrainType2 = ObjectGOOParser.read(_2_Terrain_Collection.class, Files.readString(itemFile.toPath()), "terrain");
             Stack<EditorObject> stack = new Stack<>();
             stack.addAll(terrainType2.getChildren());
             while (!stack.empty()) {

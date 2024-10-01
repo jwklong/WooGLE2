@@ -11,23 +11,24 @@ import com.woogleFX.engine.gui.LoadingScreen;
 import com.woogleFX.engine.gui.alarms.ErrorAlarm;
 import com.woogleFX.file.FileManager;
 import com.woogleFX.file.fileExport.GOOWriter;
-import com.woogleFX.file.fileExport.XMLUtility;
-import com.woogleFX.file.resourceManagers.BaseGameResources;
 import com.woogleFX.gameData.level.GameVersion;
 import com.woogleFX.gameData.level.levelSaving.AssetVerifier;
 import com.worldOfGoo.resrc.*;
+import com.worldOfGoo2.ball.Part;
+import com.worldOfGoo2.ball.ParticleEffect;
+import com.worldOfGoo2.ball.SoundEvent;
+import com.worldOfGoo2.ball.StateAnimation;
 import javafx.concurrent.Task;
+import javafx.geometry.Insets;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class _2Ball extends Asset {
@@ -100,6 +101,8 @@ public class _2Ball extends Asset {
         height = _objects.get(0).getAttribute("height").doubleValue();
         sizeVariance = _objects.get(0).getAttribute("sizeVariance").doubleValue();
 
+        setCurrentlySelectedSection("Parts");
+
         resetCamera();
 
         SetDefaults currentSetDefaults = null;
@@ -171,12 +174,21 @@ public class _2Ball extends Asset {
         TabPane hierarchySwitcherButtons = FXHierarchySwitcherButtons.getHierarchySwitcherButtons();
         hierarchySwitcherButtons.getTabs().clear();
 
-        Tab addin = new Tab("Addin");
-        Tab addin2 = new Tab("Addin");
+        Tab parts = new Tab("Parts");
+        Tab stateAnimations = new Tab("State Animations");
+        Tab soundEvents = new Tab("Sound Events");
+        Tab particleEffects = new Tab("Particle Effects");
 
-        hierarchySwitcherButtons.getTabs().addAll(addin, addin2);
+        hierarchySwitcherButtons.getTabs().addAll(parts, stateAnimations, soundEvents, particleEffects);
+        hierarchySwitcherButtons.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        hierarchySwitcherButtons.setMinHeight(30);
+        hierarchySwitcherButtons.setMaxHeight(30);
+        hierarchySwitcherButtons.setPrefHeight(30);
+        hierarchySwitcherButtons.setPadding(new Insets(-6, -6, -6, -6));
 
         hierarchySwitcherButtons.getSelectionModel().selectedItemProperty().addListener((observableValue, tab, t1) -> {
+
+            if (t1 == null) return;
 
             TreeItem<EditorObject> root = getObjects().get(0).getTreeItem();
             FXHierarchy.getHierarchy().setRoot(root);
@@ -184,16 +196,21 @@ public class _2Ball extends Asset {
             root.getChildren().clear();
 
             for (EditorObject child : getObjects()) {
-                if (child != getObjects().get(0))
-                    root.getChildren().add(child.getTreeItem());
+                if (t1 == parts && child instanceof Part) root.getChildren().add(child.getTreeItem());
+                if (t1 == stateAnimations && child instanceof StateAnimation) root.getChildren().add(child.getTreeItem());
+                if (t1 == soundEvents && child instanceof SoundEvent) root.getChildren().add(child.getTreeItem());
+                if (t1 == particleEffects && child instanceof ParticleEffect) root.getChildren().add(child.getTreeItem());
             }
 
             FXHierarchy.getHierarchy().refresh();
             FXHierarchy.getHierarchy().getRoot().setExpanded(true);
-            if (t1 != null) setCurrentlySelectedSection(t1.getText());
+            setCurrentlySelectedSection(t1.getText());
             FXHierarchy.getHierarchy().setShowRoot(true);
 
         });
+
+        updateSelectedTab();
+
     }
 
     @Override
@@ -212,6 +229,13 @@ public class _2Ball extends Asset {
     @Override
     public void addItem(EditorObject _item, int row) {
 
+        objects.add(_item);
+
+        updateSelectedTab();
+
+        FXHierarchy.getHierarchy().getSelectionModel().clearSelection();
+        FXHierarchy.getHierarchy().getSelectionModel().select(_item.getTreeItem());
+
     }
 
     @Override
@@ -226,7 +250,15 @@ public class _2Ball extends Asset {
 
     @Override
     public void updateSelectedTab() {
-
+        int i = switch (getCurrentlySelectedSection()) {
+            case "Parts" -> 0;
+            case "State Animations" -> 1;
+            case "Sound Events" -> 2;
+            case "Particle Effects" -> 3;
+            default -> -1;
+        };
+        FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select((i + 1) % 4);
+        FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(i);
     }
 
     @Override

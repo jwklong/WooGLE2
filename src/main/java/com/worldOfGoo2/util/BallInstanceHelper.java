@@ -9,20 +9,17 @@ import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.editorObjects.objectComponents.ObjectComponent;
 import com.woogleFX.editorObjects.objectComponents.RectangleComponent;
 import com.woogleFX.engine.AssetManager;
-import com.woogleFX.engine.fx.editorButtons.FXEditorButtons;
 import com.woogleFX.engine.fx.editorButtons.FXEditorButtons_ShowHide;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.gameData.ball.AtlasManager;
 import com.woogleFX.gameData.ball._2Ball;
 import com.woogleFX.gameData.level.GameVersion;
-import com.woogleFX.gameData.level.WOG2Level;
-import com.worldOfGoo2.ball._2_Ball_Image;
-import com.worldOfGoo2.ball._2_Ball_Part;
+import com.worldOfGoo2.ball.Image;
+import com.worldOfGoo2.ball.Part;
 import com.worldOfGoo2.level._2_Level_BallInstance;
-import com.worldOfGoo2.level._2_Level_Strand;
 import com.worldOfGoo2.misc._2_ImageID;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
@@ -122,7 +119,7 @@ public class BallInstanceHelper {
     }
     
 
-    private static boolean part2CanBeUsed(_2_Level_BallInstance ballInstance, _2_Ball_Part part) {
+    private static boolean part2CanBeUsed(_2_Level_BallInstance ballInstance, Part part) {
 
         String state = "0";
 
@@ -142,10 +139,10 @@ public class BallInstanceHelper {
     }
 
 
-    private static BufferedImage getPartImageWoG2(_2Ball ball, _2_Ball_Part part, Random machine) {
+    private static BufferedImage getPartImageWoG2(_2Ball ball, Part part, Random machine) {
 
-        ArrayList<_2_Ball_Image> images = new ArrayList<>();
-        for (EditorObject editorObject : part.getChildren()) if (editorObject instanceof _2_Ball_Image ball_image) images.add(ball_image);
+        ArrayList<Image> images = new ArrayList<>();
+        for (EditorObject editorObject : part.getChildren()) if (editorObject instanceof Image ball_image) images.add(ball_image);
         if (images.size() == 0) return null;
 
         String imageString = images.get((int)(images.size() * machine.nextDouble())).getChildren().get(0).getAttribute("imageId").stringValue();
@@ -163,7 +160,7 @@ public class BallInstanceHelper {
     }
 
 
-    private static BufferedImage getPartPupilImageWoG2(_2_Ball_Part part, Random machine) {
+    private static BufferedImage getPartPupilImageWoG2(Part part, Random machine) {
 
         ArrayList<_2_ImageID> pupilImages = new ArrayList<>();
         for (EditorObject editorObject : part.getChildren()) if (editorObject instanceof _2_ImageID ball_image) pupilImages.add(ball_image);
@@ -176,10 +173,10 @@ public class BallInstanceHelper {
     }
 
 
-    public static Image createBallImageWoG2(_2_Level_BallInstance ballInstance, _2Ball ball, double _scaleX, double _scaleY, Random machine) {
+    public static javafx.scene.image.Image createBallImageWoG2(_2_Level_BallInstance ballInstance, _2Ball ball, double _scaleX, double _scaleY, Random machine) {
 
-        ArrayList<_2_Ball_Part> parts = new ArrayList<>();
-        for (EditorObject child : ball.getObjects()) if (child instanceof _2_Ball_Part part) parts.add(part);
+        ArrayList<Part> parts = new ArrayList<>();
+        for (EditorObject child : ball.getObjects()) if (child instanceof Part part) parts.add(part);
         parts.sort((o1, o2) -> (int)Math.signum(
                 o1.getAttribute("layer").doubleValue() - o2.getAttribute("layer").doubleValue()));
         if (parts.isEmpty()) return null;
@@ -205,7 +202,7 @@ public class BallInstanceHelper {
         ArrayList<PartPosition> partPositions = new ArrayList<>();
 
         boolean thereWasABody = false;
-        for (_2_Ball_Part part : parts) {
+        for (Part part : parts) {
 
             double sizeVariance = ball.getObjects().get(0).getAttribute("sizeVariance").doubleValue();
 
@@ -309,9 +306,9 @@ public class BallInstanceHelper {
 
         if (ball != null) {
 
-            ArrayList<_2_Ball_Image> images = new ArrayList<>();
-            for (EditorObject editorObject : ball.getObjects()) if (editorObject instanceof _2_Ball_Part && editorObject.getAttribute("name").stringValue().equals(ball.getObjects().get(0).getChildren("bodyPart").get(0).getAttribute("partName").stringValue())) for (EditorObject child : editorObject.getChildren())
-                if (child instanceof _2_Ball_Image ball_image) images.add(ball_image);
+            ArrayList<Image> images = new ArrayList<>();
+            for (EditorObject editorObject : ball.getObjects()) if (editorObject instanceof Part && editorObject.getAttribute("name").stringValue().equals(ball.getObjects().get(0).getChildren("bodyPart").get(0).getAttribute("partName").stringValue())) for (EditorObject child : editorObject.getChildren())
+                if (child instanceof Image ball_image) images.add(ball_image);
 
             double _scaleX = 1;
             double _scaleY = 1;
@@ -340,7 +337,7 @@ public class BallInstanceHelper {
 
             }
 
-            Image image = createBallImageWoG2(ballInstance, ball, _scaleX, _scaleY, new Random(ballInstance.getRandomSeed()));
+            javafx.scene.image.Image image = createBallImageWoG2(ballInstance, ball, _scaleX, _scaleY, new Random(ballInstance.getRandomSeed()));
 
             double final_scaleX = _scaleX;
             double final_scaleY = _scaleY;
@@ -382,7 +379,7 @@ public class BallInstanceHelper {
                     return 0.000001;
                 }
                 @Override
-                public Image getImage() {
+                public javafx.scene.image.Image getImage() {
                     return image;
                 }
                 @Override
@@ -544,6 +541,11 @@ public class BallInstanceHelper {
                 @Override
                 public boolean isResizable() {
                     return false;
+                }
+
+                @Override
+                public boolean isRotatable() {
+                    return !ballInstance.getAttribute("type").stringValue().equals("Terrain");
                 }
             });
 

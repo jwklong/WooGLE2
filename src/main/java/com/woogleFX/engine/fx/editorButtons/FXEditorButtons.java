@@ -10,24 +10,17 @@ import com.woogleFX.file.FileManager;
 import com.woogleFX.file.resourceManagers.ResourceManager;
 import com.woogleFX.editorObjects.objectCreators.ObjectAdder;
 import com.woogleFX.engine.gui.PaletteReconfigurator;
-import com.woogleFX.gameData.items.ItemManager;
 import com.woogleFX.gameData.level.*;
-import com.worldOfGoo.ball.Part;
-import com.worldOfGoo2.ball._2_Ball_Image;
-import com.worldOfGoo2.ball._2_Ball_Part;
-import com.worldOfGoo2.items._2_Item;
+import com.worldOfGoo2.ball.Image;
+import com.worldOfGoo2.ball.Part;
 import com.worldOfGoo2.level._2_Level_BallInstance;
-import com.worldOfGoo2.level._2_Level_Item;
 import com.worldOfGoo2.util.BallInstanceHelper;
-import com.worldOfGoo2.util.ItemHelper;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -38,7 +31,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Random;
 
 public class FXEditorButtons {
@@ -122,7 +114,7 @@ public class FXEditorButtons {
         for (EditorObject EditorObject : ball.getObjects()) {
             String state = "standing";
 
-            if (EditorObject instanceof Part part) {
+            if (EditorObject instanceof com.worldOfGoo.ball.Part part) {
 
                 boolean ok = false;
 
@@ -176,7 +168,7 @@ public class FXEditorButtons {
                 if (imageStrings.length == 0) continue;
 
                 String imageString = imageStrings[0];
-                Image img;
+                javafx.scene.image.Image img;
                 try {
                     img = ResourceManager.getImage(ball.getResources(), imageString, ball.getVersion());
                     if (img == null) continue;
@@ -210,7 +202,7 @@ public class FXEditorButtons {
 
             String state = "standing";
 
-            if (EditorObject instanceof Part part) {
+            if (EditorObject instanceof com.worldOfGoo.ball.Part part) {
 
                 boolean ok = false;
 
@@ -235,7 +227,7 @@ public class FXEditorButtons {
 
                 if (imageStrings.length == 0) continue;
                 String imageString = imageStrings[0];
-                Image img;
+                javafx.scene.image.Image img;
                 try {
                     img = ResourceManager.getImage(ball.getResources(), imageString, ball.getVersion());
                     if (img == null) continue;
@@ -285,7 +277,7 @@ public class FXEditorButtons {
                 if (pupilImageStrings.length == 0) continue;
 
                 String pupilImageString = pupilImageStrings[0];
-                Image pupilImage;
+                javafx.scene.image.Image pupilImage;
                 try {
                     pupilImage = ResourceManager.getImage(ball.getResources(), pupilImageString, ball.getVersion());
                     if (pupilImage == null) continue;
@@ -337,9 +329,9 @@ public class FXEditorButtons {
 
     public static Button createTemplateFor2Ball(int size, _2Ball ball) {
 
-        ArrayList<_2_Ball_Image> images = new ArrayList<>();
-        for (EditorObject editorObject : ball.getObjects()) if (editorObject instanceof _2_Ball_Part && editorObject.getAttribute("name").stringValue().equals(ball.getObjects().get(0).getChildren("bodyPart").get(0).getAttribute("partName").stringValue())) for (EditorObject child : editorObject.getChildren())
-            if (child instanceof _2_Ball_Image ball_image) images.add(ball_image);
+        ArrayList<Image> images = new ArrayList<>();
+        for (EditorObject editorObject : ball.getObjects()) if (editorObject instanceof Part && editorObject.getAttribute("name").stringValue().equals(ball.getObjects().get(0).getChildren("bodyPart").get(0).getAttribute("partName").stringValue())) for (EditorObject child : editorObject.getChildren())
+            if (child instanceof Image ball_image) images.add(ball_image);
 
         double _scaleX = 1;
         double _scaleY = 1;
@@ -369,7 +361,7 @@ public class FXEditorButtons {
 
         }
 
-        Image image = BallInstanceHelper.createBallImageWoG2(null, ball, _scaleX, _scaleY, new Random(0));
+        javafx.scene.image.Image image = BallInstanceHelper.createBallImageWoG2(null, ball, _scaleX, _scaleY, new Random(0));
 
         if (image == null) return idk;
         ImageView imageView = new ImageView(image);
@@ -383,11 +375,10 @@ public class FXEditorButtons {
             String name = ball.getObjects().get(0).getAttribute("name").stringValue();
 
             _2_Level_BallInstance ballInstance = (_2_Level_BallInstance)ObjectCreator.create2(
-                _2_Level_BallInstance.class, ((WOG2Level) AssetManager.getAsset()).getLevel(), ball.getVersion());
+                _2_Level_BallInstance.class, ((WOG2Level) AssetManager.getAsset()).getLevel(), "balls", ball.getVersion());
             
             ballInstance.createPosition();
             ballInstance.setAttribute("type", name);
-            ballInstance.setTypeID("balls");
             ballInstance.onLoaded();
 
             ((WOG2Level) AssetManager.getAsset()).getObjects().add(ballInstance);

@@ -1,0 +1,19 @@
+<AttributeManifest>
+
+    <attributes>
+        <EditorAttribute name="partAnimations" type="_2_LIST_CHILD" childAlias="com.worldOfGoo2.ball.PartAnimation"/>
+        <EditorAttribute name="states" type="_2_LIST_CHILD_HIDDEN" childAlias="com.worldOfGoo2.ball.State"/>
+        <EditorAttribute name="frequenceyVarianceMagnitude" type="_2_NUMBER"/>
+        <EditorAttribute name="amplitudeVarianceMagnitude" type="_2_NUMBER"/>
+        <EditorAttribute name="phaseShiftVarianceMagnitude" type="_2_NUMBER"/>
+    </attributes>
+
+    <metaAttributes>
+        <MetaEditorAttribute name="partAnimations"/>
+        <MetaEditorAttribute name="states"/>
+        <MetaEditorAttribute name="frequenceyVarianceMagnitude"/>
+        <MetaEditorAttribute name="amplitudeVarianceMagnitude"/>
+        <MetaEditorAttribute name="phaseShiftVarianceMagnitude"/>
+    </metaAttributes>
+
+</AttributeManifest>

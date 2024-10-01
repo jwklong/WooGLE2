@@ -191,15 +191,13 @@ public class LevelSelector extends AssetSelector {
         } else {
 
             ArrayList<EditorObject> objects = new ArrayList<>();
-            EditorObject levelObject = ObjectCreator.create2(_2_Level.class, null, getVersion());
-            EditorObject topRight = ObjectCreator.create2(_2_Point.class, levelObject, getVersion());
+            EditorObject levelObject = ObjectCreator.create2(_2_Level.class, null, "level", getVersion());
+            EditorObject topRight = ObjectCreator.create2(_2_Point.class, levelObject, "boundsTopRight", getVersion());
             topRight.setAttribute("x", 5);
             topRight.setAttribute("y", 5);
-            topRight.setTypeID("boundsTopRight");
-            EditorObject bottomLeft = ObjectCreator.create2(_2_Point.class, levelObject, getVersion());
+            EditorObject bottomLeft = ObjectCreator.create2(_2_Point.class, levelObject, "boundsBottomLeft", getVersion());
             bottomLeft.setAttribute("x", -5);
             bottomLeft.setAttribute("y", -5);
-            bottomLeft.setTypeID("boundsBottomLeft");
             objects.add(levelObject);
             objects.add(topRight);
             objects.add(bottomLeft);
@@ -212,16 +210,14 @@ public class LevelSelector extends AssetSelector {
             levelObject.setAttribute("environmentId", 0);
             levelObject.setAttribute("backgroundId", "");
 
-            EditorObject gravity = ObjectCreator.create2(_2_Point.class, levelObject, getVersion());
+            EditorObject gravity = ObjectCreator.create2(_2_Point.class, levelObject, "gravity", getVersion());
             gravity.setAttribute("x", 0);
             gravity.setAttribute("y", -10);
-            gravity.setTypeID("gravity");
             levelObject.setAttribute("gravity", "0,-10");
 
-            EditorObject initialCameraPos = ObjectCreator.create2(_2_Point.class, levelObject, getVersion());
+            EditorObject initialCameraPos = ObjectCreator.create2(_2_Point.class, levelObject, "initialCameraPos", getVersion());
             initialCameraPos.setAttribute("x", 0);
             initialCameraPos.setAttribute("y", 0);
-            initialCameraPos.setTypeID("initialCameraPos");
             levelObject.setAttribute("initialCameraPos", "0,0");
 
             levelObject.setAttribute("initialCameraZoom", 1);

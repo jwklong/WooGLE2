@@ -131,9 +131,8 @@ public class MouseReleasedManager {
                                 if (!objectComponent.isVisible()) continue;
                                 if (objectComponent.mouseIntersection(mouseX, mouseY) != DragSettings.NULL) {
 
-                                    EditorObject strand = ObjectCreator.create2(_2_Level_Strand.class, wog2Level.getLevel(), level.getVersion());
+                                    EditorObject strand = ObjectCreator.create2(_2_Level_Strand.class, wog2Level.getLevel(), "strands", level.getVersion());
                                     if (strand == null) continue;
-                                    strand.setTypeID("strands");
 
                                     strand.setAttribute("ball1UID", SelectionManager.getStrand1Gooball().getAttribute("uid").stringValue());
                                     strand.setAttribute("ball2UID", ball.getAttribute("uid").stringValue());

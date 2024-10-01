@@ -1,0 +1,5 @@
+<AttributeManifest>
+    <attributes>
+        <EditorAttribute name="flashAnimationId" type="_2_STRING" required="true"/>
+    </attributes>
+</AttributeManifest>

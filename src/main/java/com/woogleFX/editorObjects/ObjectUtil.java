@@ -25,9 +25,8 @@ public class ObjectUtil {
 
         EditorObject clone;
         if (editorObject.getVersion() == GameVersion.VERSION_WOG2)
-            clone = ObjectCreator.create2(parent == null ? _2_Level.class : parent.getAttribute(editorObject.getTypeID()).getChildAlias(), parent, editorObject.getVersion());
+            clone = ObjectCreator.create2(parent == null ? _2_Level.class : parent.getAttribute(editorObject.getTypeID()).getChildAlias(), parent, editorObject.getTypeID(), editorObject.getVersion());
         else clone = ObjectCreator.create(editorObject.getType(), parent, editorObject.getVersion());
-        clone.setTypeID(editorObject.getTypeID());
 
         for (EditorObject child : editorObject.getChildren()) {
             deepClone(child, clone);

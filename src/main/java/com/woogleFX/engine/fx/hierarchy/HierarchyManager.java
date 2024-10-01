@@ -29,6 +29,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
@@ -391,7 +392,13 @@ public class HierarchyManager {
         for (Class<? extends EditorObject> childToAdd : object.getPossibleChildren()) {
 
             // Create a menu item representing creating this child.
-            MenuItem addItemItem = new MenuItem(" Add " + childToAdd.getName());
+            MenuItem addItemItem = null;
+            try {
+                EditorObject newInstance = ((EditorObject)childToAdd.getConstructors()[0].newInstance((Object) null));
+                addItemItem = new MenuItem(" Add " + newInstance.getType());
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
 
             // Attempt to set graphics for this menu item.
             addItemItem.setGraphic(new ImageView(getObjectIcon(childToAdd, false)));

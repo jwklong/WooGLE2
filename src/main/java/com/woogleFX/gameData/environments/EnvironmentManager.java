@@ -24,7 +24,7 @@ public class EnvironmentManager {
 
         try {
             File itemFile = new File(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "/res/environments/" + id + ".wog2");
-            _2_Environment environment2 = ObjectGOOParser.read(_2_Environment.class, Files.readString(itemFile.toPath()));
+            _2_Environment environment2 = ObjectGOOParser.read(_2_Environment.class, Files.readString(itemFile.toPath()), "environment");
             Stack<EditorObject> stack = new Stack<>();
             stack.add(environment2);
             while (!stack.empty()) {

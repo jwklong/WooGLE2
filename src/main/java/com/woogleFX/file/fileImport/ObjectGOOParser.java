@@ -79,7 +79,7 @@ public class ObjectGOOParser {
     }
 
 
-    public static AssetObject readList(Class<? extends EditorObject> type, Stack<String> tokens, EditorObject parent) {
+    public static AssetObject readList(Class<? extends EditorObject> type, Stack<String> tokens, String typeId, EditorObject parent) {
 
         ArrayList<AssetObject> assetObjects = new ArrayList<>();
         while (true) {
@@ -93,7 +93,7 @@ public class ObjectGOOParser {
                 }
 
                 case "[" -> {
-                    assetObjects.add(readList(type, tokens, parent));
+                    assetObjects.add(readList(type, tokens, typeId, parent));
                 }
 
                 case "\"" -> {
@@ -101,7 +101,7 @@ public class ObjectGOOParser {
                 }
 
                 case "{" -> {
-                    if (type != null) assetObjects.add(readAsset(type, tokens, parent));
+                    if (type != null) assetObjects.add(readAsset(type, tokens, typeId, parent));
                 }
 
                 case "," -> {
@@ -118,9 +118,9 @@ public class ObjectGOOParser {
 
     }
 
-    public static AssetAssetObject readAsset(Class<? extends EditorObject> type, Stack<String> tokens, EditorObject parent) {
+    public static AssetAssetObject readAsset(Class<? extends EditorObject> type, Stack<String> tokens, String typeId, EditorObject parent) {
 
-        EditorObject asset = ObjectCreator.create2(type, parent, GameVersion.VERSION_WOG2);
+        EditorObject asset = ObjectCreator.create2(type, parent, typeId, GameVersion.VERSION_WOG2);
 
         String name = null;
 
@@ -143,12 +143,9 @@ public class ObjectGOOParser {
                         }
                     }
                     String total = "";
-                    for (AssetObject assetObject : ((AssetArrayObject) readList(typeClass, tokens, asset)).value) {
+                    for (AssetObject assetObject : ((AssetArrayObject) readList(typeClass, tokens, name, asset)).value) {
                         if (assetObject instanceof AssetStringObject assetStringObject) {
                             total += assetStringObject.value + ",";
-                        } else if (assetObject instanceof AssetAssetObject assetAssetObject) {
-                            //assetAssetObject.value.setParent(asset);
-                            assetAssetObject.value.setTypeID(name);
                         }
                     }
                     if (!total.isEmpty()) {
@@ -178,9 +175,7 @@ public class ObjectGOOParser {
                         }
                     }
                     if (typeClass != null) {
-                        AssetAssetObject assetAssetObject = readAsset(typeClass, tokens, asset);
-                        //assetAssetObject.value.setParent(asset);
-                        assetAssetObject.value.setTypeID(name);
+                        readAsset(typeClass, tokens, name, asset);
                     }
                     name = null;
                 }
@@ -207,7 +202,7 @@ public class ObjectGOOParser {
     }
 
 
-    public static <T extends EditorObject> T read(Class<T> assetType, String text) {
+    public static <T extends EditorObject> T read(Class<T> assetType, String text, String typeId) {
 
         String currentWord = "";
 
@@ -231,7 +226,7 @@ public class ObjectGOOParser {
 
         tokens.remove(0);
 
-        AssetAssetObject asset = readAsset(assetType, tokens, null);
+        AssetAssetObject asset = readAsset(assetType, tokens, typeId, null);
 
         return (T) asset.value;
 

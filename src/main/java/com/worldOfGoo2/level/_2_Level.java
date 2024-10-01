@@ -255,7 +255,7 @@ public class _2_Level extends EditorObject {
                     }
                     public double getDepth() {
                         //System.out.println(part.getAttribute("depth").doubleValue());
-                        return part.getAttribute("depth").doubleValue() + 100000 * (part.getAttribute("foreground").booleanValue() ? 1 : -1);
+                        return -part.getAttribute("depth").doubleValue() + 100000 * (part.getAttribute("foreground").booleanValue() ? 1 : -1);
                         //return -100000;
                     }
                     public boolean isAdditive() {

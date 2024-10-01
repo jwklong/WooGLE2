@@ -58,7 +58,7 @@ public class BackgroundViewer extends Application {
                 if (!child.getPath().endsWith(".wog2")) {
                     continue;
                 }
-                EditorObject item = ObjectGOOParser.read(_2_Environment.class, Files.readString(child.toPath()));
+                EditorObject item = ObjectGOOParser.read(_2_Environment.class, Files.readString(child.toPath()), "environments");
                 if (item instanceof _2_Environment environment) {
                     environments.add(environment);
                 }

@@ -134,7 +134,7 @@ public class ObjectCreator {
 
     }
 
-    public static EditorObject create2(Class<? extends EditorObject> tClass, EditorObject parent, GameVersion version) {
+    public static EditorObject create2(Class<? extends EditorObject> tClass, EditorObject parent, String typeId, GameVersion version) {
 
         EditorObject toAdd;
         try {
@@ -143,6 +143,8 @@ public class ObjectCreator {
             logger.error("", e);
             return null;
         }
+
+        toAdd.setTypeID(typeId);
 
         if (parent != null) toAdd.setParent(parent);
 

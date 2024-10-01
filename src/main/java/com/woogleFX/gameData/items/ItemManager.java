@@ -27,7 +27,7 @@ public class ItemManager {
         try {
             for (File itemFile : new File(FileManager.getGameDir(GameVersion.VERSION_WOG2) + "/res/items").listFiles())
                 if (itemFile.getName().endsWith(".wog2")) {
-                _2_Item_Collection item2 = ObjectGOOParser.read(_2_Item_Collection.class, Files.readString(itemFile.toPath()));
+                _2_Item_Collection item2 = ObjectGOOParser.read(_2_Item_Collection.class, Files.readString(itemFile.toPath()), "items");
                 Stack<EditorObject> stack = new Stack<>();
                 stack.addAll(item2.getChildren());
                 while (!stack.empty()) {

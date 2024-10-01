@@ -166,8 +166,7 @@ public class BinAnimationHelper {
 
                                 @Override
                                 public double getX() {
-
-                                    double itemAddX;
+                                   double itemAddX;
                                     double itemAddY;
                                     double itemScaleX;
                                     double itemScaleY;
@@ -204,11 +203,12 @@ public class BinAnimationHelper {
                                     double rotation = (editorObject instanceof _2_Level_BallInstance) ?
                                             editorObject.getAttribute("angle").doubleValue() :
                                             editorObject.getAttribute("rotation").doubleValue();
-                                    return ballX + addX * Math.cos(-rotation) - addY * Math.sin(-rotation);
+                                    double xAddition = addX * Math.cos(-rotation) - addY * Math.sin(-rotation);
+                                    return ballX + xAddition;
                                 }
 
                                 @Override
-                                public void setX(double x) {
+                                public void setX(double _x) {
 
                                     double itemAddX;
                                     double itemAddY;
@@ -247,8 +247,9 @@ public class BinAnimationHelper {
                                             editorObject.getAttribute("angle").doubleValue() :
                                             editorObject.getAttribute("rotation").doubleValue();
                                     
-                                    double y = editorObject.getPosition().getY();
-                                    editorObject.setPosition(x - (addX * Math.cos(-rotation) - addY * Math.sin(-rotation)), y);
+                                    double _y = editorObject.getPosition().getY();
+                                    double xAddition = addX * Math.cos(-rotation) - addY * Math.sin(-rotation);
+                                    editorObject.setPosition(_x - xAddition, _y);
                                 }
 
                                 @Override
@@ -287,15 +288,18 @@ public class BinAnimationHelper {
                                     double addX = (part.offsetX - part.centerX * part.scaleX) * scaleX * itemScaleX * itemScaleX2 * scaleFactor + initialAddX + imageAddX;
                                     double addY = (part.offsetY - part.centerY * part.scaleY) * scaleY * itemScaleY * itemScaleY2 * scaleFactor + initialAddY + imageAddY;
 
-                                    double ballY = -editorObject.getPosition().getY();
                                     double rotation = (editorObject instanceof _2_Level_BallInstance) ?
                                             editorObject.getAttribute("angle").doubleValue() :
                                             editorObject.getAttribute("rotation").doubleValue();
-                                    return ballY + addX * Math.sin(-rotation) + addY * Math.cos(-rotation);
+
+                                    double yAddition = addX * Math.sin(-rotation) + addY * Math.cos(-rotation);
+
+                                    double ballY = -editorObject.getPosition().getY();
+                                    return ballY + yAddition;
                                 }
 
                                 @Override
-                                public void setY(double y) {
+                                public void setY(double _y) {
 
                                     double itemAddX;
                                     double itemAddY;
@@ -333,9 +337,11 @@ public class BinAnimationHelper {
                                     double rotation = (editorObject instanceof _2_Level_BallInstance) ?
                                             editorObject.getAttribute("angle").doubleValue() :
                                             editorObject.getAttribute("rotation").doubleValue();
+
+                                    double yAddition = addX * Math.sin(-rotation) + addY * Math.cos(-rotation);
                                     
-                                    double x = editorObject.getPosition().getX();
-                                    editorObject.setPosition(x, -y + (addX * Math.sin(-rotation) + addY * Math.cos(-rotation)));
+                                    double _x = editorObject.getPosition().getX();
+                                    editorObject.setPosition(_x, -_y + yAddition);
                                 }
 
                                 @Override
@@ -357,20 +363,22 @@ public class BinAnimationHelper {
                                 @Override
                                 public void setScaleX(double _scaleX) {
                                     double scaleFactor = ((editorObject instanceof _2_Level_BallInstance ballInstance ? ballInstance.getBall().getObjects().get(0).getChildren("ballParts").get(0).getAttribute("scale").doubleValue() : 1)) / 100;
-                                    if (editorObject instanceof _2_Level_Item) editorObject.getChildren("scale").get(0).setAttribute("x", _scaleX / scaleX / part.scaleX / scaleFactor);
+                                    double itemScaleX2 = (editorObject instanceof _2_Level_Item item) ? item.getItem().getChildren("animationLocalScale").get(0).getAttribute("x").doubleValue() : 1;
+                                    if (editorObject instanceof _2_Level_Item) editorObject.getChildren("scale").get(0).setAttribute("x", _scaleX / (scaleX * part.scaleX * scaleFactor* itemScaleX2));
                                 }
 
                                 @Override
                                 public void setScaleY(double _scaleY) {
                                     double scaleFactor = ((editorObject instanceof _2_Level_BallInstance ballInstance ? ballInstance.getBall().getObjects().get(0).getChildren("ballParts").get(0).getAttribute("scale").doubleValue() : 1)) / 100;
-                                    if (editorObject instanceof _2_Level_Item) editorObject.getChildren("scale").get(0).setAttribute("y", _scaleY / scaleY / part.scaleY / scaleFactor);
+                                    double itemScaleY2 = (editorObject instanceof _2_Level_Item item) ? item.getItem().getChildren("animationLocalScale").get(0).getAttribute("y").doubleValue() : 1;
+                                    if (editorObject instanceof _2_Level_Item) editorObject.getChildren("scale").get(0).setAttribute("y", _scaleY / (scaleY * part.scaleY * scaleFactor * itemScaleY2));
                                 }
 
                                 @Override
                                 public double getRotation() {
                                     double extraRotation = (editorObject instanceof _2_Level_Item item ? -item.getItem().getAttribute("animationRotation").doubleValue() : 0);
                                     if (editorObject instanceof _2_Level_BallInstance) return rotation + extraRotation - editorObject.getAttribute("angle").doubleValue();
-                                    else return rotation + extraRotation - editorObject.getAttribute("rotation").doubleValue();
+                                    else return rotation + part.angleBottomRight + extraRotation - editorObject.getAttribute("rotation").doubleValue();
                                 }
 
                                 @Override

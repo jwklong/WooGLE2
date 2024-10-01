@@ -1,7 +1,7 @@
 <AttributeManifest localName="TerrainType">
 
     <attributes>
-        <EditorAttribute name="uuid" type="_2_CHILD" childAlias="com.worldOfGoo2.misc._2_UUID"/>
+        <EditorAttribute name="uuid" type="_2_CHILD_HIDDEN" childAlias="com.worldOfGoo2.misc._2_UUID"/>
         <EditorAttribute name="name" type="_2_STRING"/>
         <EditorAttribute name="goolfHitSound" type="_2_CHILD" childAlias="com.worldOfGoo2.misc._2_SoundID"/>
         <EditorAttribute name="edgeTypesSettings" type="_2_STRING" childAlias="com.worldOfGoo2.terrain._2_Terrain_EdgeTypesSettings"/>

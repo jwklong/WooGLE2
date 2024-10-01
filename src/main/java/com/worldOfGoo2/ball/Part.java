@@ -4,33 +4,60 @@ import com.woogleFX.editorObjects.EditorObject;
 import com.woogleFX.editorObjects.objectComponents.ImageComponent;
 import com.woogleFX.gameData.ball.AtlasManager;
 import com.woogleFX.gameData.level.GameVersion;
+import com.worldOfGoo2.misc._2_ImageID;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
 
 import java.awt.image.BufferedImage;
 
-public class _2_Ball_Part extends EditorObject {
+public class Part extends EditorObject {
 
 
-    public _2_Ball_Part(EditorObject parent) {
+    public Part(EditorObject parent) {
         super(parent, "Part", GameVersion.VERSION_WOG2);
     }
 
     @Override
     public void onLoaded() {
 
-        Image image = null;
+        javafx.scene.image.Image image = null;
         for (EditorObject editorObject : getChildren("images"))
-            if (editorObject instanceof _2_Ball_Image image1) {
+            if (editorObject instanceof Image image1) {
                 BufferedImage img = AtlasManager.atlas.get(image1.getChild("imageId").getAttribute("imageId").stringValue());
                 if (img == null) continue;
                 image = SwingFXUtils.toFXImage(img, null);
         }
 
-        Image finalImage = image;
+        addComponent(image);
+
+        if (!getAttribute("isEye").booleanValue()) return;
+
+        javafx.scene.image.Image pupilImage = null;
+        for (EditorObject editorObject : getChildren("pupilImageIds"))
+            if (editorObject instanceof _2_ImageID image1) {
+                BufferedImage pupilImg = AtlasManager.atlas.get(image1.getAttribute("imageId").stringValue());
+                if (pupilImg == null) continue;
+                pupilImage = SwingFXUtils.toFXImage(pupilImg, null);
+            }
+
+        addComponent(pupilImage);
+
+    }
+
+
+    private EditorObject getBodyPart() {
+        String bodyPartName = getParent().getChild("bodyPart").getAttribute("partName").stringValue();
+        for (EditorObject editorObject : getParent().getChildren("ballParts")) {
+            if (editorObject.getAttribute("name").stringValue().equals(bodyPartName)) return editorObject;
+        }
+        return null;
+    }
+
+
+    private void addComponent(javafx.scene.image.Image finalImage) {
+
         addObjectComponent(new ImageComponent() {
             @Override
-            public Image getImage() {
+            public javafx.scene.image.Image getImage() {
                 return finalImage;
             }
 
@@ -142,15 +169,6 @@ public class _2_Ball_Part extends EditorObject {
             }
         });
 
-    }
-
-
-    private EditorObject getBodyPart() {
-        String bodyPartName = getParent().getChild("bodyPart").getAttribute("partName").stringValue();
-        for (EditorObject editorObject : getParent().getChildren("ballParts")) {
-            if (editorObject.getAttribute("name").stringValue().equals(bodyPartName)) return editorObject;
-        }
-        return null;
     }
 
 }

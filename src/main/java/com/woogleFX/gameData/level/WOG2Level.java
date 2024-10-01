@@ -216,7 +216,7 @@ public class WOG2Level extends _Level {
     public Asset clone(String name) {
         StringBuilder levelExport = new StringBuilder();
         GOOWriter.recursiveGOOExport(levelExport, getLevel(), 0);
-        EditorObject levelObject = ObjectGOOParser.read(_2_Level.class, levelExport.toString());
+        EditorObject levelObject = ObjectGOOParser.read(_2_Level.class, levelExport.toString(), "level");
         ArrayList<EditorObject> objects = new ArrayList<>();
         Stack<EditorObject> toAdd = new Stack<>();
         toAdd.push(levelObject);
@@ -262,18 +262,7 @@ public class WOG2Level extends _Level {
 
         objects.add(_item);
 
-        int i = switch (getCurrentlySelectedSection()) {
-            case "Terrain" -> 0;
-            case "Terrain Groups" -> 1;
-            case "Balls" -> 2;
-            case "Items" -> 3;
-            case "Pins" -> 4;
-            case "Camera" -> 5;
-            case "Addin" -> 6;
-            default -> -1;
-        };
-        FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select((i + 1) % 7);
-        FXHierarchySwitcherButtons.getHierarchySwitcherButtons().getSelectionModel().select(i);
+        updateSelectedTab();
 
         FXHierarchy.getHierarchy().getSelectionModel().clearSelection();
         FXHierarchy.getHierarchy().getSelectionModel().select(_item.getTreeItem());

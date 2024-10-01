@@ -10,6 +10,7 @@ import com.woogleFX.editorObjects.ObjectManager;
 import com.woogleFX.engine.undoHandling.UndoManager;
 import com.woogleFX.engine.undoHandling.userActions.ObjectCreationAction;
 import com.woogleFX.engine.undoHandling.userActions.UserAction;
+import com.woogleFX.gameData.ball._2Ball;
 import com.woogleFX.gameData.level.WOG1Level;
 import com.woogleFX.gameData.level.WOG2Level;
 import com.worldOfGoo.level.BallInstance;
@@ -90,6 +91,12 @@ public class ClipboardManager {
                 object.update();
                 object.onLoaded();
                 ObjectManager.create(level, object, wog2Level.getLevel().getChildren().size());
+            } else if (level instanceof _2Ball ball) {
+                object.setParent(ball.getObjects().get(0));
+                ball.getObjects().add(object);
+                object.update();
+                object.onLoaded();
+                ObjectManager.create(level, object, ball.getObjects().get(0).getChildren().size());
             } else {
                 ObjectManager.create(level, object, 0);
             }

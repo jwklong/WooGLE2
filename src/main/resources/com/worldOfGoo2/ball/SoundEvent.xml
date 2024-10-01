@@ -1,0 +1,15 @@
+<AttributeManifest>
+
+    <attributes>
+        <EditorAttribute name="soundIds" type="_2_LIST_CHILD_HIDDEN" childAlias="com.worldOfGoo2.misc._2_SoundID" required="true"/>
+        <EditorAttribute name="soundEvent" type="_2_CHILD" childAlias="com.worldOfGoo2.misc._2_SoundEvent" required="true"/>
+        <EditorAttribute name="minTimeBetweenSounds" type="_2_NUMBER"/>
+    </attributes>
+
+    <metaAttributes>
+        <MetaEditorAttribute name="soundIds"/>
+        <MetaEditorAttribute name="soundEvent"/>
+        <MetaEditorAttribute name="minTimeBetweenSounds"/>
+    </metaAttributes>
+
+</AttributeManifest>

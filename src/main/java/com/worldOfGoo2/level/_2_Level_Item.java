@@ -148,10 +148,9 @@ public class _2_Level_Item extends _2_Positionable {
 
         int i = 0;
         for (EditorObject ignored : item.getChildren("userVariables")) {
-            EditorObject userVariable2 = ObjectCreator.create2(_2_Level_UserVariable.class, this, GameVersion.VERSION_WOG2);
+            EditorObject userVariable2 = ObjectCreator.create2(_2_Level_UserVariable.class, this, "userVariables", GameVersion.VERSION_WOG2);
             if (i < values.size()) userVariable2.setAttribute("value", values.get(i));
             i++;
-            userVariable2.setTypeID("userVariables");
         }
 
         ArrayList<EditorObject> userVariables = getItem().getChildren("userVariables");
@@ -562,8 +561,6 @@ public class _2_Level_Item extends _2_Positionable {
             addObjectComponent(new ImageComponent() {
                 @Override
                 public double getX() {
-
-                    double x = getPosition().getX();
                     double scaleX = getAttribute("scale").positionValue().getX();
                     double scaleY = getAttribute("scale").positionValue().getY();
 
@@ -572,18 +569,11 @@ public class _2_Level_Item extends _2_Positionable {
 
                     double rotation = -getAttribute("rotation").doubleValue();
 
+                    double x = getPosition().getX();
                     return x + addX * Math.cos(rotation) + addY * -Math.sin(rotation);
-
                 }
                 @Override
                 public void setX(double x) {
-                    double y = getPosition().getY();
-                    double scaleX = getAttribute("scale").positionValue().getX();
-                    setPosition(x - (partX - partPivotX * partScaleX) * scaleX, y);
-                }
-                @Override
-                public double getY() {
-                    double y = -getPosition().getY();
                     double scaleX = getAttribute("scale").positionValue().getX();
                     double scaleY = getAttribute("scale").positionValue().getY();
 
@@ -592,14 +582,34 @@ public class _2_Level_Item extends _2_Positionable {
 
                     double rotation = -getAttribute("rotation").doubleValue();
 
-                    return y + addX * Math.sin(rotation) + addY * Math.cos(rotation);
+                    double y = getPosition().getY();
+                    setPosition(x - (addX * Math.cos(rotation) + addY * -Math.sin(rotation)), y);
+                }
+                @Override
+                public double getY() {
+                    double scaleX = getAttribute("scale").positionValue().getX();
+                    double scaleY = getAttribute("scale").positionValue().getY();
 
+                    double addX = (partX - partPivotX * partScaleX) * scaleX;
+                    double addY = (partY - partPivotY * partScaleY) * scaleY;
+
+                    double rotation = -getAttribute("rotation").doubleValue();
+
+                    double y = -getPosition().getY();
+                    return y + addX * Math.sin(rotation) + addY * Math.cos(rotation);
                 }
                 @Override
                 public void setY(double y) {
-                    double x = getPosition().getX();
+                    double scaleX = getAttribute("scale").positionValue().getX();
                     double scaleY = getAttribute("scale").positionValue().getY();
-                    setPosition(x, -(y - (partY - partPivotY * partScaleY) * scaleY));
+
+                    double addX = (partX - partPivotX * partScaleX) * scaleX;
+                    double addY = (partY - partPivotY * partScaleY) * scaleY;
+
+                    double rotation = -getAttribute("rotation").doubleValue();
+
+                    double x = getPosition().getX();
+                    setPosition(x, -(y - (addX * Math.sin(rotation) + addY * Math.cos(rotation))));
                 }
                 @Override
                 public double getRotation() {

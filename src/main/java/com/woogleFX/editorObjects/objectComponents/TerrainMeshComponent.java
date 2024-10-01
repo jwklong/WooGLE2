@@ -203,7 +203,9 @@ public class TerrainMeshComponent extends MeshComponent {
 
         if (AssetManager.getAsset().getVisibilitySettings().getShowGoos() != 2) return false;
 
-        int terrainGroupId = ((WOG2Level) AssetManager.getAsset()).getLevel().getChildren("terrainGroups").indexOf(terrainGroup);
+        if (!(AssetManager.getAsset() instanceof WOG2Level level)) return false;
+
+        int terrainGroupId = level.getLevel().getChildren("terrainGroups").indexOf(terrainGroup);
         if (terrainGroupId < 0 || terrainGroupId >= FXEditorButtons_ShowHide.comboBoxList.size()) return true;
         else return FXEditorButtons_ShowHide.comboBoxList.get(terrainGroupId);
 

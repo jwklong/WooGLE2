@@ -166,30 +166,26 @@ public class ObjectAdder {
         WOG2Level level = (WOG2Level) AssetManager.getAsset();
         if (level == null) return null;
 
-        EditorObject obj = ObjectCreator.create2(name, parent, level.getVersion());
-        obj.setTypeID(typeID);
+        EditorObject obj = ObjectCreator.create2(name, parent, typeID, level.getVersion());
 
         level.getObjects().add(obj);
 
         if (obj instanceof _2_Level_TerrainGroup) {
-            EditorObject point = ObjectCreator.create2(_2_Point.class, obj, GameVersion.VERSION_WOG2);
+            EditorObject point = ObjectCreator.create2(_2_Point.class, obj, "textureOffset", GameVersion.VERSION_WOG2);
             point.setAttribute("x", 0);
             point.setAttribute("y", 0);
-            point.setTypeID("textureOffset");
         } else if (obj instanceof _2_Positionable positionable) {
             positionable.createPosition();
             
             if (obj instanceof _2_Level_Item) {
-                EditorObject scale = ObjectCreator.create2(_2_Point.class, obj, GameVersion.VERSION_WOG2);
+                EditorObject scale = ObjectCreator.create2(_2_Point.class, obj, "scale", GameVersion.VERSION_WOG2);
                 scale.setAttribute("x", 1);
                 scale.setAttribute("y", 1);
-                scale.setTypeID("scale");
             }
         } else if (obj instanceof _2_Level_CameraKeyFrame) {
-            EditorObject position = ObjectCreator.create2(_2_Point.class, obj, GameVersion.VERSION_WOG2);
+            EditorObject position = ObjectCreator.create2(_2_Point.class, obj, "position", GameVersion.VERSION_WOG2);
             position.setAttribute("x", 0);
             position.setAttribute("y", 0);
-            position.setTypeID("position");
         }
 
         addAnything(obj);

@@ -93,11 +93,10 @@ public class ClipboardHandler {
             String type2 = clipboard.substring(clipboard.indexOf(";") + 1, clipboard.indexOf("<"));
             String content = clipboard.substring(clipboard.indexOf("<") + 1);
             try {
-                selectionBuilder.add(ObjectGOOParser.read((Class<? extends EditorObject>) Class.forName(type), content));
+                selectionBuilder.add(ObjectGOOParser.read((Class<? extends EditorObject>) Class.forName(type), content, type2));
             } catch (ClassNotFoundException e) {
                 logger.error("", e);
             }
-            selectionBuilder.get(0).setTypeID(type2);
             return selectionBuilder.toArray(new EditorObject[0]);
 
         }

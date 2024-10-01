@@ -19,6 +19,8 @@ public class ObjectDrag {
         objectComponent.setX(mouseX - dragSourceX);
         objectComponent.setY(mouseY - dragSourceY);
 
+        System.out.println(prevX + ", " + objectComponent.getX());
+
         for (EditorObject object : AssetManager.getAsset().getSelected()) {
             if (object.containsObjectComponent(objectComponent))
                 continue;
